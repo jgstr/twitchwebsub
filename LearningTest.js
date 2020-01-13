@@ -25,12 +25,13 @@ server.listen(port, hostname, () => {
 
 // This makes the same call to the dummy/sample stream shown on the Twitch Getting Started page.
 // Next: Use this as a starting point to send a GET Request to a subscription Webhook.
+// Note: This ID has been deleted. Create new Client-ID and move to external/ignored file.
 const options = {
   hostname: 'api.twitch.tv',
   path: '/helix/streams?game_id=33214',
   method: 'GET',
   headers: {
-      'Client-ID': 'cqsp04vus3gbjwp54lfcxiz90xmbix'
+      'Client-ID': ''
   }
 }
 
