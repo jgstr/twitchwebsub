@@ -1,0 +1,27 @@
+{
+  "name": "twitchwebsub",
+  "version": "1.0.0",
+  "description": "Learning Test for Twitch WebSub projct",
+  "main": "LearningTest.js",
+  "scripts": {
+    "test": "test",
+    "start": "--exec babel-node src/LearningTest.js",
+    "build": "babel src --out-dir dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jgstr/twitchwebsub.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jgstr/twitchwebsub/issues"
+  },
+  "homepage": "https://github.com/jgstr/twitchwebsub#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.8.3",
+    "@babel/core": "^7.8.3",
+    "@babel/node": "^7.8.3",
+    "@babel/preset-env": "^7.8.3"
+  }
+}

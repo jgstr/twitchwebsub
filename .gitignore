@@ -1,3 +1,4 @@
-resources
+references
 TwitchWebSub.code-workspace
 requests.http
+node_modules
