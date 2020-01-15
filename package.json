@@ -5,7 +5,7 @@
   "main": "LearningTest.js",
   "scripts": {
     "test": "test",
-    "start": "--exec babel-node src/LearningTest.js",
+    "start": "babel-node src/LearningTest.js",
     "build": "babel src --out-dir dist"
   },
   "repository": {
