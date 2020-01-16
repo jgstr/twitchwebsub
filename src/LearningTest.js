@@ -11,34 +11,32 @@ const hostname = '127.0.0.1';
 const port = 9000;
 
 const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World\n');
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.write('Hello World!');
+  res.end();
 });
-
-// TODO: Must handle the hub.callback. But am not sure how. I assume I will handle 
-// something like /subscription-callback with Node. I must respond with 2xx code.
 
 server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
 
-// Subscription POST Request
+// 1. Send Subscribe HTTP Request to Twitch.
 const options = {
   hostname: 'api.twitch.tv',
   path: '/helix/streams?game_id=33214',
   method: 'POST',
   headers: {
-      'hub.callback': 'https://localhost.com/9000/subscribe-response', // Unsure how to setup a test API endpoint
+      'hub.callback': 'https://dacf3b59.ngrok.io ', // ngrok Basic plan URL changes with each run.
       'hub.mode': 'subscribe',
-      'hub.topic': '?', // Unsure what Topic is.
+      'hub.topic': 'https://api.twitch.tv/helix/streams?user_id=5678', // Note: these are dummy IDs. Might need real IDs.
       'hub.lease_seconds': 864000
   }
 }
 
 const subscriptionRequest = https.request(options, res => {
-  console.log(`*** Twitch WebSub Response statusCode: ${res.statusCode}`);
+  console.log(`*** Twitch WebSub Response statusCode (should be '202'): ${res.statusCode}`);
 
+// 2. Process Twitch HTTP Response (should be '202').
   res.on('data', d => {
     process.stdout.write("*** Twitch WebSub Response Data: ", d);
   });
@@ -49,6 +47,15 @@ subscriptionRequest.on('error', error => {
 });
 
 subscriptionRequest.end();
+
+// 3. Process incoming Twitch Subscription confirmation GET Request.
+
+// 4. Respond to confirmation with 2xx and hub.challenge (in query parameters), all text/plain.
+//    Eventually use 404 for errors as well.
+
+// 5. Handle incoming Twitch notification POST Requests. Respond with 2xx.
+
+
 
       // ### SNIPPETS AND REFERENCES ###
 
