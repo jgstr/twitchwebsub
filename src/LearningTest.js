@@ -12,33 +12,37 @@ const port = 9000;
 
 const server = http.createServer((req, res) => {
   res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.write('Hello World!');
+  res.write('Hello from NodeJS localhost:9000!');
   res.end();
 });
+// Note: ngrok must use the $./ngrok http 9000 syntax, NOT http http://localhost:9000
 
 server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
 
+
 // 1. Send Subscribe HTTP Request to Twitch.
 const options = {
   hostname: 'api.twitch.tv',
-  path: '/helix/streams?game_id=33214',
+  path: '/helix/webhooks/hub',
   method: 'POST',
   headers: {
-      'hub.callback': 'https://dacf3b59.ngrok.io ', // ngrok Basic plan URL changes with each run.
+      'hub.callback': 'http://0f75fedc.ngrok.io/', // ngrok Basic plan URL changes with each run.
       'hub.mode': 'subscribe',
-      'hub.topic': 'https://api.twitch.tv/helix/streams?user_id=5678', // Note: these are dummy IDs. Might need real IDs.
-      'hub.lease_seconds': 864000
+      'hub.topic': 'https://api.twitch.tv/helix/users?id=484908342&scope=user:read:email', // This is my ID. And I have no idea how to use scops...
+      'hub.lease_seconds': 864000,
+      'Client-ID': clientID
   }
 }
 
 const subscriptionRequest = https.request(options, res => {
-  console.log(`*** Twitch WebSub Response statusCode (should be '202'): ${res.statusCode}`);
+  console.log(`*** Twitch Response statusCode (should be '202'): ${res.statusCode}\n`);
+  console.log(`*** Twitch Response statusMessage: ${res.statusMessage}\n`);
 
 // 2. Process Twitch HTTP Response (should be '202').
   res.on('data', d => {
-    process.stdout.write("*** Twitch WebSub Response Data: ", d);
+    process.stdout.write("*** Twitch Response Data: ", d);
   });
 });
 
