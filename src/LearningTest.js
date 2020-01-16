@@ -16,13 +16,46 @@ const server = http.createServer((req, res) => {
   res.end('Hello World\n');
 });
 
+// TODO: Must handle the hub.callback. But am not sure how. I assume I will handle 
+// something like /subscription-callback with Node. I must respond with 2xx code.
+
 server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
 
+// Subscription POST Request
+const options = {
+  hostname: 'api.twitch.tv',
+  path: '/helix/streams?game_id=33214',
+  method: 'POST',
+  headers: {
+      'hub.callback': 'https://localhost.com/9000/subscribe-response', // Unsure how to setup a test API endpoint
+      'hub.mode': 'subscribe',
+      'hub.topic': '?', // Unsure what Topic is.
+      'hub.lease_seconds': 864000
+  }
+}
+
+const subscriptionRequest = https.request(options, res => {
+  console.log(`*** Twitch WebSub Response statusCode: ${res.statusCode}`);
+
+  res.on('data', d => {
+    process.stdout.write("*** Twitch WebSub Response Data: ", d);
+  });
+});
+
+subscriptionRequest.on('error', error => {
+  console.error("*** Error: ", error);
+});
+
+subscriptionRequest.end();
+
+      // ### SNIPPETS AND REFERENCES ###
+
 // This makes the same call to the dummy/sample stream shown on the Twitch Getting Started page.
 // Next: Use this as a starting point to send a GET Request to a subscription Webhook.
-// Note: This ID has been deleted. Create new Client-ID and move to external/ignored file.
+/*
+
 const options = {
   hostname: 'api.twitch.tv',
   path: '/helix/streams?game_id=33214',
@@ -32,7 +65,7 @@ const options = {
   }
 }
 
-const req = https.request(options, res => {
+const dummyRequest = https.request(options, res => {
   console.log(`statusCode: ${res.statusCode}`);
 
   res.on('data', d => {
@@ -40,8 +73,10 @@ const req = https.request(options, res => {
   });
 });
 
-req.on('error', error => {
+dummyRequest.on('error', error => {
   console.error(error);
 });
 
-req.end();
+dummyRequest.end();
+
+*/
