@@ -4,7 +4,7 @@
   "description": "Learning Test for Twitch WebSub projct",
   "main": "LearningTest.js",
   "scripts": {
-    "test": "test",
+    "test": "mocha -r @babel/register test",
     "start": "babel-node src/LearningTest.js",
     "build": "babel src --out-dir dist"
   },
@@ -22,6 +22,9 @@
     "@babel/cli": "^7.8.3",
     "@babel/core": "^7.8.3",
     "@babel/node": "^7.8.3",
-    "@babel/preset-env": "^7.8.3"
+    "@babel/preset-env": "^7.8.3",
+    "@babel/register": "^7.8.3",
+    "chai": "^4.2.0",
+    "mocha": "^7.0.0"
   }
 }
