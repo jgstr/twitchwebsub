@@ -21,10 +21,15 @@ describe("Twitch WebSub", () => {
         const server = express();
 
         server.get('/', (request, response) => {
-            // Check the request.
-            console.log("*** Twitch request queries: ", request.query);
-            // Respond as needed.
+            if(request.query['hub.challenge']){
+                response.set('Content-Type', 'text/html')
+                response.status(200).send(request.query['hub.challenge']);
+            }
             done();
+        });
+
+        server.post('/', (request, response) => {
+            console.log('*** Twitch notification body: ', request.body);
         });
 
         server.listen(port, () => {
@@ -43,7 +48,7 @@ describe("Twitch WebSub", () => {
             {
                 'hub.callback': 'https://a0239221.ngrok.io', // ngrok Basic plan URL changes with each run.
                 'hub.mode': 'subscribe',
-                'hub.topic': 'https://api.twitch.tv/helix/users/follows?first=1&to_id=26301881',
+                'hub.topic': 'https://api.twitch.tv/helix/users/follows?first=1&to_id=159498717',
                 'hub.lease_seconds': 600
             }
 
