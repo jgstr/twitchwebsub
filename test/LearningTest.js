@@ -2,13 +2,6 @@
  * A learning test for Twitch WebSub.
  */
 
-// 1. Send Subscribe HTTP Request to Twitch. (Axios)
-// 2. Process Twitch HTTP Response (should be '202'). (Express)
-// 3. Process incoming Twitch Subscription confirmation GET Request. (Express)
-// 4. Respond to confirmation with 2xx and hub.challenge (in query parameters), all text/plain.
-//    Eventually use 404 for errors as well. (Express)
-// 5. Handle incoming Twitch notification POST Requests. Respond with 2xx. (Express)
-
 // Note: ngrok must use the $./ngrok http 3000 syntax, NOT http http://localhost:3000
 const express = require('express');
 const requester = require('axios');
@@ -20,23 +13,25 @@ describe("Twitch WebSub", () => {
         const port = 3000;
         const server = express();
 
+        // Handle Twitch subscription validation.
         server.get('/', (request, response) => {
-            if(request.query['hub.challenge']){
+            if (request.query['hub.challenge']) {
                 response.set('Content-Type', 'text/html')
                 response.status(200).send(request.query['hub.challenge']);
             }
             done();
         });
 
+        // Handle Twitch notifications (after subscription successful).
         server.post('/', (request, response) => {
-            console.log('*** Twitch notification body: ', request.body);
+            console.log('*** Twitch notification body: ', request.statusCode);
         });
 
         server.listen(port, () => {
             console.log(`*** Listening on port ${port}`);
         });
 
-        // *1
+        // Request subscription for Twitch topic.
         requester({
             method: 'POST',
             url: 'https://api.twitch.tv/helix/webhooks/hub',
@@ -52,7 +47,7 @@ describe("Twitch WebSub", () => {
                 'hub.lease_seconds': 600
             }
 
-        }) // *2
+        })
             .then(response => console.log("*** Twitch responded to subscribe request with code: ", response.status))
             .catch(error => console.log("*** Error: ", error.response.status, "\n*** Status text: ", error.response.statusText));
     });
