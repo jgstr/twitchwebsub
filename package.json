@@ -26,5 +26,9 @@
     "@babel/register": "^7.8.3",
     "chai": "^4.2.0",
     "mocha": "^7.0.0"
+  },
+  "dependencies": {
+    "axios": "^0.19.1",
+    "express": "^4.17.1"
   }
 }
