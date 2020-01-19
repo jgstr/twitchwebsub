@@ -34,14 +34,14 @@ describe("Twitch WebSub", () => {
         // *1
         requester({
             method: 'POST',
-            url: 'http://api.twitch.tv/helix/webhooks/hub',
+            url: 'https://api.twitch.tv/helix/webhooks/hub',
             headers: {
                 'Content-Type': 'application/json',
                 'Client-ID': clientID
             },
             data:
             {
-                'hub.callback': 'http://f2fdbd2c.ngrok.io', // ngrok Basic plan URL changes with each run.
+                'hub.callback': 'https://a0239221.ngrok.io', // ngrok Basic plan URL changes with each run.
                 'hub.mode': 'subscribe',
                 'hub.topic': 'https://api.twitch.tv/helix/users/follows?first=1&to_id=26301881',
                 'hub.lease_seconds': 600
