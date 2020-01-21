@@ -2,12 +2,15 @@
  * A learning test for Twitch WebSub.
  */
 
-// Note: ngrok must use the $./ngrok http 3000 syntax, NOT http http://localhost:3000
 const express = require('express');
 const requester = require('axios');
 import { clientID } from "../references/authentications";
+import { hubCallback } from "../references/authentications";
+
+// TODO 1: Get mocha to start/stop server with each test.
 
 describe("Twitch WebSub", () => {
+
     it("should call a validation endpoint", (done) => {
 
         const port = 3000;
@@ -41,7 +44,7 @@ describe("Twitch WebSub", () => {
             },
             data:
             {
-                'hub.callback': 'https://a0239221.ngrok.io', // ngrok Basic plan URL changes with each run.
+                'hub.callback': hubCallback,
                 'hub.mode': 'subscribe',
                 'hub.topic': 'https://api.twitch.tv/helix/users/follows?first=1&to_id=159498717',
                 'hub.lease_seconds': 600
@@ -49,6 +52,28 @@ describe("Twitch WebSub", () => {
 
         })
             .then(response => console.log("*** Twitch responded to subscribe request with code: ", response.status))
+            .catch(error => console.log("*** Error: ", error.response.status, "\n*** Status text: ", error.response.statusText));
+    });
+
+    // Note: not a good test. But this is the feature I ultimately want to create.
+    // TODO 2: Must learn how to provide authorization. Link:
+    // https://github.com/TwitchDev/authentication-samples/tree/master/node
+    it("should return an 'expires_at' response key", (done) => {
+        requester({
+            method: 'GET',
+            url: 'https://api.twitch.tv/helix/webhooks/subscriptions',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer APP-ACCESS-TOKEN`
+            }
+        })
+            .then(response => { 
+                console.log("*** Response Status: ", response.status);
+                console.log("*** Response Data: ", response.data);
+                // Note: I need to read the response.data keys first to know what the
+                // 'expires_at' key looks like.
+                return expect(response.data['expires_at']);
+            })
             .catch(error => console.log("*** Error: ", error.response.status, "\n*** Status text: ", error.response.statusText));
     });
 });
