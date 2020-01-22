@@ -7,34 +7,29 @@ const requester = require('axios');
 import { clientID } from "../references/authentications";
 import { hubCallback } from "../references/authentications";
 
-// TODO 1: Get mocha to start/stop server with each test.
-
+let server;
+const port = 3000;
+const app = express();
 describe("Twitch WebSub", () => {
 
+    beforeEach(() => {
+        server = app.listen(port, () => {
+            console.log(`*** Server running on port ${port}.`);
+        });
+    });
+
     it("should call a validation endpoint", (done) => {
-
-        const port = 3000;
-        const server = express();
-
         // Handle Twitch subscription validation.
-        server.get('/', (request, response) => {
+        app.get('/', (request, response) => {
             if (request.query['hub.challenge']) {
                 response.set('Content-Type', 'text/html')
                 response.status(200).send(request.query['hub.challenge']);
+                console.log(`*** Hub Challenge: ${request.query['hub.challenge']}`);
             }
             done();
         });
 
-        // Handle Twitch notifications (after subscription successful).
-        server.post('/', (request, response) => {
-            console.log('*** Twitch notification body: ', request.statusCode);
-        });
-
-        server.listen(port, () => {
-            console.log(`*** Listening on port ${port}`);
-        });
-
-        // Request subscription for Twitch topic.
+        // Request subscription for Twitch topic. Note: Subscriber ID might have to change frequently to receive a Twitch GET validation
         requester({
             method: 'POST',
             url: 'https://api.twitch.tv/helix/webhooks/hub',
@@ -46,7 +41,7 @@ describe("Twitch WebSub", () => {
             {
                 'hub.callback': hubCallback,
                 'hub.mode': 'subscribe',
-                'hub.topic': 'https://api.twitch.tv/helix/users/follows?first=1&to_id=159498717',
+                'hub.topic': 'https://api.twitch.tv/helix/users/follows?first=1&to_id=44445592',
                 'hub.lease_seconds': 600
             }
 
@@ -55,25 +50,8 @@ describe("Twitch WebSub", () => {
             .catch(error => console.log("*** Error: ", error.response.status, "\n*** Status text: ", error.response.statusText));
     });
 
-    // Note: not a good test. But this is the feature I ultimately want to create.
-    // TODO 2: Must learn how to provide authorization. Link:
-    // https://github.com/TwitchDev/authentication-samples/tree/master/node
-    it("should return an 'expires_at' response key", (done) => {
-        requester({
-            method: 'GET',
-            url: 'https://api.twitch.tv/helix/webhooks/subscriptions',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer APP-ACCESS-TOKEN`
-            }
-        })
-            .then(response => { 
-                console.log("*** Response Status: ", response.status);
-                console.log("*** Response Data: ", response.data);
-                // Note: I need to read the response.data keys first to know what the
-                // 'expires_at' key looks like.
-                return expect(response.data['expires_at']);
-            })
-            .catch(error => console.log("*** Error: ", error.response.status, "\n*** Status text: ", error.response.statusText));
+    afterEach(() => {
+        server.close();
+        console.log("*** Server stopped.");
     });
 });
