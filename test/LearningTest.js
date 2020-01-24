@@ -4,28 +4,40 @@
 
 const express = require('express');
 const requester = require('axios');
-import { clientID } from "../references/authentications";
-import { hubCallback } from "../references/authentications";
+import { clientID, hubCallback, liveChannelID } from "../references/authentications";
 
 let server;
 const port = 3000;
 const app = express();
-describe("Twitch WebSub", () => {
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 
-    beforeEach(() => {
+describe("Twitch WebSub", function() {
+
+    this.timeout(60000);
+
+    beforeEach(function() {
         server = app.listen(port, () => {
             console.log(`*** Server running on port ${port}.`);
         });
     });
 
-    it("should call a validation endpoint", (done) => {
+    // Useful for 1.a: Add/Renew Subscription
+    // and for 1.b: Remove Subscription
+    it("should call a validation endpoint", function(done) {
         // Handle Twitch subscription validation.
         app.get('/', (request, response) => {
             if (request.query['hub.challenge']) {
-                response.set('Content-Type', 'text/html')
+                response.set('Content-Type', 'text/html');
                 response.status(200).send(request.query['hub.challenge']);
                 console.log(`*** Hub Challenge: ${request.query['hub.challenge']}`);
             }
+        });
+
+        app.post('/', (request, response) => {
+            response.set('Content-Type', 'text/html');
+            response.status(200);
+            console.log('*** Notification request: ', request.body);
             done();
         });
 
@@ -41,7 +53,7 @@ describe("Twitch WebSub", () => {
             {
                 'hub.callback': hubCallback,
                 'hub.mode': 'subscribe',
-                'hub.topic': 'https://api.twitch.tv/helix/users/follows?first=1&to_id=44445592',
+                'hub.topic': `https://api.twitch.tv/helix/users/follows?first=1&to_id=${liveChannelID}`,
                 'hub.lease_seconds': 600
             }
 
@@ -50,7 +62,7 @@ describe("Twitch WebSub", () => {
             .catch(error => console.log("*** Error: ", error.response.status, "\n*** Status text: ", error.response.statusText));
     });
 
-    afterEach(() => {
+    afterEach(function() {
         server.close();
         console.log("*** Server stopped.");
     });
