@@ -2,17 +2,14 @@
   "name": "twitchwebsub",
   "version": "1.0.0",
   "description": "Learning Test for Twitch WebSub projct",
-  "main": "LearningTest.js",
   "scripts": {
-    "test": "mocha -r @babel/register test",
-    "start": "babel-node src/LearningTest.js",
-    "build": "babel src --out-dir dist"
+    "test": "mocha -r @babel/register tests"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jgstr/twitchwebsub.git"
   },
-  "author": "",
+  "author": "Aaron Goold",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/jgstr/twitchwebsub/issues"
@@ -25,6 +22,7 @@
     "@babel/preset-env": "^7.8.3",
     "@babel/register": "^7.8.3",
     "chai": "^4.2.0",
+    "docker-compose": "^0.23.2",
     "mocha": "^7.0.0"
   },
   "dependencies": {

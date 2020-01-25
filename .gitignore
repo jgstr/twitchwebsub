@@ -3,3 +3,4 @@ TwitchWebSub.code-workspace
 requests.http
 node_modules
 dist
+.DS_Store
