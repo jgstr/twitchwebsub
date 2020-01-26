@@ -1,6 +1,8 @@
 'use strict';
 const path = require('path');
 const compose = require('docker-compose');
+import { expect } from 'chai';
+import mysql from 'mysql';
 
 describe('Twitch Websub Subscriber', function (done) {
   this.timeout(17000);
@@ -21,9 +23,21 @@ describe('Twitch Websub Subscriber', function (done) {
   });
 
   // Get a subscription list.
-  it('should return an empty subscription list.', function (done) {
-    console.log('*** Test timeout start.');
-    setTimeout(done(), 1000);
+  it('should return an empty subscription list.', function () {
+
+    let pool = mysql.createPool({
+      host: 'localhost',
+      port: 3000,
+      user: 'root',
+      password: 'root',
+      database: 'notifications'
+    });
+    
+    let subscriptions = pool.query('SELECT * FROM subscriptions', function(error){
+      console.log("*** MySQL Error: ", error);
+    })
+
+    expect(subscriptions.length).to.equal(0);
   });
 
   // Send the subscription request to Twitch.

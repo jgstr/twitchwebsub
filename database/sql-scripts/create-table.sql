@@ -1,5 +1,5 @@
-CREATE TABLE IF NOT EXISTS notifications (
+CREATE TABLE IF NOT EXISTS subscriptions (
     id INT NOT NULL AUTO_INCREMENT,
-    event_data BLOB NOT NULL,
+    data VARCHAR(255) NOT NULL,
     PRIMARY KEY (id)
     );
