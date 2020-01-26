@@ -3,7 +3,12 @@
   "version": "1.0.0",
   "description": "Learning Test for Twitch WebSub projct",
   "scripts": {
-    "test": "mocha -r @babel/register tests"
+    "test": "mocha -r @babel/register tests",
+    "e2e": "mocha -r @babel/register end-to-end",
+    "build-subscriber": "docker build -t twitchwebsub_subscriber subscriber",
+    "build-fake-twitch": "docker build -t twitchwebsub_fake-twitch-websub fake-twitch-websub",
+    "build-database": "docker build -t twitchwebsub_database database",
+    "build-all": "build-subscriber && build-fake-twitch && build-database"
   },
   "repository": {
     "type": "git",

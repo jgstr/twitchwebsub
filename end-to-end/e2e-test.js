@@ -3,7 +3,7 @@ const path = require('path');
 const compose = require('docker-compose');
 
 describe('Twitch Websub Subscriber', function (done) {
-  this.timeout(10000);
+  this.timeout(17000);
 
   before(function (done) {
     compose
@@ -20,11 +20,21 @@ describe('Twitch Websub Subscriber', function (done) {
       );
   });
 
-  it('should return one event record from the database.', function (done) {
-    // expect record from database to return 1 row
+  // Get a subscription list.
+  it('should return an empty subscription list.', function (done) {
     console.log('*** Test timeout start.');
-    setTimeout(done(), 5000);
+    setTimeout(done(), 1000);
   });
+
+  // Send the subscription request to Twitch.
+  // it('should receive a 2xx response from Twitch.',function(){
+
+  // });
+
+  // Write the subscription to the database and Read it.
+  // it('should return one subscription record.', function () {
+
+  // });
 
   after(function (done) {
     compose
