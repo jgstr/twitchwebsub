@@ -5,16 +5,17 @@ import { expect } from 'chai';
 import mysql from 'mysql';
 
 describe('Twitch Websub Subscriber', function (done) {
-  this.timeout(17000);
+  this.timeout(30000);
+
+  let pool;
 
   before(function (done) {
     compose
       .upAll({ cwd: path.join(__dirname, '..'), log: true, })
-      .then(
-        () => {
-          console.log('Docker-compose up ran.');
-          done();
-        },
+      .then(() => {
+        console.log('Docker-compose up ran.');
+        done();
+      },
         err => {
           console.log('Error running docker-compose up:', err.message);
           done();
@@ -23,21 +24,28 @@ describe('Twitch Websub Subscriber', function (done) {
   });
 
   // Get a subscription list.
-  it('should return an empty subscription list.', function () {
+  it('should return an empty subscription list.', function (done) {
+    console.log('*** Waiting 7 seconds to query...');
+    setTimeout(() => {
 
-    let pool = mysql.createPool({
-      host: 'localhost',
-      port: 3000,
-      user: 'root',
-      password: 'root',
-      database: 'notifications'
-    });
-    
-    let subscriptions = pool.query('SELECT * FROM subscriptions', function(error){
-      console.log("*** MySQL Error: ", error);
-    })
+      pool = mysql.createPool({
+        host: 'localhost',
+        user: 'admin',
+        password: 'root',
+        database: 'notifications'
+      });
+      
+      pool.query('SELECT * FROM subscriptions', function (error, results) {
+        if (error) {
+          console.log('*** Query error: ', error);
+          done();
+        } else {
+          console.log('*** Results!');
+          done();
+        }
+      });
+    }, 7000);
 
-    expect(subscriptions.length).to.equal(0);
   });
 
   // Send the subscription request to Twitch.
