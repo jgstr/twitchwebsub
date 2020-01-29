@@ -31,9 +31,10 @@ describe('Twitch Websub Subscriber', function (done) {
     // Receive no subscriptions.
     setTimeout(() => {
 
+      // Using port 3307 because compose exposes MySQL to 3307 on this Host machine (aka my Mac)
       pool = mysql.createPool({
         host: 'localhost',
-        port: 3000,
+        port: 3307,
         user: 'user',
         password: 'password',
         database: 'notifications'
