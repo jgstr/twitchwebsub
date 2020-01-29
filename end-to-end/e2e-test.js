@@ -25,18 +25,22 @@ describe('Twitch Websub Subscriber', function (done) {
 
   // Get a subscription list.
   it('should return one subscription.', function (done) {
-    console.log('*** Waiting 7 seconds to query...');
+
+    let subscriptions;
+
+    // Receive no subscriptions.
     setTimeout(() => {
 
       pool = mysql.createPool({
         host: 'localhost',
         user: 'user',
+        password: 'password',
         database: 'notifications'
       });
-      
+
       pool.query('SELECT * FROM subscriptions', function (error, results) {
         if (error) {
-          console.log('error');
+          console.log('Error: ', error);
           done();
         } else {
           console.log('*** Results!');
@@ -44,6 +48,11 @@ describe('Twitch Websub Subscriber', function (done) {
         }
       });
     }, 7000);
+
+    // Subscribe to a Twitch event.
+
+    // Receive one subscription. (Use an assertion like this when ready.)
+    // expect(subscriptions.length).to.equal(1);
 
   });
 
