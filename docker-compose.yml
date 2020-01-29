@@ -12,10 +12,6 @@ services:
       MYSQL_USER: "user"
       MYSQL_PASSWORD: "password"
       MYSQL_DATABASE: "notifications"
-    depends_on:
-      - database
-    links:
-      - database
   fake-twitch-websub:
     build: fake-twitch-websub
     ports:
