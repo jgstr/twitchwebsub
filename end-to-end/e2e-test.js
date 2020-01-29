@@ -24,20 +24,19 @@ describe('Twitch Websub Subscriber', function (done) {
   });
 
   // Get a subscription list.
-  it('should return an empty subscription list.', function (done) {
+  it('should return one subscription.', function (done) {
     console.log('*** Waiting 7 seconds to query...');
     setTimeout(() => {
 
       pool = mysql.createPool({
         host: 'localhost',
-        user: 'admin',
-        password: 'root',
+        user: 'user',
         database: 'notifications'
       });
       
       pool.query('SELECT * FROM subscriptions', function (error, results) {
         if (error) {
-          console.log('*** Query error: ', error);
+          console.log('error');
           done();
         } else {
           console.log('*** Results!');
@@ -47,16 +46,6 @@ describe('Twitch Websub Subscriber', function (done) {
     }, 7000);
 
   });
-
-  // Send the subscription request to Twitch.
-  // it('should receive a 2xx response from Twitch.',function(){
-
-  // });
-
-  // Write the subscription to the database and Read it.
-  // it('should return one subscription record.', function () {
-
-  // });
 
   after(function (done) {
     compose

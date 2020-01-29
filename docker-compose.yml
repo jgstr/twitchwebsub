@@ -4,16 +4,21 @@ services:
   subscriber:
     build: subscriber
     ports:
-      - 3000:3000
+      - "3306:3306"
+    expose:
+      - "3306"
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_USER: "user"
+      MYSQL_PASSWORD: "password"
+      MYSQL_DATABASE: "notifications"
     depends_on:
       - database
-    environment:
-      - DATABASE_HOST=database
     links:
       - database
   fake-twitch-websub:
     build: fake-twitch-websub
     ports:
-      - 3001:3001
+      - "3001:3001"
   database:
     build: database
