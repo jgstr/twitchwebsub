@@ -32,7 +32,8 @@ describe('Twitch Websub Subscriber', function (done) {
     setTimeout(() => {
 
       pool = mysql.createPool({
-        host: 'database',
+        host: 'localhost',
+        port: 3000,
         user: 'user',
         password: 'password',
         database: 'notifications'
@@ -47,7 +48,7 @@ describe('Twitch Websub Subscriber', function (done) {
           done();
         }
       });
-    }, 7000);
+    }, 10000);
 
     // Subscribe to a Twitch event.
 
