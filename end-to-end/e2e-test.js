@@ -2,12 +2,10 @@
 const path = require('path');
 const compose = require('docker-compose');
 import { expect } from 'chai';
-import mysql from 'mysql';
+const axios = require('axios');
 
 describe('Twitch Websub Subscriber', function (done) {
   this.timeout(30000);
-
-  let pool;
 
   before(function (done) {
     compose
@@ -26,30 +24,18 @@ describe('Twitch Websub Subscriber', function (done) {
   // Get a subscription list.
   it('should return one subscription.', function (done) {
 
-    let subscriptions;
-
     // Receive no subscriptions.
     setTimeout(() => {
-
-      // Using port 3307 because compose exposes MySQL to 3307 on this Host machine (aka my Mac)
-      pool = mysql.createPool({
-        host: 'localhost',
-        port: 3307,
-        user: 'user',
-        password: 'password',
-        database: 'notifications'
+      const subscriptionsResponse = axios.get('http://localhost:3000/get-subscriptions');
+      subscriptionsResponse.then((response) => {
+        console.log("*** Subscription response: ", response.status);
+        done();
+      }).catch((error) => {
+        console.log("*** ", error);
+        done();
       });
+    }, 12000);
 
-      pool.query('SELECT * FROM subscriptions', function (error, results) {
-        if (error) {
-          console.log('Error: ', error);
-          done();
-        } else {
-          console.log('*** Results!');
-          done();
-        }
-      });
-    }, 10000);
 
     // Subscribe to a Twitch event.
 
