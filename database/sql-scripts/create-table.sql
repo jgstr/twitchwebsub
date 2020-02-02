@@ -1,4 +1,4 @@
-CREATE DATABASE notifications;
+CREATE DATABASE IF NOT EXISTS notifications;
 USE notifications;
 CREATE TABLE IF NOT EXISTS subscriptions (
     id INT NOT NULL AUTO_INCREMENT,
