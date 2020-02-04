@@ -3,11 +3,17 @@ const path = require('path');
 const compose = require('docker-compose');
 import { expect } from 'chai';
 const axios = require('axios');
+const twitchServer = require('../fake-twitch-websub/fake-twitch-server');
+const twitchPort = 3001;
+let twitchApp;
 
 describe('Twitch Websub Subscriber', function (done) {
   this.timeout(30000);
 
   before(function (done) {
+    twitchApp = twitchServer.listen(twitchPort);
+    console.log(`*** Fake Twitch Listening on ${twitchPort}`);
+
     compose
       .upAll({ cwd: path.join(__dirname, '..'), log: true, })
       .then(() => {
@@ -64,6 +70,7 @@ describe('Twitch Websub Subscriber', function (done) {
   });
 
   after(function (done) {
+    twitchApp.close();
     compose
       .down(["--rmi all"])
       .then(
