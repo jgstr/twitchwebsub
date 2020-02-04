@@ -30,11 +30,11 @@ describe('Twitch Websub Subscriber', function (done) {
       // TODO: Next handle json
       // Then: handle next tests. 
       subscriptionsResponse.then((response) => {
-        const subscriptions = JSON.parse(response.body);
+        const subscriptions = response.data;
         expect(subscriptions.list.length).to.equal(0); // Way-point marker.
         done();
       }).catch((error) => {
-        console.log("*** ", error.message);
+        console.log("*** Error: ", error.message);
         done();
       });
     }, 12000);
@@ -47,17 +47,17 @@ describe('Twitch Websub Subscriber', function (done) {
 
   });
 
-  // after(function (done) {
-  //   compose
-  //     .down(["--rmi all"])
-  //     .then(
-  //       () => {
-  //         console.log('Docker-compose down ran.');
-  //         done();
-  //       },
-  //       err => {
-  //         console.log('Something went wrong when trying to stop containers:', err.message);
-  //         done();
-  //       });
-  // });
+  after(function (done) {
+    compose
+      .down(["--rmi all"])
+      .then(
+        () => {
+          console.log('Docker-compose down ran.');
+          done();
+        },
+        err => {
+          console.log('Something went wrong when trying to stop containers:', err.message);
+          done();
+        });
+  });
 });

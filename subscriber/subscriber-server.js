@@ -7,7 +7,7 @@ const port = 3000;
 const app = express();
 
 let pool = mysql.createPool({
-  host: 'database',
+  host: 'database', 
   port: 3306,
   user: 'user',
   password: 'password',
@@ -20,14 +20,13 @@ app.get('/', (request, response) => {
 
 app.get('/get-subscriptions', (request, response) => {
 
-  
-
   pool.query('SELECT * FROM subscriptions', function (error, results) {
     if (error) {
-      console.log(error);
+      console.log('*** Error: ', error);
       response.status(500).send(error);
     } else {
-      response.status(200).send(results);
+      // const subscriptionList = ;
+      response.status(200).json({list:results});
     }
   });
 
