@@ -25,7 +25,6 @@ app.get('/get-subscriptions', (request, response) => {
       console.log('*** Error: ', error);
       response.status(500).send(error);
     } else {
-      // const subscriptionList = ;
       response.status(200).json({list:results});
     }
   });
