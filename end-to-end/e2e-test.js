@@ -40,6 +40,15 @@ describe('Twitch Websub Subscriber', function (done) {
         .then((response) => {
           expect(response.status).to.equal(200); // Way-point marker.
           console.log('*** Subscribe response: ', response.status);
+
+          // Receive 1 subscription.
+          const subscribeResponse = axios.get('http://localhost:3000/get-subscriptions');
+          return subscribeResponse;
+        })
+        .then((response) => {
+          const subscriptions = response.data;
+          expect(subscriptions.list.length).to.equal(1);
+          console.log('*** Subscriptions: ', subscriptions.list.length);
           done();
         })
         .catch((error) => {
