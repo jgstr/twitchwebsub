@@ -24,24 +24,31 @@ describe('Twitch Websub Subscriber', function (done) {
   // Get a subscription list.
   it('should return one subscription.', function (done) {
 
-    // Receive no subscriptions.
     setTimeout(() => {
+      // Receive no subscriptions.
       const subscriptionsResponse = axios.get('http://localhost:3000/get-subscriptions');
-      subscriptionsResponse.then((response) => {
-        const subscriptions = response.data;
-        expect(subscriptions.list.length).to.equal(0); // Way-point marker.
-        done();
-      }).catch((error) => {
-        console.log("*** Error: ", error.message);
-        done();
-      });
+      subscriptionsResponse
+        .then((response) => {
+          const subscriptions = response.data;
+          expect(subscriptions.list.length).to.equal(0); // Way-point marker.
+          console.log('*** Subs: ', subscriptions.list.length);
+          // Subscribe to a Twitch event. Receive response.
+          const subscribeResponse = axios.get('http://localhost:3000/subscribe');
+          return subscribeResponse;
+        })
+        .then((response) => {
+          expect(response.status).to.equal(200); // Way-point marker.
+          console.log('*** Subscribe res: ', response.status);
+          done();
+        })
+        .catch((error) => {
+          console.log("*** Error: ", error.message);
+          done();
+        });
+
     }, 12000);
 
-
-    // Subscribe to a Twitch event.
-    expect(subscription.)
-
-    // Receive one subscription. (Use an assertion like this when ready.)
+    // Receive one subscription.
     // expect(subscriptions.length).to.equal(1);
 
   });
