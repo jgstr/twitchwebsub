@@ -41,14 +41,14 @@ describe('Twitch Websub Subscriber', function (done) {
           expect(response.status).to.equal(200); // Way-point marker.
           console.log('*** Subscribe response: ', response.status);
 
-          // Receive 1 subscription.
-          const subscribeResponse = axios.get('http://localhost:3000/get-subscriptions');
-          return subscribeResponse;
+          // Trigger Fake-Twitch Request.
+          const approvalResponse = axios.get('http://localhost:3001/make-request');
+          return approvalResponse;
         })
-        .then((response) => {
-          const subscriptions = response.data;
-          expect(subscriptions.list.length).to.equal(1);
-          console.log('*** Subscriptions: ', subscriptions.list.length);
+        .then(() => {
+          // Check Subscriber-server Responded correctly.
+          const fakeTwitchSubscribers = axios.get('http://localhost:3001/get-subscribers');
+          expect(fakeTwitchSubscribers).to.equal(1);
           done();
         })
         .catch((error) => {
@@ -58,8 +58,8 @@ describe('Twitch Websub Subscriber', function (done) {
 
     }, 12000);
 
-    // Receive one subscription.
-    // expect(subscriptions.length).to.equal(1);
+    // Receive 1 subscription.
+    // expect(subscriptions.list.length).to.equal(1);
 
   });
 
