@@ -27,8 +27,6 @@ describe('Twitch Websub Subscriber', function (done) {
     // Receive no subscriptions.
     setTimeout(() => {
       const subscriptionsResponse = axios.get('http://localhost:3000/get-subscriptions');
-      // TODO: Next handle json
-      // Then: handle next tests. 
       subscriptionsResponse.then((response) => {
         const subscriptions = response.data;
         expect(subscriptions.list.length).to.equal(0); // Way-point marker.
@@ -41,6 +39,7 @@ describe('Twitch Websub Subscriber', function (done) {
 
 
     // Subscribe to a Twitch event.
+    expect(subscription.)
 
     // Receive one subscription. (Use an assertion like this when ready.)
     // expect(subscriptions.length).to.equal(1);
