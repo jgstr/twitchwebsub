@@ -31,14 +31,15 @@ describe('Twitch Websub Subscriber', function (done) {
         .then((response) => {
           const subscriptions = response.data;
           expect(subscriptions.list.length).to.equal(0); // Way-point marker.
-          console.log('*** Subs: ', subscriptions.list.length);
+          console.log('*** Subscriptions: ', subscriptions.list.length);
+
           // Subscribe to a Twitch event. Receive response.
           const subscribeResponse = axios.get('http://localhost:3000/subscribe');
           return subscribeResponse;
         })
         .then((response) => {
           expect(response.status).to.equal(200); // Way-point marker.
-          console.log('*** Subscribe res: ', response.status);
+          console.log('*** Subscribe response: ', response.status);
           done();
         })
         .catch((error) => {

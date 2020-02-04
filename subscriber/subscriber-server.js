@@ -7,7 +7,7 @@ const port = 3000;
 const app = express();
 
 let pool = mysql.createPool({
-  host: 'database', 
+  host: 'database',
   port: 3306,
   user: 'user',
   password: 'password',
@@ -25,10 +25,15 @@ app.get('/get-subscriptions', (request, response) => {
       console.log('*** Error: ', error);
       response.status(500).send(error);
     } else {
-      response.status(200).json({list:results});
+      response.status(200).json({ list: results });
     }
   });
 
+});
+
+app.get('/subscribe', (request, response) => {
+  // TODO validate request.
+  response.status(200).send('OK');
 });
 
 app.listen(port);
