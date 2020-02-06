@@ -32,8 +32,14 @@ app.get('/get-subscriptions', (request, response) => {
 });
 
 app.get('/subscribe', (request, response) => {
-  // TODO validate request.
   response.status(200).send('OK');
+
+  // TODO: Call /hub once request arrives. But this will not work currently.
+  axios.get('http://localhost:3001/hub')
+    .then(response => {
+      console.log('*** /hub Approval response: ', response.status);
+    })
+    .catch(error => console.log(error));
 });
 
 app.listen(port);

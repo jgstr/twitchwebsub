@@ -3,7 +3,9 @@ const path = require('path');
 const compose = require('docker-compose');
 import { expect } from 'chai';
 const axios = require('axios');
-const twitchServer = require('../fake-twitch-websub/fake-twitch-server');
+// const twitchServer = require('../fake-twitch-websub/fake-twitch-server');
+import {app, sendApprovalRequest} from '../fake-twitch-websub/fake-twitch-server';
+const twitchServer = app;
 const twitchPort = 3001;
 let twitchApp;
 
@@ -40,16 +42,14 @@ describe('Twitch Websub Subscriber', function (done) {
           console.log('*** Subscriptions: ', subscriptions.list.length);
 
           // Subscribe to a Twitch event. Receive response.
-          const subscribeResponse = axios.get('http://localhost:3000/subscribe');
-          return subscribeResponse;
+          return axios.get('http://localhost:3000/subscribe');
         })
         .then((response) => {
           expect(response.status).to.equal(200); // Way-point marker.
-          console.log('*** Subscribe response: ', response.status);
+          console.log('*** subscriber/subscribe response: ', response.status);
 
           // Trigger Fake-Twitch Request.
-          const approvalResponse = axios.get('http://localhost:3001/make-request');
-          return approvalResponse;
+          return sendApprovalRequest();
         })
         .then(() => {
           // Check Subscriber-server Responded correctly.
@@ -69,18 +69,18 @@ describe('Twitch Websub Subscriber', function (done) {
 
   });
 
-  after(function (done) {
-    twitchApp.close();
-    compose
-      .down(["--rmi all"])
-      .then(
-        () => {
-          console.log('Docker-compose down ran.');
-          done();
-        },
-        err => {
-          console.log('Something went wrong when trying to stop containers:', err.message);
-          done();
-        });
-  });
+  // after(function (done) {
+  //   twitchApp.close();
+  //   compose
+  //     .down(["--rmi all"])
+  //     .then(
+  //       () => {
+  //         console.log('Docker-compose down ran.');
+  //         done();
+  //       },
+  //       err => {
+  //         console.log('Something went wrong when trying to stop containers:', err.message);
+  //         done();
+  //       });
+  // });
 });
