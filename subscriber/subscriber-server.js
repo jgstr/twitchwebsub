@@ -1,9 +1,10 @@
 'use strict';
 const express = require('express');
 import mysql from 'mysql';
+const axios = require('axios');
+
 
 const port = 3000;
-
 const app = express();
 
 let pool = mysql.createPool({
@@ -34,12 +35,25 @@ app.get('/get-subscriptions', (request, response) => {
 app.get('/subscribe', (request, response) => {
   response.status(200).send('OK');
 
-  // TODO: Call /hub once request arrives. But this will not work currently.
-  axios.get('http://localhost:3001/hub')
+  axios.post('http://host.docker.internal:3001/hub')
     .then(response => {
-      console.log('*** /hub Approval response: ', response.status);
+      console.log('*** Hub Approval response: ', response.status);
     })
     .catch(error => console.log(error));
+});
+
+app.get('/approval-callback', (request, response) => {
+
+  response.set('Content-Type', 'text/html');
+  response.status(200).send('hub.challenge Will Go Here');
+
+  pool.query('INSERT INTO subscriptions SET ?', { data: 'test_subscription' }, function (error, results) {
+    if (error) {
+      console.log('*** Error: ', error);
+    } else {
+      console.log('*** Subscription ID: ', results.insertId);
+    }
+  });
 });
 
 app.listen(port);
