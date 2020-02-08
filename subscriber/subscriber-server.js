@@ -2,7 +2,7 @@
 const express = require('express');
 import mysql from 'mysql';
 const axios = require('axios');
-
+import { clientID, hubCallback, liveChannelID } from "./authentications";
 
 const port = 3000;
 const app = express();
@@ -35,7 +35,21 @@ app.get('/get-subscriptions', (request, response) => {
 app.get('/subscribe', (request, response) => {
   response.status(200).send('OK');
 
-  axios.post('http://host.docker.internal:3001/hub')
+  axios({
+    method: 'POST',
+    url: 'http://host.docker.internal:3001/hub',
+    headers: {
+      'Content-Type': 'application/json',
+      'Client-ID': clientID
+    },
+    data:
+    {
+      'hub.callback': hubCallback,
+      'hub.mode': 'subscribe',
+      'hub.topic': `https://api.twitch.tv/helix/users/follows?first=1&to_id=${liveChannelID}`,
+      'hub.lease_seconds': 600
+    }
+  })
     .then(response => {
       console.log('*** Hub Approval response: ', response.status);
     })
