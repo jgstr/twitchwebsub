@@ -7,6 +7,7 @@ import { app, sendApprovalRequest } from '../fake-twitch-websub/fake-twitch-serv
 const twitchServer = app;
 const twitchPort = 3001;
 let twitchApp;
+const hubCallback = 'http://localhost:3000/approval-callback';
 
 describe('Twitch Websub Subscriber', function (done) {
   this.timeout(30000);
@@ -48,7 +49,9 @@ describe('Twitch Websub Subscriber', function (done) {
           console.log('*** /subscribe response: ', response.status);
 
           // Trigger Fake-Twitch Request.
-          return sendApprovalRequest();
+          // Note: passing this callback is a temporary solution. Fake-twitch should
+          // validate hub.callback, but passing hub.callback results in 'undefined.'
+          return sendApprovalRequest(hubCallback); 
         })
         .then((response) => {
           // Check Subscriber-server Responded correctly.
@@ -74,18 +77,18 @@ describe('Twitch Websub Subscriber', function (done) {
 
   });
 
-  after(function (done) {
-    twitchApp.close();
-    compose
-      .down(["--rmi all"])
-      .then(
-        () => {
-          console.log('Docker-compose down ran.');
-          done();
-        },
-        err => {
-          console.log('Something went wrong when trying to stop containers:', err.message);
-          done();
-        });
-  });
+  // after(function (done) {
+  //   twitchApp.close();
+  //   compose
+  //     .down(["--rmi all"])
+  //     .then(
+  //       () => {
+  //         console.log('Docker-compose down ran.');
+  //         done();
+  //       },
+  //       err => {
+  //         console.log('Something went wrong when trying to stop containers:', err.message);
+  //         done();
+  //       });
+  // });
 });
