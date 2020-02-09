@@ -58,8 +58,10 @@ app.get('/subscribe', (request, response) => {
 
 app.get('/approval-callback', (request, response) => {
 
-  response.set('Content-Type', 'text/html');
-  response.status(200).send('hub.challenge Will Go Here');
+  if (request.query['hub.challenge']) {
+    response.set('Content-Type', 'text/html');
+    response.status(200).send(request.query['hub.challenge']);
+  }
 
   pool.query('INSERT INTO subscriptions SET ?', { data: 'test_subscription' }, function (error, results) {
     if (error) {

@@ -23,7 +23,10 @@ app.post('/hub', (request, response) => {
 // Note: See e2e. E2e calls this and gets 'undefined' when using body['hub.callback'].
 // For now, I pass the URL from the e2e to get this to work.
 const sendApprovalRequest = (hubCallback) => {
-  return axios.get(hubCallback);
+  return axios({
+    method: 'GET',
+    url: hubCallback + '/?hub.challenge=97jbdwcHVzb_rv7McRfpIHuMMY8UhvUXDYhA1Egd'
+  });
 };
 
 module.exports = { app, sendApprovalRequest };

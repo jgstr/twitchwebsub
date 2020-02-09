@@ -54,8 +54,11 @@ describe('Twitch Websub Subscriber', function (done) {
           return sendApprovalRequest(hubCallback); 
         })
         .then((response) => {
+          // TODO: left off here 2/9/2020
           // Check Subscriber-server Responded correctly.
-          if (response.status === 200) {
+          // This needs to be moved to fake-twitch.
+          if (response.status === 200
+            && response.data === '97jbdwcHVzb_rv7McRfpIHuMMY8UhvUXDYhA1Egd') {
             return axios.get('http://localhost:3000/get-subscriptions');
           } else {
             console.log('*** Subscriber did not respond to Twitch Approval properly.');
