@@ -49,7 +49,7 @@ describe('Twitch Websub Subscriber', function (done) {
           console.log('*** /subscribe response: ', response.status);
 
           // Trigger Fake-Twitch Request.
-          // Note: passing this callback is a temporary solution. Fake-twitch should
+          // TODO: passing this callback is a temporary solution. Fake-twitch should
           // validate hub.callback, but passing hub.callback results in 'undefined.'
           return sendApprovalRequest(hubCallback); 
         })

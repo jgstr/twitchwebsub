@@ -22,7 +22,7 @@ app.post('/hub', (request, response) => {
 
 });
 
-// Note: See e2e. E2e calls this and gets 'undefined' when using body['hub.callback'].
+// TODO: See e2e. E2e calls this and gets 'undefined' when using body['hub.callback'].
 // For now, I pass the URL from the e2e to get this to work.
 const sendApprovalRequest = (hubCallback) => {
 
