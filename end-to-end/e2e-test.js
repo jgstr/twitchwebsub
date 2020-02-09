@@ -53,15 +53,10 @@ describe('Twitch Websub Subscriber', function (done) {
           // validate hub.callback, but passing hub.callback results in 'undefined.'
           return sendApprovalRequest(hubCallback); 
         })
-        .then((response) => {
-          // TODO: left off here 2/9/2020
-          // Check Subscriber-server Responded correctly.
-          // This needs to be moved to fake-twitch.
-          if (response.status === 200
-            && response.data === '97jbdwcHVzb_rv7McRfpIHuMMY8UhvUXDYhA1Egd') {
+        .then((requestStatus) => {
+          if (requestStatus === 'approved') {
             return axios.get('http://localhost:3000/get-subscriptions');
           } else {
-            console.log('*** Subscriber did not respond to Twitch Approval properly.');
             done();
           }
         })
@@ -80,18 +75,18 @@ describe('Twitch Websub Subscriber', function (done) {
 
   });
 
-  // after(function (done) {
-  //   twitchApp.close();
-  //   compose
-  //     .down(["--rmi all"])
-  //     .then(
-  //       () => {
-  //         console.log('Docker-compose down ran.');
-  //         done();
-  //       },
-  //       err => {
-  //         console.log('Something went wrong when trying to stop containers:', err.message);
-  //         done();
-  //       });
-  // });
+  after(function (done) {
+    twitchApp.close();
+    compose
+      .down(["--rmi all"])
+      .then(
+        () => {
+          console.log('Docker-compose down ran.');
+          done();
+        },
+        err => {
+          console.log('Something went wrong when trying to stop containers:', err.message);
+          done();
+        });
+  });
 });

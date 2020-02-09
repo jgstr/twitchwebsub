@@ -6,6 +6,8 @@ const app = express();
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 
+let subscriptions = [];
+
 app.post('/hub', (request, response) => {
   if (request.headers['Client-ID']
     && request.body['hub.callback']
@@ -23,9 +25,22 @@ app.post('/hub', (request, response) => {
 // Note: See e2e. E2e calls this and gets 'undefined' when using body['hub.callback'].
 // For now, I pass the URL from the e2e to get this to work.
 const sendApprovalRequest = (hubCallback) => {
-  return axios({
-    method: 'GET',
-    url: hubCallback + '/?hub.challenge=97jbdwcHVzb_rv7McRfpIHuMMY8UhvUXDYhA1Egd'
+
+  return new Promise((resolve, reject) => {
+    axios({
+      method: 'GET',
+      url: hubCallback + '/?hub.challenge=97jbdwcHVzb_rv7McRfpIHuMMY8UhvUXDYhA1Egd'
+    })
+      .then((response) => {
+        if (response.status === 200
+          && response.data === '97jbdwcHVzb_rv7McRfpIHuMMY8UhvUXDYhA1Egd') {
+          subscriptions.push(hubCallback + '/?hub.challenge=97jbdwcHVzb_rv7McRfpIHuMMY8UhvUXDYhA1Egd');
+          resolve('approved');
+        }
+      })
+      .catch((error) => {
+        reject(error);
+      });
   });
 };
 
