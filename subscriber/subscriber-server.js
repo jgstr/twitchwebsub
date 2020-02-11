@@ -51,7 +51,7 @@ app.get('/subscribe', (request, response) => {
     }
   })
     .then(response => {
-      console.log('*** Hub Approval response: ', response.status);
+      console.log('*** Twitch Hub Approval response: ', response.status);
     })
     .catch(error => console.log(error));
 });

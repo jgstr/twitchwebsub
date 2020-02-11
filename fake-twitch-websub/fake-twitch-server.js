@@ -15,7 +15,6 @@ app.post('/hub', (request, response) => {
     && request.body['hub.mode'] === 'subscribe'
     && request.body['hub.topic']
     && request.body['hub.lease_seconds']) {
-      hubCallbackTest = request.body['hub.callback'];
     response.status(200).send('Subscription Request Received.');
   } else {
     response.status(400).send('There was a problem with your subscribe request.');
