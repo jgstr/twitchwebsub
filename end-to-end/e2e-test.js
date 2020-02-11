@@ -3,7 +3,7 @@ const path = require('path');
 const compose = require('docker-compose');
 import { expect } from 'chai';
 const axios = require('axios');
-import { app, sendApprovalRequest } from '../fake-twitch-websub/fake-twitch-server';
+import { app, sendApprovalRequest, getSubscriptions } from '../fake-twitch-websub/fake-twitch-server';
 const twitchServer = app;
 const twitchPort = 3001;
 let twitchApp;
@@ -57,12 +57,17 @@ describe('Twitch Websub Subscriber', function (done) {
           if (requestStatus === 'approved') {
             return axios.get('http://localhost:3000/get-subscriptions');
           } else {
+            console.log('*** Somethign went wrong with the Approval Request.');
             done();
           }
         })
         .then((response) => {
           const subscriptions = response.data;
           expect(subscriptions.list.length).to.equal(1);
+          // TODO: Here's a similar problem to the sendApprovalRequest(callback) problem.
+          // In both cases, the variables in fake-twitch-server are not scoped correctly.
+          // But how to accomplish this eludes me.
+          // expect(subscriptions.list.length).to.equal(getSubscriptions.length);
           console.log('*** Subscriptions: ', subscriptions.list.length);
           done();
         })
