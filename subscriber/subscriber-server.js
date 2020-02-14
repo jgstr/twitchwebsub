@@ -22,12 +22,7 @@ app.get('/', (request, response) => {
 app.get('/get-subscriptions', (request, response) => {
 
   pool.query('SELECT * FROM subscriptions', function (error, results) {
-    if (error) {
-      console.log('*** Error: ', error);
-      response.status(500).send(error);
-    } else {
-      response.status(200).json({ list: results });
-    }
+    response.status(200).json({ list: results });
   });
 
 });

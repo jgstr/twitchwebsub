@@ -29,7 +29,6 @@ describe('Twitch Websub Subscriber', function (done) {
       );
   });
 
-  // Get a subscription list.
   it('should return one subscription.', function (done) {
 
     setTimeout(() => {
@@ -44,9 +43,6 @@ describe('Twitch Websub Subscriber', function (done) {
         .then((response) => {
           expect(response.status).to.equal(200); // Way-point marker.
 
-          // Trigger Fake-Twitch Request.
-          // TODO: passing this callback is a temporary solution. Fake-twitch should
-          // validate hub.callback, but passing hub.callback results in 'undefined.'
           return sendApprovalRequest(); 
         })
         .then((requestStatus) => {
@@ -74,7 +70,7 @@ describe('Twitch Websub Subscriber', function (done) {
     }, 12000);
 
   });
-
+  
   after(function (done) {
     twitchApp.close();
     compose
