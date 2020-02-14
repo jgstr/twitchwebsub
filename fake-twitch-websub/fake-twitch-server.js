@@ -7,6 +7,7 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 
 let subscriptions = [];
+let hubCallback;
 
 app.post('/hub', (request, response) => {
   if (request.headers['Client-ID']
@@ -16,6 +17,7 @@ app.post('/hub', (request, response) => {
     && request.body['hub.topic']
     && request.body['hub.lease_seconds']) {
     response.status(200).send('Subscription Request Received.');
+    hubCallback = request.body['hub.callback'];
   } else {
     response.status(400).send('There was a problem with your subscribe request.');
   }
@@ -24,7 +26,7 @@ app.post('/hub', (request, response) => {
 
 // TODO: See e2e. E2e calls this and gets 'undefined' when using body['hub.callback'].
 // For now, I pass the URL from the e2e to get this to work.
-const sendApprovalRequest = (hubCallback) => {
+const sendApprovalRequest = () => {
   return new Promise((resolve, reject) => {
     axios({
       method: 'GET',

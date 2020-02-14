@@ -47,7 +47,7 @@ describe('Twitch Websub Subscriber', function (done) {
           // Trigger Fake-Twitch Request.
           // TODO: passing this callback is a temporary solution. Fake-twitch should
           // validate hub.callback, but passing hub.callback results in 'undefined.'
-          return sendApprovalRequest(hubCallback); 
+          return sendApprovalRequest(); 
         })
         .then((requestStatus) => {
           if (requestStatus === 'approved') {
