@@ -4,15 +4,16 @@ const compose = require('docker-compose');
 import { expect } from 'chai';
 const axios = require('axios');
 import { app, sendApprovalRequest, getSubscriptions } from '../fake-twitch-websub/fake-twitch-server';
+const subscriber = require('../utils/subscriber-driver');
 const twitchServer = app;
 const twitchPort = 3001;
 let twitchApp;
-const hubCallback = 'http://localhost:3000/approval-callback';
 
 describe('Twitch Websub Subscriber', function (done) {
   this.timeout(20000);
 
   before(function (done) {
+
     twitchApp = twitchServer.listen(twitchPort);
     console.log(`*** Fake Twitch Listening on ${twitchPort}`);
 
@@ -32,34 +33,21 @@ describe('Twitch Websub Subscriber', function (done) {
   it('should return one subscription.', function (done) {
 
     setTimeout(() => {
-      const subscriptionsResponse = axios.get('http://localhost:3000/get-subscriptions');
-      subscriptionsResponse
+      subscriber.getAllSubscriptions()
         .then((response) => {
-          const subscriptions = response.data;
-          expect(subscriptions.list.length).to.equal(0); // Way-point marker.
-
-          return axios.get('http://localhost:3000/subscribe');
+          expect(response.data.list.length).to.equal(0);
+          return subscriber.requestSubscription();
         })
         .then((response) => {
-          expect(response.status).to.equal(200); // Way-point marker.
-
-          return sendApprovalRequest(); 
+          expect(response.status).to.equal(200);
+          return sendApprovalRequest();
         })
-        .then((requestStatus) => {
-          if (requestStatus === 'approved') {
-            return axios.get('http://localhost:3000/get-subscriptions');
-          } else {
-            console.log('*** Something went wrong with the Approval Request.');
-            done();
-          }
+        .then(() => {
+          return subscriber.getAllSubscriptions();
         })
         .then((response) => {
           const subscriptions = response.data;
           expect(subscriptions.list.length).to.equal(1);
-          // TODO: Here's a similar problem to the sendApprovalRequest(callback) problem.
-          // In both cases, the variables in fake-twitch-server are not scoped correctly.
-          // But how to accomplish this eludes me.
-          // expect(subscriptions.list.length).to.equal(getSubscriptions.length);
           done();
         })
         .catch((error) => {
@@ -70,7 +58,7 @@ describe('Twitch Websub Subscriber', function (done) {
     }, 12000);
 
   });
-  
+
   after(function (done) {
     twitchApp.close();
     compose
