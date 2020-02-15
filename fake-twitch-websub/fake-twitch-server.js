@@ -45,9 +45,9 @@ const sendApprovalRequest = () => {
   });
 };
 
-const getSubscriptions = () => {
+const getFakeSubscriptions = () => {
   return subscriptions;
 }
 
-module.exports = { app, sendApprovalRequest, getSubscriptions };
+module.exports = { app, sendApprovalRequest, getFakeSubscriptions };
 

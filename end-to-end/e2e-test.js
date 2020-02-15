@@ -2,10 +2,8 @@
 const path = require('path');
 const compose = require('docker-compose');
 import { expect } from 'chai';
-const axios = require('axios');
-import { app, sendApprovalRequest, getSubscriptions } from '../fake-twitch-websub/fake-twitch-server';
+const fakeTwitch = require('../fake-twitch-websub/fake-twitch-server');
 const subscriber = require('../utils/subscriber-driver');
-const twitchServer = app;
 const twitchPort = 3001;
 let twitchApp;
 
@@ -14,7 +12,7 @@ describe('Twitch Websub Subscriber', function (done) {
 
   before(function (done) {
 
-    twitchApp = twitchServer.listen(twitchPort);
+    twitchApp = fakeTwitch.app.listen(twitchPort);
     console.log(`*** Fake Twitch Listening on ${twitchPort}`);
 
     compose
@@ -40,14 +38,14 @@ describe('Twitch Websub Subscriber', function (done) {
         })
         .then((response) => {
           expect(response.status).to.equal(200);
-          return sendApprovalRequest();
+          return fakeTwitch.sendApprovalRequest();
         })
         .then(() => {
           return subscriber.getAllSubscriptions();
         })
         .then((response) => {
           const subscriptions = response.data;
-          expect(subscriptions.list.length).to.equal(1);
+          expect(subscriptions.list.length).to.equal(fakeTwitch.getFakeSubscriptions());
           done();
         })
         .catch((error) => {
