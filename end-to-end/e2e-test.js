@@ -57,6 +57,16 @@ describe('Twitch Websub Subscriber', function (done) {
 
   });
 
+  it('should receive return at least one notification.', function(){
+    // Check notifications table. Get zero results.
+    let notifications = {};
+    expect(notifications.list.length).to.equal(0);
+
+    // Perform Subscribe request.
+
+    // Check notifications table. Get at least 1 result.
+  });
+
   after(function (done) {
     twitchApp.close();
     compose
