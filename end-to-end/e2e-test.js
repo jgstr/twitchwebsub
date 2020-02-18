@@ -32,20 +32,13 @@ describe('Twitch Websub Subscriber', function (done) {
 
     setTimeout(() => {
       subscriber.getAllSubscriptions()
+        .then((response) => { expect(response.data.list.length).to.equal(0); })
+        .then(() => { return subscriber.requestSubscription(); })
+        .then((response) => { expect(response.status).to.equal(200); })
+        .then(() => { return fakeTwitch.sendApprovalRequest(); })
+        .then(() => { return subscriber.getAllSubscriptions(); })
         .then((response) => {
-          expect(response.data.list.length).to.equal(0);
-          return subscriber.requestSubscription();
-        })
-        .then((response) => {
-          expect(response.status).to.equal(200);
-          return fakeTwitch.sendApprovalRequest();
-        })
-        .then(() => {
-          return subscriber.getAllSubscriptions();
-        })
-        .then((response) => {
-          const subscriptions = response.data;
-          expect(subscriptions.list.length).to.equal(fakeTwitch.getFakeSubscriptions());
+          expect(response.data.list.length).to.equal(fakeTwitch.getFakeSubscriptions());
           done();
         })
         .catch((error) => {
@@ -57,7 +50,7 @@ describe('Twitch Websub Subscriber', function (done) {
 
   });
 
-  it('should receive return at least one notification.', function(){
+  it('should receive return at least one notification.', function () {
     // Check notifications table. Get zero results.
     let notifications = {};
     expect(notifications.list.length).to.equal(0);
