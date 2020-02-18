@@ -1,6 +1,5 @@
 'use strict';
-const path = require('path');
-const compose = require('docker-compose');
+const testUtils = require('../utils/test-utils');
 import { expect } from 'chai';
 const fakeTwitch = require('../fake-twitch-websub/fake-twitch-server');
 const subscriber = require('../utils/subscriber-driver');
@@ -11,21 +10,9 @@ describe('Twitch Websub Subscriber', function (done) {
   this.timeout(20000);
 
   before(function (done) {
-
     twitchApp = fakeTwitch.app.listen(twitchPort);
     console.log(`*** Fake Twitch Listening on ${twitchPort}`);
-
-    compose
-      .upAll({ cwd: path.join(__dirname, '..'), log: true, })
-      .then(() => {
-        console.log('Docker-compose up ran.');
-        done();
-      },
-        err => {
-          console.log('Error running docker-compose up:', err.message);
-          done();
-        }
-      );
+    testUtils.dockerComposeUp(done);
   });
 
   it('should return one subscription.', function (done) {
@@ -62,16 +49,6 @@ describe('Twitch Websub Subscriber', function (done) {
 
   after(function (done) {
     twitchApp.close();
-    compose
-      .down(["--rmi all"])
-      .then(
-        () => {
-          console.log('Docker-compose down ran.');
-          done();
-        },
-        err => {
-          console.log('Something went wrong when trying to stop containers:', err.message);
-          done();
-        });
+    testUtils.dockerComposeDown(done);
   });
 });
