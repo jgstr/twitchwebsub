@@ -50,15 +50,32 @@ const getFakeSubscriptions = () => {
 }
 
 const sendNotification = () => {
-  const data = {
-    data: [ {
+
+  const dataObject = {
+    data: [{
       id: "28623425344",
-    } ],
+    }],
     pagination: {
       cursor: "eyJiIjpudWxsLCJhIjp7Ik9mZnNldCI6MX19"
     }
   };
-  return JSON.stringify(data);
+
+  const data = JSON.stringify(dataObject);
+
+  // TODO: include data with request.
+  return new Promise(
+    axios({
+      method: 'POST',
+      url: hubCallback
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          resolve();
+        }
+      })
+      .catch(error => reject(error))
+  );
+
 }
 
 module.exports = { app, sendApprovalRequest, getFakeSubscriptions, sendNotification };
