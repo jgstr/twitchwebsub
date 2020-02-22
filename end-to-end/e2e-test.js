@@ -3,15 +3,16 @@ const testUtils = require('../utils/test-utils');
 import { expect } from 'chai';
 const fakeTwitch = require('../fake-twitch-websub/fake-twitch-server');
 const subscriber = require('../utils/subscriber-driver');
+
 const twitchPort = 3001;
 let twitchApp;
 
 describe('Twitch Websub Subscriber', function (done) {
   this.timeout(20000);
 
-  before(function (done) {
+  beforeEach(function (done) {
     twitchApp = fakeTwitch.app.listen(twitchPort);
-    console.log(`*** Fake Twitch Listening on ${twitchPort}`);
+    console.log(`* Fake Twitch Listening on ${twitchPort}`);
     testUtils.dockerComposeUp(done);
   });
 
@@ -29,7 +30,7 @@ describe('Twitch Websub Subscriber', function (done) {
           done();
         })
         .catch((error) => {
-          console.log("*** Error: ", error.message);
+          console.log("* Error: ", error.message);
           done();
         });
 
@@ -39,15 +40,16 @@ describe('Twitch Websub Subscriber', function (done) {
 
   it('should receive return at least one notification.', function () {
     // Check notifications table. Get zero results.
-    let notifications = {};
+    let notifications = { list: [] };
     expect(notifications.list.length).to.equal(0);
 
     // Perform Subscribe request.
 
     // Check notifications table. Get at least 1 result.
+    expect(notifications.list.length).to.not.equal(0);
   });
 
-  after(function (done) {
+  afterEach(function (done) {
     twitchApp.close();
     testUtils.dockerComposeDown(done);
   });
