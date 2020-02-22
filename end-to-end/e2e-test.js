@@ -39,14 +39,25 @@ describe('Twitch Websub Subscriber', function (done) {
   });
 
   it('should receive return at least one notification.', function () {
-    // Check notifications table. Get zero results.
-    let notifications = { list: [] };
-    expect(notifications.list.length).to.equal(0);
 
-    // Perform Subscribe request.
+    setTimeout(() => {
+      subscriber.requestSubscription()
+        .then(() => { return fakeTwitch.sendApprovalRequest(); })
+        .then(() => { return subscriber.getAllNotifications(); })
+        .then((notifications) => { expect(notifications.list.length).to.equal(0); })
+        .then(() => { return fakeTwitch.sendNotification(); })
+        .then(() => { return subscriber.getAllNotifications(); })
+        .then((notifications) => {
+          expect(notifications.list.length).to.not.equal(0);
+          done();
+        })
+        .catch((error) => {
+          console.log("* Error: ", error.message);
+          done();
+        });
 
-    // Check notifications table. Get at least 1 result.
-    expect(notifications.list.length).to.not.equal(0);
+    }, 12000);
+
   });
 
   afterEach(function (done) {

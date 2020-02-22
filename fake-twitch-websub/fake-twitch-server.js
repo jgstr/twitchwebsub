@@ -35,8 +35,8 @@ const sendApprovalRequest = () => {
       .then((response) => {
         if (response.status === 200
           && response.data === '97jbdwcHVzb_rv7McRfpIHuMMY8UhvUXDYhA1Egd') {
-          subscriptions.push(hubCallback + '/?hub.challenge=97jbdwcHVzb_rv7McRfpIHuMMY8UhvUXDYhA1Egd');
-          resolve('approved');
+          subscriptions.push(hubCallback);
+          resolve();
         }
       })
       .catch((error) => {
@@ -49,5 +49,17 @@ const getFakeSubscriptions = () => {
   return subscriptions;
 }
 
-module.exports = { app, sendApprovalRequest, getFakeSubscriptions };
+const sendNotification = () => {
+  const data = {
+    data: [ {
+      id: "28623425344",
+    } ],
+    pagination: {
+      cursor: "eyJiIjpudWxsLCJhIjp7Ik9mZnNldCI6MX19"
+    }
+  };
+  return JSON.stringify(data);
+}
+
+module.exports = { app, sendApprovalRequest, getFakeSubscriptions, sendNotification };
 
