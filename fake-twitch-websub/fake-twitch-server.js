@@ -18,16 +18,15 @@ app.post('/hub', (request, response) => {
     && request.body['hub.lease_seconds']) {
     response.status(200).send('Subscription Request Received.');
     hubCallback = request.body['hub.callback'];
+    console.log('* hubCall: ', hubCallback);
   } else {
     response.status(400).send('There was a problem with your subscribe request.');
   }
 
 });
 
-// TODO: See e2e. E2e calls this and gets 'undefined' when using body['hub.callback'].
-// For now, I pass the URL from the e2e to get this to work.
 const sendApprovalRequest = () => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => { 
     axios({
       method: 'GET',
       url: hubCallback + '/?hub.challenge=97jbdwcHVzb_rv7McRfpIHuMMY8UhvUXDYhA1Egd'
@@ -51,7 +50,6 @@ const getFakeSubscriptions = () => {
 
 const sendNotification = () => {
 
-  // TODO: This object format might not be correct. Will have to test with HTTP to real Twitch.
   const dataObject = {
     data: [{
       id: "28623425344",

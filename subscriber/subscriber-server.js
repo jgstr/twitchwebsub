@@ -51,7 +51,7 @@ app.get('/subscribe', (request, response) => {
     .catch(error => console.log(error));
 });
 
-app.get('/approval-callback', (request, response) => {
+app.get('/approval-callback', (request, response) => { 
 
   if (request.query['hub.challenge']) {
     response.set('Content-Type', 'text/html');
@@ -60,9 +60,9 @@ app.get('/approval-callback', (request, response) => {
 
   pool.query('INSERT INTO subscriptions SET ?', { data: 'test_subscription' }, function (error, results) {
     if (error) {
-      console.log('*** Error: ', error);
+      console.log('* Error: ', error);
     } else {
-      console.log('*** Subscription ID: ', results.insertId);
+      console.log('* Subscription ID: ', results.insertId);
     }
   });
 });
