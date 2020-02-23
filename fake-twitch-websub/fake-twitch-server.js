@@ -51,6 +51,7 @@ const getFakeSubscriptions = () => {
 
 const sendNotification = () => {
 
+  // TODO: This object format might not be correct. Will have to test with HTTP to real Twitch.
   const dataObject = {
     data: [{
       id: "28623425344",
@@ -62,11 +63,14 @@ const sendNotification = () => {
 
   const data = JSON.stringify(dataObject);
 
-  // TODO: include data with request.
   return new Promise(
     axios({
       method: 'POST',
-      url: hubCallback
+      url: hubCallback,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data
     })
       .then((response) => {
         if (response.status === 200) {

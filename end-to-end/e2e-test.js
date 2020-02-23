@@ -38,7 +38,7 @@ describe('Twitch Websub Subscriber', function (done) {
 
   });
 
-  it('should receive return at least one notification.', function () {
+  it('should receive return at least one notification.', function (done) {
 
     setTimeout(() => {
       subscriber.requestSubscription()
