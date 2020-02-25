@@ -9,24 +9,63 @@ app.use(express.urlencoded({ extended: true }));
 let subscriptions = [];
 let hubCallback;
 
+// app.get('/', (req, res) => {
+//   console.log("Fake headers: ", req.headers);
+//   res.status(200).send('Fake up!');
+// });
+
+// app.post('/hub2', (request, response) => {
+//   console.log("Hub2: ", request.headers);
+//   response.status(200).send('Hub2 up!');
+// });
+
 app.post('/hub', (request, response) => {
-  if (request.headers['Client-ID']
-    && request.body['hub.callback']
-    && request.body['Content-Type'] === 'application/json'
-    && request.body['hub.mode'] === 'subscribe'
-    && request.body['hub.topic']
-    && request.body['hub.lease_seconds']) {
-    response.status(200).send('Subscription Request Received.');
-    hubCallback = request.body['hub.callback'];
-    console.log('* hubCall: ', hubCallback);
-  } else {
-    response.status(400).send('There was a problem with your subscribe request.');
+
+  if (!request.headers['Client-ID']) {
+    return response.status(400).json({
+      status: 'error',
+      error: 'Missing Client-ID'
+    });
   }
+  if (!request.body['hub.callback']) {
+    return response.status(400).json({
+      status: 'error',
+      error: 'Missing hub.callback'
+    });
+  }
+  if (request.body['Content-Type'] !== 'application/json') {
+    return response.status(400).json({
+      status: 'error',
+      error: 'Incorrect Content-Type'
+    });
+  }
+  if (request.body['hub.mode'] !== 'subscribe') {
+    return response.status(400).json({
+      status: 'error',
+      error: 'Incorred hub.mode'
+    });
+  }
+  if (!request.body['hub.topic']) {
+    return response.status(400).json({
+      status: 'error',
+      error: 'Missing hub.topic'
+    });
+  }
+  if (!request.body['hub.lease_seconds']) {
+    return response.status(400).json({
+      status: 'error',
+      error: 'Missing hub.lease_seconds'
+    });
+  }
+
+  hubCallback = request.body['hub.callback'];
+  console.log('* hubCall: ', hubCallback);
+  response.status(200).send('Subscription Request Received.');
 
 });
 
 const sendApprovalRequest = () => {
-  return new Promise((resolve, reject) => { 
+  return new Promise((resolve, reject) => {
     axios({
       method: 'GET',
       url: hubCallback + '/?hub.challenge=97jbdwcHVzb_rv7McRfpIHuMMY8UhvUXDYhA1Egd'
@@ -43,10 +82,6 @@ const sendApprovalRequest = () => {
       });
   });
 };
-
-const getFakeSubscriptions = () => {
-  return subscriptions;
-}
 
 const sendNotification = () => {
 
@@ -80,5 +115,9 @@ const sendNotification = () => {
 
 }
 
-module.exports = { app, sendApprovalRequest, getFakeSubscriptions, sendNotification };
+app.listen(3001, () => {
+  console.log("Fake listening");
+})
+
+module.exports = { app, sendApprovalRequest, sendNotification };
 

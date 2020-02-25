@@ -29,7 +29,7 @@ app.get('/get-subscriptions', (request, response) => {
 
 app.get('/subscribe', (request, response) => {
   response.status(200).send('OK');
-
+  
   axios({
     method: 'POST',
     url: 'http://host.docker.internal:3001/hub',
@@ -45,8 +45,8 @@ app.get('/subscribe', (request, response) => {
       'hub.lease_seconds': 600
     }
   })
-    .then(response => {
-      console.log('*** Twitch Hub Approval response: ', response.status);
+    .then(twitchResponse => {
+      console.log('*** Twitch Hub Approval response: ', twitchResponse.status);
     })
     .catch(error => console.log(error));
 });

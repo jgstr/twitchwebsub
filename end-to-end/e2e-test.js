@@ -10,9 +10,8 @@ let twitchApp;
 describe('Twitch Websub Subscriber', function (done) {
   this.timeout(20000);
 
-  beforeEach(function (done) {
-    twitchApp = fakeTwitch.app.listen(twitchPort);
-    console.log(`* Fake Twitch Listening on ${twitchPort}`);
+  before(function (done) {
+    twitchApp = fakeTwitch.app.listen(twitchPort, () => { console.log(`* Fake Twitch Listening on ${twitchPort}`); });
     testUtils.dockerComposeUp(done);
   });
 
@@ -22,18 +21,13 @@ describe('Twitch Websub Subscriber', function (done) {
       subscriber.getAllSubscriptions()
         .then((response) => { expect(response.data.list.length).to.equal(0); })
         .then(() => { return subscriber.requestSubscription(); })
-        .then((response) => { expect(response.status).to.equal(200);})
+        .then((response) => { expect(response.status).to.equal(200); })
         .then(() => { return fakeTwitch.sendApprovalRequest(); })
         .then(() => { return subscriber.getAllSubscriptions(); })
         .then((response) => {
-          expect(response.data.list.length).to.equal(fakeTwitch.getFakeSubscriptions());
+          expect(response.data.list.length).to.equal(1);
           done();
         })
-        .catch((error) => {
-          console.log("* Error: ", error.message);
-          done();
-        });
-
     }, 12000);
 
   });
@@ -61,8 +55,8 @@ describe('Twitch Websub Subscriber', function (done) {
   });
   */
 
-  afterEach(function (done) {
-    twitchApp.close();
-    testUtils.dockerComposeDown(done);
-  });
+  // after(function (done) {
+  //   twitchApp.close();
+  //   testUtils.dockerComposeDown(done);
+  // });
 });
