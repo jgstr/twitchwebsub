@@ -9,16 +9,6 @@ app.use(express.urlencoded({ extended: true }));
 let subscriptions = [];
 let hubCallback;
 
-// app.get('/', (req, res) => {
-//   console.log("Fake headers: ", req.headers);
-//   res.status(200).send('Fake up!');
-// });
-
-// app.post('/hub2', (request, response) => {
-//   console.log("Hub2: ", request.headers);
-//   response.status(200).send('Hub2 up!');
-// });
-
 app.post('/hub', (request, response) => {
 
   if (!request.headers['Client-ID']) {
@@ -114,10 +104,6 @@ const sendNotification = () => {
   );
 
 }
-
-app.listen(3001, () => {
-  console.log("Fake listening");
-})
 
 module.exports = { app, sendApprovalRequest, sendNotification };
 
