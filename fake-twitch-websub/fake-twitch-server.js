@@ -11,22 +11,23 @@ let hubCallback;
 
 app.post('/hub', (request, response) => {
 
-  if (!request.headers['Client-ID']) {
+  // TODO: Figure out why request.headers[...] is case sensitive.
+  if (!request.headers['client-id']) {
     return response.status(400).json({
       status: 'error',
       error: 'Missing Client-ID'
+    });
+  }
+  if (request.headers['content-type'] !== 'application/json') {
+    return response.status(400).json({
+      status: 'error',
+      error: 'Incorrect Content-Type'
     });
   }
   if (!request.body['hub.callback']) {
     return response.status(400).json({
       status: 'error',
       error: 'Missing hub.callback'
-    });
-  }
-  if (request.body['Content-Type'] !== 'application/json') {
-    return response.status(400).json({
-      status: 'error',
-      error: 'Incorrect Content-Type'
     });
   }
   if (request.body['hub.mode'] !== 'subscribe') {
@@ -49,16 +50,15 @@ app.post('/hub', (request, response) => {
   }
 
   hubCallback = request.body['hub.callback'];
-  console.log('* hubCall: ', hubCallback);
   response.status(200).send('Subscription Request Received.');
 
 });
 
-const sendApprovalRequest = () => {
+const sendApprovalRequest = (hubCallback) => {
   return new Promise((resolve, reject) => {
     axios({
       method: 'GET',
-      url: hubCallback + '/?hub.challenge=97jbdwcHVzb_rv7McRfpIHuMMY8UhvUXDYhA1Egd'
+      url: hubCallback + '/?hub.challenge=97jbdwcHVzb_rv7McRfpIHuMMY8UhvUXDYhA1Egd' // TODO: this is causing the ERRCONN 127.0.0.1:80
     })
       .then((response) => {
         if (response.status === 200
@@ -73,7 +73,7 @@ const sendApprovalRequest = () => {
   });
 };
 
-const sendNotification = () => {
+const sendNotification = (hubCallback) => {
 
   const dataObject = {
     data: [{
