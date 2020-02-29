@@ -2,7 +2,7 @@
 const express = require('express');
 import mysql from 'mysql';
 const axios = require('axios');
-import { clientID, hubCallback, liveChannelID } from "./authentications";
+import { clientID, hubCallback, hubUrl, hubTopic } from "./authentications";
 
 const port = 3000;
 const app = express();
@@ -16,6 +16,7 @@ let pool = mysql.createPool({
 });
 
 app.get('/', (request, response) => {
+  console.log("Process env?: ", process.env.TEST);
   response.status(200).send('Up!');
 });
 
@@ -32,7 +33,7 @@ app.get('/subscribe', (request, response) => {
   
   axios({
     method: 'POST',
-    url: 'http://host.docker.internal:3001/hub',
+    url: hubUrl,
     headers: {
       'Content-Type': 'application/json',
       'Client-ID': clientID
@@ -41,12 +42,12 @@ app.get('/subscribe', (request, response) => {
     {
       'hub.callback': hubCallback,
       'hub.mode': 'subscribe',
-      'hub.topic': `https://api.twitch.tv/helix/users/follows?first=1&to_id=${liveChannelID}`,
+      'hub.topic': hubTopic,
       'hub.lease_seconds': 600
     }
   })
     .then(twitchResponse => {
-      console.log('*** Twitch Hub Approval response: ', twitchResponse.status);
+      console.log('* Twitch Hub Approval response: ', twitchResponse.status);
     })
     .catch(error => console.log(error));
 });
