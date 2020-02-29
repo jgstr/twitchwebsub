@@ -10,7 +10,8 @@ services:
       - database
     environment:
       - TEST="the e2e yml version"
-      - HUBCALLBACK="http://localhost:3000/approval-callback"
+      - HUB_CALLBACK="http://localhost:3000/approval-callback"
+      - HUB_URL="http://host.docker.internal:3001/hub"
   database:
     container_name: db
     build: database
