@@ -1,4 +1,4 @@
-# e2e
+# Real Twitch
 version: '3.2'
 services:
   subscriber:
@@ -9,9 +9,8 @@ services:
     depends_on: 
       - database
     environment:
-      - TEST="the e2e yml version"
-      - HUB_CALLBACK="http://localhost:3000/approval-callback"
-      - HUB_URL="http://host.docker.internal:3001/hub"
+      - HUB_CALLBACK=http://9480d24b.ngrok.io/approval-callback
+      - HUB_URL=https://api.twitch.tv/helix/webhooks/hub
   database:
     container_name: db
     build: database

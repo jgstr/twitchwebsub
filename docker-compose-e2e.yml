@@ -1,4 +1,4 @@
-# Real Twitch
+# e2e
 version: '3.2'
 services:
   subscriber:
@@ -9,7 +9,8 @@ services:
     depends_on: 
       - database
     environment:
-      - TEST="the Real Twitch yml version"
+      - HUB_CALLBACK="http://localhost:3000/approval-callback"
+      - HUB_URL="http://host.docker.internal:3001/hub"
   database:
     container_name: db
     build: database

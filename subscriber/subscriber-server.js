@@ -16,7 +16,6 @@ let pool = mysql.createPool({
 });
 
 app.get('/', (request, response) => {
-  console.log("Process env?: ", process.env.TEST);
   response.status(200).send('Up!');
 });
 
@@ -42,7 +41,7 @@ app.get('/subscribe', (request, response) => {
     {
       'hub.callback': hubCallback,
       'hub.mode': 'subscribe',
-      'hub.topic': hubTopic,
+      'hub.topic': hubTopic, // TODO: this variable won't work with Real Twitch. I must use string literal instead. How to solve this?
       'hub.lease_seconds': 600
     }
   })
@@ -57,6 +56,8 @@ app.get('/approval-callback', (request, response) => {
   if (request.query['hub.challenge']) {
     response.set('Content-Type', 'text/html');
     response.status(200).send(request.query['hub.challenge']);
+    console.log(`* Hub Challenge: ${request.query['hub.challenge']}`);
+
   }
 
   pool.query('INSERT INTO subscriptions SET ?', { data: 'test_subscription' }, function (error, results) {
