@@ -41,7 +41,7 @@ app.get('/subscribe', (request, response) => {
     {
       'hub.callback': hubCallback,
       'hub.mode': 'subscribe',
-      'hub.topic': hubTopic, // TODO: this variable won't work with Real Twitch. I must use string literal instead. How to solve this?
+      'hub.topic': hubTopic, 
       'hub.lease_seconds': 600
     }
   })
