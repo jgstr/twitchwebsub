@@ -9,7 +9,7 @@ services:
     depends_on: 
       - database
     environment:
-      - HUB_CALLBACK=http://7f46d4ad.ngrok.io/approval-callback
+      - HUB_CALLBACK=http://c26145ed.ngrok.io/approval-callback
       - HUB_URL=https://api.twitch.tv/helix/webhooks/hub
   database:
     container_name: db

@@ -34,25 +34,25 @@ describe('Twitch Websub Subscriber', function (done) {
 
   });
  
-  it('should receive return at least one notification.', function (done) {
+  it('should receive return at least one event.', function (done) {
 
     setTimeout(() => {
       subscriber.requestSubscription()
         .then(() => { return fakeTwitch.sendApprovalRequest(hubCallback); })
-        .then(() => { return subscriber.getAllNotifications(); })
-        .then((notifications) => { expect(notifications.list.length).to.equal(0); })
-        .then(() => { return fakeTwitch.sendNotification(hubCallback); })
-        .then(() => { return subscriber.getAllNotifications(); })
-        .then((notifications) => {
-          expect(notifications.list.length).to.not.equal(0);
+        .then(() => { return subscriber.getAllEvents(); })
+        .then((events) => { expect(events.list.length).to.equal(0); })
+        .then(() => { return fakeTwitch.sendEvent(hubCallback); })
+        .then(() => { return subscriber.getAllEvents(); })
+        .then((events) => {
+          expect(events.list.length).to.not.equal(0);
           done();
         })
     }, 12000);
 
   });
 
-  after(function (done) {
-    twitchApp.close();
-    testUtils.dockerComposeDown(done);
-  });
+  // after(function (done) {
+  //   twitchApp.close();
+  //   testUtils.dockerComposeDown(done);
+  // });
 });

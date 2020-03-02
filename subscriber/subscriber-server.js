@@ -16,7 +16,7 @@ let pool = mysql.createPool({
 });
 
 app.get('/', (request, response) => {
-  response.status(200).send('Up!');
+  response.status(200).send('Welcome to a Twitch Websub Service.');
 });
 
 app.get('/get-subscriptions', (request, response) => {
@@ -27,9 +27,17 @@ app.get('/get-subscriptions', (request, response) => {
 
 });
 
+app.get('/get-events', (request, response) => {
+  console.log('* Get-events hit.');``
+  pool.query('SELECT * FROM events', function (error, results) {
+    response.status(200).json({ list: results });
+  });
+
+});
+
 app.get('/subscribe', (request, response) => {
   response.status(200).send('OK');
-  
+
   axios({
     method: 'POST',
     url: hubUrl,
@@ -41,7 +49,7 @@ app.get('/subscribe', (request, response) => {
     {
       'hub.callback': hubCallback,
       'hub.mode': 'subscribe',
-      'hub.topic': hubTopic, 
+      'hub.topic': hubTopic,
       'hub.lease_seconds': 600
     }
   })
@@ -51,7 +59,7 @@ app.get('/subscribe', (request, response) => {
     .catch(error => console.log(error));
 });
 
-app.get('/approval-callback', (request, response) => { 
+app.get('/approval-callback', (request, response) => {
 
   if (request.query['hub.challenge']) {
     response.set('Content-Type', 'text/html');
@@ -68,6 +76,22 @@ app.get('/approval-callback', (request, response) => {
     }
   });
 });
+
+app.post('/approval-callback', (request, response) => {
+  // TODO: Must use and check for a secret in next iteration to ensure this request is genuine!
+  response.set('Content-Type', 'text/html');
+  response.status(200);
+  console.log(`* Twitch Event: ${request.body}`);
+
+  pool.query('INSERT INTO events SET ?', { data: 'test_event' }, function (error, results) {
+    if (error) {
+      console.log('* Error: ', error);
+    } else {
+      console.log('* Event ID: ', results.insertId);
+    }
+  });
+
+})
 
 app.listen(port);
 console.log(`Running on port: ${port}`);

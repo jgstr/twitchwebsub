@@ -58,7 +58,7 @@ const sendApprovalRequest = (hubCallback) => {
   return new Promise((resolve, reject) => {
     axios({
       method: 'GET',
-      url: hubCallback + '/?hub.challenge=97jbdwcHVzb_rv7McRfpIHuMMY8UhvUXDYhA1Egd' // TODO: this is causing the ERRCONN 127.0.0.1:80
+      url: hubCallback + '/?hub.challenge=97jbdwcHVzb_rv7McRfpIHuMMY8UhvUXDYhA1Egd'
     })
       .then((response) => {
         if (response.status === 200
@@ -73,8 +73,8 @@ const sendApprovalRequest = (hubCallback) => {
   });
 };
 
-const sendNotification = (hubCallback) => {
-
+const sendEvent = (hubCallback) => {
+console.log('* Got to sendEvent in Fake.');
   const dataObject = {
     data: [{
       id: "28623425344",
@@ -105,5 +105,5 @@ const sendNotification = (hubCallback) => {
 
 }
 
-module.exports = { app, sendApprovalRequest, sendNotification };
+module.exports = { app, sendApprovalRequest, sendEvent };
 
