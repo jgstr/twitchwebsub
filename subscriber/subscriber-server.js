@@ -28,7 +28,7 @@ app.get('/get-subscriptions', (request, response) => {
 });
 
 app.get('/get-events', (request, response) => {
-  console.log('* Get-events hit.');``
+  console.log('* Get-events hit.');
   pool.query('SELECT * FROM events', function (error, results) {
     response.status(200).json({ list: results });
   });
