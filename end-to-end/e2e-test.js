@@ -16,45 +16,40 @@ describe('Twitch Websub Subscriber', function (done) {
     testUtils.dockerComposeUp(done);
   });
 
-  /*
   it('should return one subscription.', function (done) {
 
-    setTimeout(() => {
-      subscriber.getAllSubscriptions()
-        .then((response) => { expect(response.data.list.length).to.equal(0); })
-        .then(() => { return subscriber.requestSubscription(); })
-        .then((response) => { expect(response.status).to.equal(200); })
-        // TODO: hubCallback is 'undefined' unless I include it here. Same goes for other similar functions below.
-        .then(() => { return fakeTwitch.sendApprovalRequest(hubCallback); }) 
-        .then(() => { return subscriber.getAllSubscriptions(); })
-        .then((response) => {
-          expect(response.data.list.length).to.equal(1);
-          done();
-        })
-    }, 12000);
+    testUtils.checkDatabaseIsRunning()
+      .then(() => { return subscriber.getAllSubscriptions(); })
+      .then((response) => { expect(response.data.list.length).to.equal(0); })
+      .then(() => { return subscriber.requestSubscription(); })
+      .then((response) => { expect(response.status).to.equal(200); })
+      // TODO: hubCallback is 'undefined' unless I include it here. Same goes for other similar functions below.
+      .then(() => { return fakeTwitch.sendApprovalRequest(hubCallback); })
+      .then(() => { return subscriber.getAllSubscriptions(); })
+      .then((response) => {
+        expect(response.data.list.length).to.equal(1);
+        done();
+      })
 
   });
-  */
- 
+
   it('should receive return at least one event.', function (done) {
 
-    setTimeout(() => {
-      subscriber.requestSubscription()
-        .then(() => { return fakeTwitch.sendApprovalRequest(hubCallback); })
-        .then(() => { return subscriber.getAllEvents(); })
-        .then((events) => { expect(events.data.list.length).to.equal(0); })
-        .then(() => { return fakeTwitch.sendEvent(hubCallback); })
-        .then(() => { return subscriber.getAllEvents(); })
-        .then((events) => {
-          expect(events.data.list.length).to.not.equal(0);
-          done();
-        })
-    }, 12000);
+    subscriber.requestSubscription()
+      .then(() => { return fakeTwitch.sendApprovalRequest(hubCallback); })
+      .then(() => { return subscriber.getAllEvents(); })
+      .then((events) => { expect(events.data.list.length).to.equal(0); })
+      .then(() => { return fakeTwitch.sendEvent(hubCallback); })
+      .then(() => { return subscriber.getAllEvents(); })
+      .then((events) => {
+        expect(events.data.list.length).to.not.equal(0);
+        done();
+      })
 
   });
 
-  // after(function (done) {
-  //   twitchApp.close();
-  //   testUtils.dockerComposeDown(done);
-  // });
+  after(function (done) {
+    twitchApp.close();
+    testUtils.dockerComposeDown(done);
+  });
 });
