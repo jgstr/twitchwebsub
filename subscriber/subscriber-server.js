@@ -28,7 +28,6 @@ app.get('/get-subscriptions', (request, response) => {
 });
 
 app.get('/get-events', (request, response) => {
-  console.log('* Get-events hit.');
   pool.query('SELECT * FROM events', function (error, results) {
     response.status(200).json({ list: results });
   });
@@ -64,8 +63,6 @@ app.get('/approval-callback', (request, response) => {
   if (request.query['hub.challenge']) {
     response.set('Content-Type', 'text/html');
     response.status(200).send(request.query['hub.challenge']);
-    console.log(`* Hub Challenge: ${request.query['hub.challenge']}`);
-
   }
 
   pool.query('INSERT INTO subscriptions SET ?', { data: 'test_subscription' }, function (error, results) {
@@ -80,8 +77,7 @@ app.get('/approval-callback', (request, response) => {
 app.post('/approval-callback', (request, response) => {
   // TODO: Must use and check for a secret in next iteration to ensure this request is genuine!
   response.set('Content-Type', 'text/html');
-  response.status(200);
-  console.log(`* Twitch Event: ${request.body}`);
+  response.status(200).send('Ok');
 
   pool.query('INSERT INTO events SET ?', { data: 'test_event' }, function (error, results) {
     if (error) {

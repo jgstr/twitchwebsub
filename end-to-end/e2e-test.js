@@ -9,7 +9,7 @@ const twitchPort = 3001;
 let twitchApp;
 
 describe('Twitch Websub Subscriber', function (done) {
-  this.timeout(30000);
+  this.timeout(17000);
 
   before(function (done) {
     twitchApp = fakeTwitch.app.listen(twitchPort, () => { console.log(`* Fake Twitch Listening on ${twitchPort}`); });
@@ -42,7 +42,7 @@ describe('Twitch Websub Subscriber', function (done) {
       .then(() => { return fakeTwitch.sendEvent(hubCallback); })
       .then(() => { return subscriber.getAllEvents(); })
       .then((events) => {
-        expect(events.data.list.length).to.not.equal(0);
+        expect(events.data.list.length).to.equal(1);
         done();
       })
 

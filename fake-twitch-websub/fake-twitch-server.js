@@ -74,26 +74,23 @@ const sendApprovalRequest = (hubCallback) => {
 };
 
 const sendEvent = (hubCallback) => {
-console.log('* Got to sendEvent in Fake.');
-  const dataObject = {
-    data: [{
-      id: "28623425344",
-    }],
-    pagination: {
-      cursor: "eyJiIjpudWxsLCJhIjp7Ik9mZnNldCI6MX19"
-    }
-  };
 
-  const data = JSON.stringify(dataObject);
+  const data = [{
+    from_id: "1336",
+    from_name: "userNameFrom",
+    to_id: "1337",
+    to_name: "userNameTo",
+    followed_at: "2017-08-22T22:55:24Z"
+  }];
 
-  return new Promise(
+  return new Promise((resolve, reject) => {
     axios({
       method: 'POST',
       url: hubCallback,
       headers: {
         'Content-Type': 'application/json'
       },
-      data
+      data: data
     })
       .then((response) => {
         if (response.status === 200) {
@@ -101,8 +98,7 @@ console.log('* Got to sendEvent in Fake.');
         }
       })
       .catch(error => reject(error))
-  );
-
+  });
 }
 
 module.exports = { app, sendApprovalRequest, sendEvent };
