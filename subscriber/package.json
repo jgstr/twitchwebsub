@@ -7,7 +7,7 @@
     "start": "nodemon --exec babel-node subscriber-server.js",
     "build": "babel . --our-dir dist",
     "serve": "node dist/subscriber-server.js",
-    "test": "mocha --require @babel/register"
+    "test": "mocha --require @babel/register tests"
   },
   "dependencies": {
     "axios": "^0.19.1",
