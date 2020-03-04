@@ -19,13 +19,13 @@ describe('Twitch Websub Subscriber', function (done) {
   it('should return one subscription.', function (done) {
 
     testUtils.checkDatabaseIsRunning()
-      .then(() => { return subscriber.getAllSubscriptions(); })
+      .then(subscriber.getAllSubscriptions)
       .then((response) => { expect(response.data.list.length).to.equal(0); })
-      .then(() => { return subscriber.requestSubscription(); })
+      .then(subscriber.requestSubscription)
       .then((response) => { expect(response.status).to.equal(200); })
       // TODO: hubCallback is 'undefined' unless I include it here. Same goes for other similar functions below.
       .then(() => { return fakeTwitch.sendApprovalRequest(hubCallback); })
-      .then(() => { return subscriber.getAllSubscriptions(); })
+      .then(subscriber.getAllSubscriptions)
       .then((response) => {
         expect(response.data.list.length).to.equal(1);
         done();
