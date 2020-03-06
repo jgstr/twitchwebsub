@@ -8,7 +8,7 @@ const hubCallback = 'http://localhost:3000/approval-callback';
 const twitchPort = 3001;
 let twitchApp;
 
-describe('Twitch Websub Subscriber', function (done) {
+describe('Twitch Websub Subscriber', function () {
   this.timeout(17000);
 
   before(function (done) {

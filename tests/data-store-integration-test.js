@@ -18,4 +18,8 @@ describe('Data Store', function () {
     expect(subscriptions).to.deep.equal(expectedValue);
   });
 
+  after(function(done){
+    testUtils.dockerComposeDown(done);
+  });
+
 });
