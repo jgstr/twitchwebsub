@@ -3,7 +3,7 @@ version: '3.2'
 services:
   database:
     container_name: db
-    build: database
+    build: ./test-database
     ports:
       - "3307:3306"
     expose:
