@@ -1,12 +1,12 @@
 import path from 'path';
 import { expect } from 'chai';
-import { createDataStore } from '../data-store';
-import compose from 'docker-compose';
+import { createDataStore } from '../subscriber/data-store';
+const compose = require('docker-compose');
 
 describe('Data Store', function () {
 
   before(function () {
-    return compose.upAll({cwd: path.join(__dirname, '..'), log: true})
+    compose.upOne('database', {cwd: path.join(__dirname, '..'), log: true})
     .then(() => {
       console.log('* docker ran.');
     });
