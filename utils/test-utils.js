@@ -30,6 +30,12 @@ const dockerComposeDown = (done) => {
       });
 };
 
+const dockerComposeUpDatabase = (done) => {
+  compose.upOne('database', { cwd: path.join(__dirname, '..'), log: true })
+    .then(() => done() )
+    .catch(error => console.log(error));
+};
+
 const checkDatabaseIsRunning = () => {
   return new Promise((resolve) => {
 
@@ -61,4 +67,4 @@ const checkDatabaseIsRunning = () => {
   });
 }
 
-module.exports = { dockerComposeUp, dockerComposeDown, checkDatabaseIsRunning };
+module.exports = { dockerComposeUp, dockerComposeDown, dockerComposeUpDatabase, checkDatabaseIsRunning };

@@ -2,14 +2,12 @@ import path from 'path';
 import { expect } from 'chai';
 import { createDataStore } from '../subscriber/data-store';
 const compose = require('docker-compose');
+const testUtils = require('../utils/test-utils');
 
 describe('Data Store', function () {
 
-  before(function () {
-    compose.upOne('database', {cwd: path.join(__dirname, '..'), log: true})
-    .then(() => {
-      console.log('* docker ran.');
-    });
+  before(function (done) {
+    testUtils.dockerComposeUpDatabase(done);
   });
 
   it('should return a list of subscriptions.', function () {
