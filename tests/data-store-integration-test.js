@@ -13,16 +13,20 @@ describe('Data Store', function () {
   it('should return a list of subscriptions.', function (done) {
 
     let pool;
-    const expectedValue = 0;
+    const expectedValue = [{ subscriptionId: 1 }];
+    let dataStore;
 
     testUtils.checkDatabaseIsRunning()
       .then(() => {
         pool = getPool();
-        const dataStore = createDataStore(pool);
-        return dataStore.getAllSubscriptions()
+        dataStore = createDataStore(pool);
+        return dataStore.saveSubscription();
+      })
+      .then(() => {
+        return dataStore.getAllSubscriptions(pool);
       })
       .then((subscriptions) => {
-        expect(subscriptions.length).to.equal(expectedValue);
+        expect(subscriptions).to.equal(expectedValue);
         done();
       });
   });
