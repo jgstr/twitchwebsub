@@ -13,7 +13,7 @@ describe('Data Store', function () {
   it('should return a list of subscriptions.', function (done) {
 
     let pool;
-    const expectedValue = { id: 1, data: { hubTopic: 'https://twitch.com'} };
+    const expectedValue = { id: 1, data: { hubTopic: 'https://twitch.com'}, hub_topic: 'https://twitch.com' };
     let dataStore;
 
     testUtils.checkDatabaseIsRunning()
