@@ -1,6 +1,13 @@
 export const createDataStore = (pool) => {
 
   return {
+
+    saveSubscription: (subscription) => {
+      return new Promise((resolve) => {
+        resolve();
+      })
+    },
+
     getAllSubscriptions: () => {
       return new Promise((resolve) => {
         pool.query('SELECT * FROM subscriptions', (error, results) => {
