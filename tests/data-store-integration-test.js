@@ -13,7 +13,7 @@ describe('Data Store', function () {
   it('should return a list of subscriptions.', function (done) {
 
     let pool;
-    const expectedValue = [{ id: 1, data: {} }];
+    const expectedValue = { id: 1, data: { hubTopic: 'https://twitch.com'} };
     let dataStore;
 
     testUtils.checkDatabaseIsRunning()
@@ -26,7 +26,7 @@ describe('Data Store', function () {
         return dataStore.getAllSubscriptions(pool);
       })
       .then((subscriptions) => {
-        expect(subscriptions).to.equal(expectedValue);
+        expect(JSON.parse(subscriptions[0].data)).to.deep.equal(expectedValue.data);
         done();
       });
   });
