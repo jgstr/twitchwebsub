@@ -3,6 +3,7 @@ USE notifications;
 
 CREATE TABLE IF NOT EXISTS subscriptions (
     id INT NOT NULL AUTO_INCREMENT,
+    hub_topic VARCHAR(500) NOT NULL, 
     data VARCHAR(1000) NOT NULL,
     PRIMARY KEY (id)
     );
