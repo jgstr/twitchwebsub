@@ -1,6 +1,6 @@
 import mysql from 'mysql';
-import { notificationsDatabaseConfig } from '../subscriber/authentications';
-const dbConfig = notificationsDatabaseConfig;
+import { notificationsDatabaseLocalConfig } from '../subscriber/authentications';
+const dbConfig = notificationsDatabaseLocalConfig;
 
 const getPool = () => {
 
