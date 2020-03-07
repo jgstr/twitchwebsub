@@ -5,14 +5,13 @@ const fakeTwitch = require('../fake-twitch-websub/fake-twitch-server');
 const subscriber = require('../utils/subscriber-driver');
 const hubCallback = 'http://localhost:3000/approval-callback';
 
-const twitchPort = 3001;
 let twitchApp;
 
 describe('Twitch Websub Subscriber', function () {
   this.timeout(17000);
 
   before(function (done) {
-    twitchApp = fakeTwitch.app.listen(twitchPort, () => { console.log(`* Fake Twitch Listening on ${twitchPort}`); });
+    twitchApp = fakeTwitch.start();
     testUtils.dockerComposeUp(done);
   });
 
@@ -49,7 +48,7 @@ describe('Twitch Websub Subscriber', function () {
   });
 
   after(function (done) {
-    twitchApp.close();
+    fakeTwitch.stop(twitchApp);
     testUtils.dockerComposeDown(done);
   });
 });

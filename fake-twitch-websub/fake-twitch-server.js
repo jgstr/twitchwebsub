@@ -9,6 +9,14 @@ app.use(express.urlencoded({ extended: true }));
 let subscriptions = [];
 let hubCallback;
 
+const start = () => {
+  return app.listen(3001, () => { console.log('* Fake Twitch Listening on 3001'); });
+};
+
+const stop = (twitchApp) => {
+  twitchApp.close();
+}
+
 app.post('/hub', (request, response) => {
 
   // TODO: Figure out why request.headers[...] is case sensitive.
@@ -101,5 +109,5 @@ const sendEvent = (hubCallback) => {
   });
 }
 
-module.exports = { app, sendApprovalRequest, sendEvent };
+module.exports = { app, sendApprovalRequest, sendEvent, start, stop };
 
