@@ -65,7 +65,7 @@ app.get('/approval-callback', (request, response) => {
     response.status(200).send(request.query['hub.challenge']);
   }
 
-  pool.query('INSERT INTO subscriptions SET ?', { data: 'test_subscription' }, function (error, results) {
+  pool.query('INSERT INTO subscriptions SET ?', { data: 'test_subscription'}, function (error, results) {
     if (error) {
       console.log('* Error: ', error);
     } else {

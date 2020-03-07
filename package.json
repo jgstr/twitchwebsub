@@ -5,7 +5,8 @@
   "scripts": {
     "e2e": "mocha -r @babel/register end-to-end",
     "build": "mocha -r @babel/register tests",
-    "start": "docker-compose -f docker-compose.production.yml up",
+    "start": "nodemon --exec babel-node subscriber-server.js",
+    "start-locally": "docker-compose -f docker-compose.production.yml up",
     "build-subscriber": "docker build -t twitchwebsub_subscriber subscriber",
     "build-database": "docker build -t twitchwebsub_database database",
     "build-all": "npm run build-subscriber && npm run build-database && npm run clean-volumes",
@@ -29,7 +30,8 @@
     "@babel/register": "^7.8.3",
     "chai": "^4.2.0",
     "docker-compose": "^0.23.2",
-    "mocha": "^7.0.0"
+    "mocha": "^7.0.0",
+    "nodemon": "^2.0.2"
   },
   "dependencies": {
     "axios": "^0.19.1",

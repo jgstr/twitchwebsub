@@ -4,7 +4,6 @@ export const createDataStore = (pool) => {
 
     saveSubscription: (subscription) => {
       return new Promise((resolve) => {
-
         pool.query('INSERT INTO subscriptions SET ?', { data: JSON.stringify(subscription.data) }, (error) => {
           if (error) throw error;
           resolve();

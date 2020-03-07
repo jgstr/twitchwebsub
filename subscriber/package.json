@@ -1,0 +1,27 @@
+{
+  "name": "twitch-subscriber-server",
+  "version": "1.0.0",
+  "description": "The server for subscribing Twitch Websub channels.",
+  "main": "subscriber-server.js",
+  "scripts": {
+    "start": "nodemon --exec babel-node subscriber-server.js",
+    "build": "babel . --our-dir dist",
+    "serve": "node dist/subscriber-server.js",
+    "test": "mocha --require @babel/register tests"
+  },
+  "dependencies": {
+    "axios": "^0.19.1",
+    "express": "^4.17.1",
+    "mysql": "^2.18.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.3",
+    "@babel/core": "^7.8.3",
+    "@babel/node": "^7.8.3",
+    "@babel/preset-env": "^7.8.3",
+    "@babel/register": "^7.8.3",
+    "chai": "^4.2.0",
+    "mocha": "^7.0.0",
+    "nodemon": "^2.0.2"
+  }
+}
