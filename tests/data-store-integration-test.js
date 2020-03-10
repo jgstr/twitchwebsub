@@ -17,8 +17,6 @@ describe('Data Store', function () {
 
     let pool;
     const expectedValue = {
-      id: 1,
-      data: { hubTopic: 'https://twitch.com' },
       hub_topic: 'https://twitch.com',
       lease_start: timestampFormatter.utc(new Date()).format("YYYY-MM-DD HH:mm:ss")
     };
@@ -34,7 +32,7 @@ describe('Data Store', function () {
         return dataStore.getAllSubscriptions(pool);
       })
       .then((subscriptions) => {
-        expect(JSON.parse(subscriptions[0].data)).to.deep.equal(expectedValue.data);
+        expect(subscriptions[0].hub_topic).to.equal(expectedValue.hub_topic);
         done();
       });
   });

@@ -9,7 +9,6 @@ export const createDataStore = (pool) => {
 
         pool.query('INSERT INTO subscriptions SET ?',
           {
-            data: JSON.stringify(subscription.data),
             hub_topic: subscription.hub_topic,
             lease_start: subscription.lease_start
           },
