@@ -65,7 +65,7 @@ app.get('/approval-callback', (request, response) => {
     response.status(200).send(request.query['hub.challenge']);
   }
 
-  dataStore.saveSubscription({ data: { hubTopic: 'https://twitch.com'}, hub_topic: 'https://twitch.com' });
+  dataStore.saveSubscription({ data: { hubTopic: hubTopic}, hub_topic: hubTopic });
 
 });
 
