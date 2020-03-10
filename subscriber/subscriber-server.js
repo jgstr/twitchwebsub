@@ -9,6 +9,7 @@ const port = 3000;
 const app = express();
 
 let pool = getPool(notificationsDatabaseDockerConfig);
+const dataStore = createDataStore(pool);
 
 app.get('/', (request, response) => {
   response.status(200).send('Welcome to a Twitch Websub Service.');
@@ -16,11 +17,12 @@ app.get('/', (request, response) => {
 
 app.get('/get-subscriptions', (request, response) => {
 
-  const dataStore = createDataStore(pool);
-
   dataStore.getAllSubscriptions()
     .then((results) => {
-      response.status(200).json({ list: results });
+      return response.status(200).json({ list: results });
+    })
+    .catch((error) => {
+      return response.status(400).send(error);
     });
 
 });
@@ -63,13 +65,8 @@ app.get('/approval-callback', (request, response) => {
     response.status(200).send(request.query['hub.challenge']);
   }
 
-  pool.query('INSERT INTO subscriptions SET ?', { data: 'test_subscription', hub_topic: 'twitch.com' }, function (error, results) {
-    if (error) {
-      console.log('* Error: ', error);
-    } else {
-      console.log('* Subscription ID: ', results.insertId);
-    }
-  });
+  dataStore.saveSubscription({ data: { hubTopic: 'https://twitch.com'}, hub_topic: 'https://twitch.com' });
+
 });
 
 app.post('/approval-callback', (request, response) => {
