@@ -3,7 +3,8 @@ version: '3.2'
 services:
   subscriber:
     container_name: sub
-    build: subscriber
+    build:
+      context: .
     ports:
       - "3000:3000"
     depends_on: 
