@@ -41,7 +41,7 @@ describe('Twitch Websub Subscriber', function () {
       .then(() => { return fakeTwitch.sendEvent(hubCallback); })
       .then(() => { return subscriber.getAllEvents(); })
       .then((events) => {
-        expect(events.data.list.length).to.equal(1);
+        expect(events.data.list.length).to.at.least(1);
         done();
       })
 
