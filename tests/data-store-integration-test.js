@@ -2,6 +2,8 @@ import { expect } from 'chai';
 import { createDataStore } from '../subscriber/data-store';
 const testUtils = require('../utils/test-utils');
 import { getPool } from '../subscriber/subscriber-utils';
+import { notificationsDatabaseLocalConfig } from '../subscriber/authentications';
+
 
 describe('Data Store', function () {
   this.timeout(13000);
@@ -18,7 +20,7 @@ describe('Data Store', function () {
 
     testUtils.checkDatabaseIsRunning()
       .then(() => {
-        pool = getPool();
+        pool = getPool(notificationsDatabaseLocalConfig);
         dataStore = createDataStore(pool);
         return dataStore.saveSubscription(expectedValue);
       })

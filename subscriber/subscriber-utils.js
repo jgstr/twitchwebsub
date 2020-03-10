@@ -1,8 +1,6 @@
 import mysql from 'mysql';
-import { notificationsDatabaseLocalConfig } from '../subscriber/authentications';
-const dbConfig = notificationsDatabaseLocalConfig;
 
-const getPool = () => {
+const getPool = (dbConfig) => {
 
   let pool = mysql.createPool({
     host: dbConfig.host,
