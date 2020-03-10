@@ -7,11 +7,11 @@ WORKDIR /usr/src/server
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
 COPY package*.json ./
-COPY authentications.js ./
+COPY ./subscriber/authentications.js ./
 
 RUN npm install
 
 # Bundle app source
-COPY . ./
+COPY ./subscriber ./
 
 CMD [ "npm", "start" ]

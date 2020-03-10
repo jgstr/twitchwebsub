@@ -4,10 +4,12 @@
   "description": "Learning Test for Twitch WebSub projct",
   "scripts": {
     "e2e": "mocha -r @babel/register end-to-end",
-    "build": "mocha -r @babel/register tests",
+    "build": "babel . --our-dir dist",
+    "build-tests": "mocha -r @babel/register tests",
+    "serve": "node dist/subscriber-server.js",
     "start": "nodemon --exec babel-node subscriber-server.js",
     "start-locally": "docker-compose -f docker-compose.production.yml up",
-    "build-subscriber": "docker build -t twitchwebsub_subscriber subscriber",
+    "build-subscriber": "docker build -t twitchwebsub_subscriber .",
     "build-database": "docker build -t twitchwebsub_database database",
     "build-all": "npm run build-subscriber && npm run build-database && npm run clean-volumes",
     "clean-volumes": "docker volume rm $(docker volume ls -qf dangling=true)"
