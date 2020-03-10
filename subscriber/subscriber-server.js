@@ -1,20 +1,13 @@
 'use strict';
 const express = require('express');
-import mysql from 'mysql';
 const axios = require('axios');
-import { clientID, hubCallback, hubUrl, hubTopic } from "./authentications";
+import { clientID, hubCallback, hubUrl, hubTopic, notificationsDatabaseDockerConfig } from "./authentications";
 import { getPool } from './subscriber-utils';
 
 const port = 3000;
 const app = express();
 
-let pool = mysql.createPool({
-  host: 'database',
-  port: 3306,
-  user: 'user',
-  password: 'password',
-  database: 'notifications'
-});
+let pool = getPool(notificationsDatabaseDockerConfig);
 
 app.get('/', (request, response) => {
   response.status(200).send('Welcome to a Twitch Websub Service.');
