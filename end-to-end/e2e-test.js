@@ -22,7 +22,6 @@ describe('Twitch Websub Subscriber', function () {
       .then((response) => { expect(response.data.list.length).to.equal(0); })
       .then(subscriber.requestSubscription)
       .then((response) => { expect(response.status).to.equal(200); })
-      // TODO: hubCallback is 'undefined' unless I include it here. Same goes for other similar functions below.
       .then(() => { return fakeTwitch.sendApprovalRequest(hubCallback); })
       .then(subscriber.getAllSubscriptions)
       .then((response) => {
@@ -36,10 +35,10 @@ describe('Twitch Websub Subscriber', function () {
 
     subscriber.requestSubscription()
       .then(() => { return fakeTwitch.sendApprovalRequest(hubCallback); })
-      .then(() => { return subscriber.getAllEvents(); })
+      .then(subscriber.getAllEvents)
       .then((events) => { expect(events.data.list.length).to.equal(0); })
       .then(() => { return fakeTwitch.sendEvent(hubCallback); })
-      .then(() => { return subscriber.getAllEvents(); })
+      .then(subscriber.getAllEvents)
       .then((events) => {
         expect(events.data.list.length).to.at.least(1);
         done();
