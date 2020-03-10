@@ -3,6 +3,7 @@ const express = require('express');
 const axios = require('axios');
 import { clientID, hubCallback, hubUrl, hubTopic, notificationsDatabaseDockerConfig } from "./authentications";
 import { getPool } from './subscriber-utils';
+import { createDataStore } from './data-store';
 
 const port = 3000;
 const app = express();
@@ -15,9 +16,12 @@ app.get('/', (request, response) => {
 
 app.get('/get-subscriptions', (request, response) => {
 
-  pool.query('SELECT * FROM subscriptions', function (error, results) {
-    response.status(200).json({ list: results });
-  });
+  const dataStore = createDataStore(pool);
+
+  dataStore.getAllSubscriptions()
+    .then((results) => {
+      response.status(200).json({ list: results });
+    });
 
 });
 
@@ -59,7 +63,7 @@ app.get('/approval-callback', (request, response) => {
     response.status(200).send(request.query['hub.challenge']);
   }
 
-  pool.query('INSERT INTO subscriptions SET ?', { data: 'test_subscription', hub_topic: 'twitch.com'}, function (error, results) {
+  pool.query('INSERT INTO subscriptions SET ?', { data: 'test_subscription', hub_topic: 'twitch.com' }, function (error, results) {
     if (error) {
       console.log('* Error: ', error);
     } else {
