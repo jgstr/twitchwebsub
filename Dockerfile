@@ -8,6 +8,7 @@ WORKDIR /usr/src/server
 # where available (npm@5+)
 COPY package*.json ./
 COPY ./subscriber/authentications.js ./
+COPY .babelrc ./
 
 RUN npm install
 
