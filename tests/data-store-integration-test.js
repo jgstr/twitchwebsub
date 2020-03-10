@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { createDataStore } from '../subscriber/data-store';
 const testUtils = require('../utils/test-utils');
-import { getPool } from '../utils/subscriber-utils';
+import { getPool } from '../subscriber/subscriber-utils';
 
 describe('Data Store', function () {
   this.timeout(13000);

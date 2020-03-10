@@ -3,6 +3,7 @@ const express = require('express');
 import mysql from 'mysql';
 const axios = require('axios');
 import { clientID, hubCallback, hubUrl, hubTopic } from "./authentications";
+import { getPool } from './subscriber-utils';
 
 const port = 3000;
 const app = express();
