@@ -3,6 +3,7 @@ import { createDataStore } from '../subscriber/data-store';
 const testUtils = require('../utils/test-utils');
 import { getPool } from '../subscriber/subscriber-utils';
 import { notificationsDatabaseLocalConfig } from '../subscriber/authentications';
+const timestampFormatter = require('moment');
 
 
 describe('Data Store', function () {
@@ -15,7 +16,12 @@ describe('Data Store', function () {
   it('should return a list of subscriptions.', function (done) {
 
     let pool;
-    const expectedValue = { id: 1, data: { hubTopic: 'https://twitch.com'}, hub_topic: 'https://twitch.com' };
+    const expectedValue = {
+      id: 1,
+      data: { hubTopic: 'https://twitch.com' },
+      hub_topic: 'https://twitch.com',
+      lease_start: timestampFormatter.utc(new Date()).format("YYYY-MM-DD HH:mm:ss")
+    };
     let dataStore;
 
     testUtils.checkDatabaseIsRunning()
