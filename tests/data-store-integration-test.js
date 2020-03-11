@@ -37,6 +37,23 @@ describe('Data Store', function () {
       });
   });
 
+  it('should return a list of events.', function () {
+    let pool;
+    let dataStore;
+    const event = { list: [] };
+
+    testUtils.checkDatabaseIsRunning()
+      .then(() => {
+        pool = getPool(notificationsDatabaseLocalConfig);
+        dataStore = createDataStore(pool);
+        return dataStore.saveEvent(event);
+      })
+      .then(() => { return dataStore.getAllEvents(pool); })
+      .then((events) => {
+        expect(events.length).to.be.at.least(1);
+      });
+  });
+
   after(function (done) {
     testUtils.dockerComposeDown(done);
   });

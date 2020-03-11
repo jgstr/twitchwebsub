@@ -1,5 +1,3 @@
-const timestampFormatter = require('moment');
-
 export const createDataStore = (pool) => {
 
   return {
