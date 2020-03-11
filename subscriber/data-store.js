@@ -4,7 +4,6 @@ export const createDataStore = (pool) => {
 
     saveSubscription: (subscription) => {
       return new Promise((resolve) => {
-
         pool.query('INSERT INTO subscriptions SET ?',
           {
             hub_topic: subscription.hub_topic,
@@ -26,7 +25,15 @@ export const createDataStore = (pool) => {
           resolve(results);
         });
       });
+    },
+
+    saveEvent: (event) => {
+      return new Promise((resolve) => {
+        pool.query('INSERT INTO events SET ?', { data: JSON.stringify(event.data) }, (error) => {
+          if (error) throw error;
+          resolve();
+        });
+      });
     }
   };
-
 };

@@ -40,7 +40,7 @@ describe('Data Store', function () {
   it('should return a list of events.', function () {
     let pool;
     let dataStore;
-    const event = { list: [] };
+    const event = { data: { id: 1234, user_id: 4321 } };
 
     testUtils.checkDatabaseIsRunning()
       .then(() => {
