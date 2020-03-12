@@ -27,6 +27,15 @@ export const createDataStore = (pool) => {
       });
     },
 
+    getAllEvents: () => {
+      return new Promise((resolve) => {
+        pool.query('SELECT * FROM events', (error, results) => {
+          if (error) throw error;
+          resolve(results);
+        });
+      });
+    },
+
     saveEvent: (event) => {
       return new Promise((resolve) => {
         pool.query('INSERT INTO events SET ?', { data: JSON.stringify(event.data) }, (error) => {
