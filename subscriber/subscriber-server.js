@@ -78,14 +78,7 @@ app.post('/approval-callback', (request, response) => {
   // TODO: Must use and check for a secret in next iteration to ensure this request is genuine!
   response.set('Content-Type', 'text/html');
   response.status(200).send('Ok');
-
-  pool.query('INSERT INTO events SET ?', { data: 'test_event' }, function (error, results) {
-    if (error) {
-      console.log('* Error: ', error);
-    } else {
-      console.log('* Event ID: ', results.insertId);
-    }
-  });
+  dataStore.saveEvent({ data: { id: 1234, user_id: 4321 } });
 
 })
 
