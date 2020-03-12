@@ -22,15 +22,20 @@ app.get('/get-subscriptions', (request, response) => {
       return response.status(200).json({ list: results });
     })
     .catch((error) => {
-      return response.status(400).send(error);
+      return response.status(500).send(error);
     });
 
 });
 
 app.get('/get-events', (request, response) => {
-  pool.query('SELECT * FROM events', function (error, results) {
-    response.status(200).json({ list: results });
-  });
+
+  dataStore.getAllEvents()
+    .then((results) => {
+      return response.status(200).json({ list: results });
+    })
+    .catch((error) => {
+      return response.status(500).send(error);
+    });
 
 });
 
@@ -65,7 +70,7 @@ app.get('/approval-callback', (request, response) => {
     response.status(200).send(request.query['hub.challenge']);
   }
 
-  dataStore.saveSubscription({ data: { hubTopic: hubTopic}, hub_topic: hubTopic });
+  dataStore.saveSubscription({ data: { hubTopic: hubTopic }, hub_topic: hubTopic });
 
 });
 
