@@ -39,8 +39,7 @@ app.get('/get-events', (request, response) => {
 
 });
 
-app.get('/subscribe', (request, response) => {
-  response.status(200).send('OK');
+const requestSubscription = (request, response, hubUrl, clientID, hubCallback, hubTopic) => {
 
   axios({
     method: 'POST',
@@ -61,6 +60,13 @@ app.get('/subscribe', (request, response) => {
       console.log('* Twitch Hub Approval response: ', twitchResponse.status);
     })
     .catch(error => console.log(error));
+
+};
+
+app.get('/subscribe', (request, response) => {
+  response.status(200).send('OK');
+  requestSubscription(request, response, hubUrl, clientID, hubCallback, hubTopic);
+
 });
 
 app.get('/approval-callback', (request, response) => {
