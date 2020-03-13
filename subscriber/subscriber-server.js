@@ -1,8 +1,7 @@
 'use strict';
 const express = require('express');
-const axios = require('axios');
 import { clientID, hubCallback, hubUrl, hubTopic, notificationsDatabaseDockerConfig } from "./authentications";
-import { getPool } from './subscriber-utils';
+import { getPool, requestSubscription } from './subscriber-utils';
 import { createDataStore } from './data-store';
 
 const port = 3000;
@@ -41,26 +40,8 @@ app.get('/get-events', (request, response) => {
 
 app.get('/subscribe', (request, response) => {
   response.status(200).send('OK');
+  requestSubscription(request, response, hubUrl, clientID, hubCallback, hubTopic);
 
-  axios({
-    method: 'POST',
-    url: hubUrl,
-    headers: {
-      'Content-Type': 'application/json',
-      'Client-ID': clientID
-    },
-    data:
-    {
-      'hub.callback': hubCallback,
-      'hub.mode': 'subscribe',
-      'hub.topic': hubTopic,
-      'hub.lease_seconds': 600
-    }
-  })
-    .then(twitchResponse => {
-      console.log('* Twitch Hub Approval response: ', twitchResponse.status);
-    })
-    .catch(error => console.log(error));
 });
 
 app.get('/approval-callback', (request, response) => {
