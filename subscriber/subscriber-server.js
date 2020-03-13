@@ -44,6 +44,8 @@ app.get('/subscribe', (request, response) => {
 
 });
 
+// TODO: At some point, this endpoint will have to be created for each subscription.
+// Otherwise I'll have no way to know which event goes to which subscription.
 app.get('/approval-callback', (request, response) => {
 
   if (request.query['hub.challenge']) {
