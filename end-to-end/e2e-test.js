@@ -46,6 +46,23 @@ describe('Twitch Websub Subscriber', function () {
 
   });
 
+  it('should remove one subscription from the database.', function (done) {
+    const subscription = "12345";
+    
+    subscriber.requestSubscription()
+      .then((response) => { expect(response.status).to.equal(200); })
+      .then(() => { return fakeTwitch.sendApprovalRequest(hubCallback); })
+      .then(subscriber.getAllSubscriptions)
+      .then((response) => { expect(response.data.list.length).to.equal(1); })
+      .then(subscriber.removeSubscription(subscription))
+      .then(subscriber.getAllSubscriptions)
+      .then((subscriptions) => { 
+        expect(subscriptions.data.list.length).to.equal(0); 
+        done();
+      })
+
+  });
+
   after(function (done) {
     fakeTwitch.stop(twitchApp);
     testUtils.dockerComposeDown(done);
