@@ -66,8 +66,10 @@ app.post('/approval-callback', (request, response) => {
 
 })
 
+const start = () => { return app.listen(port, () => { console.log(`Running on port ${port}`); }); };
+
 app.listen(port);
 console.log(`Running on port: ${port}`);
 
-
+module.exports = { start };
 
