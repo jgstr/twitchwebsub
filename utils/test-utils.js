@@ -2,16 +2,16 @@ const path = require('path');
 const compose = require('docker-compose');
 import mysql from 'mysql';
 
-const dockerComposeUp = (done) => {
+const dockerComposeUp = () => {
   compose
     .upAll({ cwd: path.join(__dirname, '..'), log: true, })
     .then(() => {
       console.log('Docker-compose up ran.');
-      done();
+      // done();
     },
       err => {
         console.log('Error running docker-compose up:', err.message);
-        done();
+        // done();
       }
     );
 };

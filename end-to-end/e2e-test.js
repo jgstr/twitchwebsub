@@ -12,8 +12,8 @@ describe('Twitch Websub Subscriber', function () {
 
   before(function (done) {
     twitchApp = fakeTwitch.start();
-    testUtils.dockerComposeUp(done);
-    // subscriber.isRunning(done);
+    testUtils.dockerComposeUp();
+    subscriber.isRunning();
   });
 
   it('should return one subscription.', function (done) {
