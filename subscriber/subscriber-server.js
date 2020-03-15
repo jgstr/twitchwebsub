@@ -14,6 +14,18 @@ app.get('/', (request, response) => {
   response.status(200).send('Welcome to a Twitch Websub Service.');
 });
 
+app.get('/status', (request, response) => {
+
+  pool.query('SELECT 1', function (error, results) {
+    if (error) {
+      return response.status(500).send('Not running.');
+    } else {
+      return response.status(200).send('Running.');
+    }
+  });
+
+});
+
 app.get('/get-subscriptions', (request, response) => {
 
   dataStore.getAllSubscriptions()
