@@ -16,13 +16,9 @@ app.get('/', (request, response) => {
 
 app.get('/status', (request, response) => {
 
-  pool.query('SELECT 1', function (error, results) {
-    if (error) {
-      return response.status(500).send('Not running.');
-    } else {
-      return response.status(200).send('Running.');
-    }
-  });
+  dataStore.checkStatus()
+    .then(() => { return response.status(200).send('Running.'); })
+    .catch(() => { return response.status(500).send('Not running.'); });
 
 });
 

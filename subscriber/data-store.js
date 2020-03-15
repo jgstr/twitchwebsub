@@ -2,6 +2,18 @@ export const createDataStore = (pool) => {
 
   return {
 
+    checkStatus: () => {
+      return new Promise((resolve, reject) => {
+        pool.query('SELECT 1', (error) => {
+          if(error) {
+            reject(error);
+          } else {
+            resolve();
+          }
+        });
+      });
+    },
+
     saveSubscription: (subscription) => {
       return new Promise((resolve) => {
         pool.query('INSERT INTO subscriptions SET ?',
