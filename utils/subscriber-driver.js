@@ -1,11 +1,10 @@
 const axios = require('axios');
-import { start } from '../subscriber/subscriber-server';
+import mysql from 'mysql';
 
 const getAllSubscriptions = () => { return axios.get('http://localhost:3000/get-subscriptions'); }
 const requestSubscription = () => { return axios.get('http://localhost:3000/subscribe'); }
 const getAllEvents = () => { return axios.get('http://localhost:3000/get-events'); }
 const removeSubscription = () => { return axios.get('http://localhost:3000/unsubscribe'); };
-const startServer = () => { return start() };
-const stopServer = (app, done) => { app.close(done); }
+const isRunning = () => { return axios.get('http://localhost:3000/status'); };
 
-module.exports = { getAllSubscriptions, requestSubscription, getAllEvents, removeSubscription, startServer, stopServer };
+module.exports = { getAllSubscriptions, requestSubscription, getAllEvents, removeSubscription, isRunning };
