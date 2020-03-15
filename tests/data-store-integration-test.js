@@ -13,7 +13,7 @@ describe('Data Store', function () {
     testUtils.dockerComposeUpDatabase(done);
   });
 
-  it('should return a list of subscriptions.', function (done) {
+  it('should return a list of subscriptions.', function (done) { 
 
     let pool;
     const expectedValue = {
@@ -32,7 +32,7 @@ describe('Data Store', function () {
         return dataStore.getAllSubscriptions(pool);
       })
       .then((subscriptions) => {
-        expect(subscriptions[0].hub_topic).to.equal(expectedValue.hub_topic);
+        expect(subscriptions[0].hub_topic).to.equal(expectedValue.hub_topic); // TODO: Just check objects with deep.equal. and/or .contain.
         done();
       });
   });
@@ -50,7 +50,7 @@ describe('Data Store', function () {
       })
       .then(() => { return dataStore.getAllEvents(pool); })
       .then((events) => {
-        expect(events.length).to.be.at.least(1);
+        expect(events.length).to.be.at.least(1); // TODO: use something like to.contain(object). But review docs to make sure.
       });
   });
 

@@ -5,16 +5,10 @@ describe('Subscriber Server', function () {
   let subscriberApp;
 
   before(function (done) {
-    subscriberApp = subscriber.startServer(done);
   });
 
-  // Note: 2nd end-to-end tests should have gone here, but I accidentally skipped that step.
-
-  it('should remove one subscription.', function () {
-    subscriber.removeSubscription(subscription);
-  });
+  // Note: Add unit tests for previous e2e tests here.
 
   after(function (done) {
-    subscriber.stopServer(subscriberApp, done);
   });
 });
