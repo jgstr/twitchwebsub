@@ -13,7 +13,8 @@ describe('Twitch Websub Subscriber', function () {
   before(function (done) {
     twitchApp = fakeTwitch.start();
     testUtils.dockerComposeUp();
-    subscriber.isRunning();
+    subscriber.isRunning()
+    .then(done);
   });
 
   it('should return one subscription.', function (done) {
@@ -68,8 +69,8 @@ describe('Twitch Websub Subscriber', function () {
 
   // });
 
-  after(function (done) {
-    fakeTwitch.stop(twitchApp);
-    testUtils.dockerComposeDown(done);
-  });
+  // after(function (done) {
+  //   fakeTwitch.stop(twitchApp);
+  //   testUtils.dockerComposeDown(done);
+  // });
 });
