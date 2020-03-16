@@ -6,25 +6,26 @@ const getAllEvents = () => { return axios.get('http://localhost:3000/get-events'
 const removeSubscription = () => { return axios.get('http://localhost:3000/unsubscribe'); };
 
 const isRunning = () => {
+
   return new Promise((resolve) => {
-    (function pollStatus(){
+    function pollStatus() {
 
       let statusResponse;
 
       axios.get('http://localhost:3000/status')
-      .then((response) => {
-        statusResponse = response;
-      }).catch((err) => {
-        console.log('* Error.', err);
-      });
+        .then((response) => {
+          if (response.status === 200) {
+            resolve();
+          } else {
+            setTimeout(pollStatus, 3000);
+          }
+        }).catch((err) => {
+          console.log('* Error.');
+          setTimeout(pollStatus, 3000);
+        });
+    }
 
-      if(statusResponse.status !== 200) {
-        console.log('* Res status: ', statusResponse);
-        setTimeout(pollStatus, 2000);
-      } else {
-        resolve();
-      }
-    })()
+    pollStatus()
 
   });
 };

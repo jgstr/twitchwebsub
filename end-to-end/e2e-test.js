@@ -69,8 +69,8 @@ describe('Twitch Websub Subscriber', function () {
 
   // });
 
-  // after(function (done) {
-  //   fakeTwitch.stop(twitchApp);
-  //   testUtils.dockerComposeDown(done);
-  // });
+  after(function (done) {
+    fakeTwitch.stop(twitchApp);
+    testUtils.dockerComposeDown(done);
+  });
 });
