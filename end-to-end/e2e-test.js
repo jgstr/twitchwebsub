@@ -19,8 +19,7 @@ describe('Twitch Websub Subscriber', function () {
 
   it('should return one subscription.', function (done) {
 
-    testUtils.checkDatabaseIsRunning()
-      .then(subscriber.getAllSubscriptions)
+    subscriber.getAllSubscriptions()
       .then((response) => { expect(response.data.list.length).to.equal(0); })
       .then(subscriber.requestSubscription)
       .then((response) => { expect(response.status).to.equal(200); })
