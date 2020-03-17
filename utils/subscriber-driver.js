@@ -15,17 +15,18 @@ const isRunning = () => {
       axios.get('http://localhost:3000/status')
         .then((response) => {
           if (response.status === 200) {
+            console.log('* Database up.');
             resolve();
           } else {
             setTimeout(pollStatus, 3000);
           }
         }).catch((err) => {
-          console.log('* Error.');
           setTimeout(pollStatus, 3000);
         });
     }
 
-    pollStatus()
+    console.log('* Checking database... ');
+    pollStatus();
 
   });
 };
