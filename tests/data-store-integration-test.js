@@ -14,13 +14,11 @@ describe('Data Store', function () {
   });
 
   it('should return a list of subscriptions.', function (done) {
-
+    let dataStore;
     const expectedValue = {
       hub_topic: 'https://twitch.com',
       lease_start: timestampFormatter.utc(new Date()).format("YYYY-MM-DD HH:mm:ss")
     };
-
-    let dataStore;
 
     dataStore = createDataStore(notificationsDatabaseLocalConfig);
     dataStore.saveSubscription(expectedValue)
@@ -39,7 +37,7 @@ describe('Data Store', function () {
     dataStore.saveEvent(event)
       .then(() => { return dataStore.getAllEvents(); })
       .then((events) => {
-        expect(events.length).to.be.at.least(1); // TODO: use something like to.contain(object). But review docs to make sure.
+        expect(events).to.include.deep.members([event]);
         done();
       });
   });
