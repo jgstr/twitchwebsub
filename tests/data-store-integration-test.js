@@ -24,16 +24,15 @@ describe('Data Store', function () {
 
     dataStore = createDataStore(notificationsDatabaseLocalConfig);
     dataStore.saveSubscription(expectedValue)
-      .then(() => {
-        return dataStore.getAllSubscriptions();
-      })
+      .then(() => { return dataStore.getAllSubscriptions(); })
       .then((subscriptions) => {
-        expect(subscriptions[0].hub_topic).to.equal(expectedValue.hub_topic); // TODO: Just check objects with deep.equal. and/or .contain.
+        expect(subscriptions[0].hub_topic).to.equal(expectedValue.hub_topic);
+        // expect(subscriptions).to.include.deep.members(expectedValue); TODO: Get something like this to work instead of above test.
         done();
       });
   });
 
-  it('should return a list of events.', function () {
+  it('should return a list of events.', function (done) {
     let dataStore;
     const event = { data: { id: 1234, user_id: 4321 } };
 
@@ -42,6 +41,7 @@ describe('Data Store', function () {
       .then(() => { return dataStore.getAllEvents(); })
       .then((events) => {
         expect(events.length).to.be.at.least(1); // TODO: use something like to.contain(object). But review docs to make sure.
+        done();
       });
   });
 
