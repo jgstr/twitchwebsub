@@ -1,7 +1,6 @@
 import { expect } from 'chai';
 import { createDataStore } from '../subscriber/data-store';
 const testUtils = require('../utils/test-utils');
-import { getPool } from '../subscriber/subscriber-utils';
 import { notificationsDatabaseLocalConfig } from '../subscriber/authentications';
 const timestampFormatter = require('moment');
 
@@ -10,22 +9,21 @@ describe('Data Store', function () {
   this.timeout(13000);
 
   before(function (done) {
-    testUtils.dockerComposeUpDatabase(done);
+    testUtils.dockerComposeUpDatabase();
+    testUtils.checkDatabaseIsRunning().then(done);
   });
 
-  it('should return a list of subscriptions.', function (done) { 
+  it('should return a list of subscriptions.', function (done) {
 
     const expectedValue = {
       hub_topic: 'https://twitch.com',
       lease_start: timestampFormatter.utc(new Date()).format("YYYY-MM-DD HH:mm:ss")
     };
+
     let dataStore;
 
-    testUtils.checkDatabaseIsRunning()
-      .then(() => {
-        dataStore = createDataStore(notificationsDatabaseLocalConfig);
-        return dataStore.saveSubscription(expectedValue);
-      })
+    dataStore = createDataStore(notificationsDatabaseLocalConfig);
+    dataStore.saveSubscription(expectedValue)
       .then(() => {
         return dataStore.getAllSubscriptions();
       })
@@ -36,15 +34,11 @@ describe('Data Store', function () {
   });
 
   it('should return a list of events.', function () {
-    let pool;
     let dataStore;
     const event = { data: { id: 1234, user_id: 4321 } };
 
-    testUtils.checkDatabaseIsRunning()
-      .then(() => {
-        dataStore = createDataStore(notificationsDatabaseLocalConfig);
-        return dataStore.saveEvent(event);
-      })
+    dataStore = createDataStore(notificationsDatabaseLocalConfig);
+    dataStore.saveEvent(event)
       .then(() => { return dataStore.getAllEvents(); })
       .then((events) => {
         expect(events.length).to.be.at.least(1); // TODO: use something like to.contain(object). But review docs to make sure.

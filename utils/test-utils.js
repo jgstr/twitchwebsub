@@ -7,11 +7,9 @@ const dockerComposeUp = () => {
     .upAll({ cwd: path.join(__dirname, '..'), log: true, })
     .then(() => {
       console.log('Docker-compose up ran.');
-      // done();
     },
       err => {
         console.log('Error running docker-compose up:', err.message);
-        // done();
       }
     );
 };
@@ -30,10 +28,15 @@ const dockerComposeDown = (done) => {
       });
 };
 
-const dockerComposeUpDatabase = (done) => {
+const dockerComposeUpDatabase = () => {
   compose.upOne('database', { cwd: path.join(__dirname, '..'), log: true })
-    .then(() => done() )
-    .catch(error => console.log(error));
+  .then(() => {
+    console.log('Docker-compose up ran.');
+  },
+    err => {
+      console.log('Error running docker-compose up:', err.message);
+    }
+  );
 };
 
 const checkDatabaseIsRunning = () => {
