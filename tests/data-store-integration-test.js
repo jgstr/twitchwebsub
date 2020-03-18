@@ -26,8 +26,7 @@ describe('Data Store', function () {
     dataStore.saveSubscription(expectedValue)
       .then(() => { return dataStore.getAllSubscriptions(); })
       .then((subscriptions) => {
-        expect(subscriptions[0].hub_topic).to.equal(expectedValue.hub_topic);
-        // expect(subscriptions).to.include.deep.members(expectedValue); TODO: Get something like this to work instead of above test.
+        expect(subscriptions).to.include.deep.members([expectedValue]);
         done();
       });
   });
