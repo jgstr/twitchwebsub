@@ -15,7 +15,6 @@ describe('Data Store', function () {
 
   it('should return a list of subscriptions.', function (done) { 
 
-    let pool;
     const expectedValue = {
       hub_topic: 'https://twitch.com',
       lease_start: timestampFormatter.utc(new Date()).format("YYYY-MM-DD HH:mm:ss")
@@ -24,12 +23,11 @@ describe('Data Store', function () {
 
     testUtils.checkDatabaseIsRunning()
       .then(() => {
-        pool = getPool(notificationsDatabaseLocalConfig);
-        dataStore = createDataStore(pool);
+        dataStore = createDataStore(notificationsDatabaseLocalConfig);
         return dataStore.saveSubscription(expectedValue);
       })
       .then(() => {
-        return dataStore.getAllSubscriptions(pool);
+        return dataStore.getAllSubscriptions();
       })
       .then((subscriptions) => {
         expect(subscriptions[0].hub_topic).to.equal(expectedValue.hub_topic); // TODO: Just check objects with deep.equal. and/or .contain.
@@ -44,11 +42,10 @@ describe('Data Store', function () {
 
     testUtils.checkDatabaseIsRunning()
       .then(() => {
-        pool = getPool(notificationsDatabaseLocalConfig);
-        dataStore = createDataStore(pool);
+        dataStore = createDataStore(notificationsDatabaseLocalConfig);
         return dataStore.saveEvent(event);
       })
-      .then(() => { return dataStore.getAllEvents(pool); })
+      .then(() => { return dataStore.getAllEvents(); })
       .then((events) => {
         expect(events.length).to.be.at.least(1); // TODO: use something like to.contain(object). But review docs to make sure.
       });

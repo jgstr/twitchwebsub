@@ -1,4 +1,14 @@
-export const createDataStore = (pool) => {
+import mysql from 'mysql';
+
+export const createDataStore = (config) => {
+
+  let pool = mysql.createPool({
+    host: config.host,
+    port: config.port,
+    user: config.user,
+    password: config.password,
+    database: config.database
+  });
 
   return {
 
