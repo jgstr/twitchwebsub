@@ -61,7 +61,10 @@ export const createDataStore = (config) => {
 
     saveEvent: (event) => {
       return new Promise((resolve) => {
-        pool.query('INSERT INTO events SET ?', { id: event.id, data: JSON.stringify(event.data) }, (error) => {
+        pool.query('INSERT INTO events SET ?', { 
+          id: event.id, 
+          subscription_id: event.subscription_id, 
+          data: JSON.stringify(event.data) }, (error) => {
           if (error) throw error;
           resolve();
         });

@@ -34,8 +34,9 @@ describe('Data Store', function () {
   it('should return a list of events.', function (done) {
     let dataStore;
     const eventUuid = uuid();
-    const rawEvent = { id: eventUuid, data: { id: 1234, user_id: 4321 } };
-    const expectedEvent = { id: eventUuid, data: JSON.stringify({ id: 1234, user_id: 4321 }) };
+    const eventSubscriptionId = uuid();
+    const rawEvent = { id: eventUuid, subscription_id: eventSubscriptionId, data: { id: 1234, user_id: 4321 } };
+    const expectedEvent = { id: eventUuid, subscription_id: eventSubscriptionId, data: JSON.stringify({ id: 1234, user_id: 4321 }) };
 
     dataStore = createDataStore(notificationsDatabaseLocalConfig);
     dataStore.saveEvent(rawEvent)

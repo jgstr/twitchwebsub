@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS subscriptions (
 
 CREATE TABLE IF NOT EXISTS events (
     id VARCHAR(128) NOT NULL,
+    subscription_id VARCHAR(128) NOT NULL,
     data VARCHAR(1000) NOT NULL,
     PRIMARY KEY (id)
     );
