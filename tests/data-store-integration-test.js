@@ -40,7 +40,7 @@ describe('Data Store', function () {
 
     dataStore = createDataStore(notificationsDatabaseLocalConfig);
     dataStore.saveEvent(rawEvent)
-      .then(() => { return dataStore.getAllEvents(); })
+      .then(() => { return dataStore.getAllEvents(eventSubscriptionId); })
       .then((events) => {
         expect(events).to.include.deep.members([expectedEvent]);
         done();

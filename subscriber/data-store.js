@@ -50,9 +50,9 @@ export const createDataStore = (config) => {
       });
     },
 
-    getAllEvents: () => {
+    getAllEvents: (subscriptionId) => {
       return new Promise((resolve) => {
-        pool.query('SELECT * FROM events', (error, results) => {
+        pool.query('SELECT * FROM events WHERE subscription_id=?', [subscriptionId], (error, results) => {
           if (error) throw error;
           resolve(results);
         });
