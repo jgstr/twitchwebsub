@@ -26,8 +26,6 @@ describe('Data Store', function () {
     dataStore.saveSubscription(expectedValue)
       .then(() => { return dataStore.getAllSubscriptions(); })
       .then((subscriptions) => {
-        console.log('Sub results: ', subscriptions);
-        console.log('ExpectedValue: ', expectedValue);
         expect(subscriptions).to.include.deep.members([expectedValue]);
         done();
       });
@@ -35,13 +33,15 @@ describe('Data Store', function () {
 
   it('should return a list of events.', function (done) {
     let dataStore;
-    const event = { data: { id: 1234, user_id: 4321 } };
+    const eventUuid = uuid();
+    const rawEvent = { id: eventUuid, data: { id: 1234, user_id: 4321 } };
+    const expectedEvent = { id: eventUuid, data: JSON.stringify({ id: 1234, user_id: 4321 }) };
 
     dataStore = createDataStore(notificationsDatabaseLocalConfig);
-    dataStore.saveEvent(event)
+    dataStore.saveEvent(rawEvent)
       .then(() => { return dataStore.getAllEvents(); })
       .then((events) => {
-        expect(events).to.include.deep.members([event]);
+        expect(events).to.include.deep.members([expectedEvent]);
         done();
       });
   });
