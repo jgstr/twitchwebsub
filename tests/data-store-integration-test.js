@@ -3,6 +3,7 @@ import { createDataStore } from '../subscriber/data-store';
 const testUtils = require('../utils/test-utils');
 import { notificationsDatabaseLocalConfig } from '../subscriber/authentications';
 const timestampFormatter = require('moment');
+import { uuid } from 'uuidv4';
 
 
 describe('Data Store', function () {
@@ -16,6 +17,7 @@ describe('Data Store', function () {
   it('should return a list of subscriptions.', function (done) {
     let dataStore;
     const expectedValue = {
+      id: uuid(),
       hub_topic: 'https://twitch.com',
       lease_start: timestampFormatter.utc(new Date()).format("YYYY-MM-DD HH:mm:ss")
     };
@@ -24,6 +26,8 @@ describe('Data Store', function () {
     dataStore.saveSubscription(expectedValue)
       .then(() => { return dataStore.getAllSubscriptions(); })
       .then((subscriptions) => {
+        console.log('Sub results: ', subscriptions);
+        console.log('ExpectedValue: ', expectedValue);
         expect(subscriptions).to.include.deep.members([expectedValue]);
         done();
       });

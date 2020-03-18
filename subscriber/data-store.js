@@ -28,6 +28,7 @@ export const createDataStore = (config) => {
       return new Promise((resolve) => {
         pool.query('INSERT INTO subscriptions SET ?',
           {
+            id: subscription.id,
             hub_topic: subscription.hub_topic,
             lease_start: subscription.lease_start
           },

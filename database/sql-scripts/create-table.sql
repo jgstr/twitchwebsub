@@ -2,9 +2,9 @@ CREATE DATABASE IF NOT EXISTS notifications;
 USE notifications;
 
 CREATE TABLE IF NOT EXISTS subscriptions (
-    id INT NOT NULL AUTO_INCREMENT,
+    id VARCHAR(128) NOT NULL,
     hub_topic VARCHAR(500) NOT NULL, 
-    lease_start TIMESTAMP,
+    lease_start VARCHAR(255),
     PRIMARY KEY (id)
     );
 
