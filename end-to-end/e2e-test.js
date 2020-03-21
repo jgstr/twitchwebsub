@@ -17,6 +17,7 @@ describe('Twitch Websub Subscriber', function () {
     .then(done);
   });
 
+  // Walking skeleton
   it('should return one subscription.', function (done) {
 
     subscriber.getAllSubscriptions()
