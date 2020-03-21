@@ -30,13 +30,13 @@ const dockerComposeDown = (done) => {
 
 const dockerComposeUpDatabase = () => {
   compose.upOne('database', { cwd: path.join(__dirname, '..'), log: true })
-  .then(() => {
-    console.log('Docker-compose up ran.');
-  },
-    err => {
-      console.log('Error running docker-compose up:', err.message);
-    }
-  );
+    .then(() => {
+      console.log('Docker-compose up ran.');
+    },
+      err => {
+        console.log('Error running docker-compose up:', err.message);
+      }
+    );
 };
 
 const checkDatabaseIsRunning = () => {
@@ -70,4 +70,16 @@ const checkDatabaseIsRunning = () => {
   });
 }
 
-module.exports = { dockerComposeUp, dockerComposeDown, dockerComposeUpDatabase, checkDatabaseIsRunning };
+const subscription = {
+  id: 'ac7856cb-5695-4664-b52f-0dc908e3aa7a',
+  hub_topic: 'https://twitch.com',
+  lease_start: '2020-03-21 01:01:01'
+};
+
+module.exports = {
+  dockerComposeUp,
+  dockerComposeDown,
+  dockerComposeUpDatabase,
+  checkDatabaseIsRunning,
+  subscription
+};
