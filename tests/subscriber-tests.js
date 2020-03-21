@@ -1,5 +1,6 @@
 const subscriber = require('../subscriber/subscriber');
 import { expect } from 'chai';
+const dataStoreFake = require('../subscriber/data-store-fake');
 
 describe('Subscriber Server', function () {
 
@@ -11,7 +12,7 @@ describe('Subscriber Server', function () {
       lease_start: '2020-03-21 01:01:01'
     };
 
-    const subscriptions = subscriber.getAllSubscriptions();
+    const subscriptions = subscriber.getAllSubscriptions(dataStoreFake);
     expect(subscriptions).to.include.deep.members([subscription]);
   });
 
