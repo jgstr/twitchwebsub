@@ -10,8 +10,6 @@ const isRunning = () => {
   return new Promise((resolve) => {
     function pollStatus() {
 
-      let statusResponse;
-
       axios.get('http://localhost:3000/status')
         .then((response) => {
           if (response.status === 200) {

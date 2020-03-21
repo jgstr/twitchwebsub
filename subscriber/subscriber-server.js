@@ -1,14 +1,14 @@
 'use strict';
 const express = require('express');
 import { clientID, hubCallback, hubUrl, hubTopic, notificationsDatabaseDockerConfig } from "./authentications";
-import { getPool, requestSubscription } from './subscriber-utils';
+import { requestSubscription } from './subscriber-utils';
+const subscriber = require('./subscriber');
 import { createDataStore } from './data-store';
 
 const port = 3000;
 const app = express();
 
-let pool = getPool(notificationsDatabaseDockerConfig);
-const dataStore = createDataStore(pool);
+const dataStore = createDataStore(notificationsDatabaseDockerConfig);
 
 app.get('/', (request, response) => {
   response.status(200).send('Welcome to a Twitch Websub Service.');
