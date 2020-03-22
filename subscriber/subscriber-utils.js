@@ -1,18 +1,4 @@
-import mysql from 'mysql';
 const axios = require('axios');
-
-const getPool = (dbConfig) => {
-
-  let pool = mysql.createPool({
-    host: dbConfig.host,
-    port: dbConfig.port,
-    user: dbConfig.user,
-    password: dbConfig.password,
-    database: dbConfig.database
-  });
-
-  return pool;
-};
 
 const requestSubscription = (request, response, hubUrl, clientID, hubCallback, hubTopic) => {
 
@@ -38,4 +24,4 @@ const requestSubscription = (request, response, hubUrl, clientID, hubCallback, h
 
 };
 
-module.exports = { getPool, requestSubscription };
+module.exports = { requestSubscription };

@@ -1,3 +1,5 @@
 const getAllSubscriptions = (dataStore) => { return dataStore.getAllSubscriptions(); };
 
-module.exports = { getAllSubscriptions };
+const requestSubscription = () => {};
+
+module.exports = { getAllSubscriptions, requestSubscription };
