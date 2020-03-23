@@ -24,6 +24,7 @@ app.get('/status', (request, response) => {
 
 app.get('/get-subscriptions', (request, response) => {
 
+  // Has subscriber unit test.
   dataStore.getAllSubscriptions()
     .then((results) => {
       return response.status(200).json({ list: results });
@@ -48,6 +49,7 @@ app.get('/get-events', (request, response) => {
 
 app.get('/subscribe', (request, response) => {
   response.status(200).send('OK');
+  // Has subscriber unit test but unfinished.
   requestSubscription(request, response, hubUrl, clientID, hubCallback, hubTopic);
 
 });

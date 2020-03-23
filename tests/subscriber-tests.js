@@ -25,4 +25,21 @@ describe('Subscriber Server', function () {
       });
   });
 
+  it('should save a subscription', function () {
+
+    const subscription = {
+      'hub.callback': 'http://localhost:3000/approval-callback',
+      'hub.mode': 'subscribe',
+      'hub.topic': 'https://api.twitch.tv/helix/users/follows?first=1&to_id=17337557',
+      'hub.lease_seconds': 600
+    };
+
+    let databaseFake = [];
+
+    subscriber.saveSubscription(datastore, subscription);
+
+    expect(dataStoreFake.length).to.equal(1);
+
+  });
+
 });
