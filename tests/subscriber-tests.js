@@ -2,7 +2,6 @@ const subscriber = require('../subscriber/subscriber');
 import { expect } from 'chai';
 const dataStoreFake = require('../subscriber/data-store-fake');
 import { subscription } from '../utils/test-utils';
-import { clientID, hubCallback, hubUrl, hubTopic } from "../subscriber/authentications";
 
 describe('Subscriber Server', function () {
 
@@ -11,42 +10,19 @@ describe('Subscriber Server', function () {
     expect(subscriptions).to.include.deep.members([subscription]);
   });
 
-  it('should send a subscriptions request.', function () {
+  it('should send a subscription request.', function () {
+    // Can't figure out this test.
+    const subscriptionRequestData = {
+      'hub.callback': 'http://localhost:3000/approval-callback',
+      'hub.mode': 'subscribe',
+      'hub.topic': 'https://api.twitch.tv/helix/users/follows?first=1&to_id=17337557',
+      'hub.lease_seconds': 600
+    };
 
-    const expectedRequest = {
-      method: 'POST',
-      url: hubUrl,
-      headers: {
-        'Content-Type': 'application/json',
-        'Client-ID': clientID
-      },
-      data:
-      {
-        'hub.callback': hubCallback,
-        'hub.mode': 'subscribe',
-        'hub.topic': hubTopic,
-        'hub.lease_seconds': 600
-      }
-    }
-
-    subscriber.requestSubscription();
-
-    const receivedRequest = {
-      method: 'POST',
-      url: hubUrl,
-      headers: {
-        'Content-Type': 'application/json',
-        'Client-ID': clientID
-      },
-      data:
-      {
-        'hub.callback': hubCallback,
-        'hub.mode': 'subscribe',
-        'hub.topic': hubTopic,
-        'hub.lease_seconds': 600
-      }
-    }
-    expect(receivedRequest).to.deep.equal(receivedRequest);
+    subscriber.requestSubscription()
+      .then(response => {
+        expect(response.data).to.deep.equal(subscriptionRequestData);
+      });
   });
 
 });
