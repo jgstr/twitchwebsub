@@ -49,7 +49,7 @@ app.get('/get-events', (request, response) => {
 
 app.get('/subscribe', (request, response) => {
   response.status(200).send('OK');
-  // Has subscriber unit test but unfinished.
+  // TODO: Has subscriber unit test but needs improvement.
   requestSubscription(request, response, hubUrl, clientID, hubCallback, hubTopic);
 
 });

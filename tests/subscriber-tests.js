@@ -2,6 +2,7 @@ const subscriber = require('../subscriber/subscriber');
 import { expect } from 'chai';
 const dataStoreFake = require('../subscriber/data-store-fake');
 import { subscription } from '../utils/test-utils';
+const nock = require('nock');
 
 describe('Subscriber Server', function () {
 
@@ -10,30 +11,23 @@ describe('Subscriber Server', function () {
     expect(subscriptions).to.include.deep.members([subscription]);
   });
 
+  // I'm unsure of the quality of this test and subscriber implementation.
   it('should send a subscription request.', function () {
-    // Can't figure out this test.
-    const subscriptionRequestData = {
-      'hub.callback': 'http://localhost:3000/approval-callback',
-      'hub.mode': 'subscribe',
-      'hub.topic': 'https://api.twitch.tv/helix/users/follows?first=1&to_id=17337557',
-      'hub.lease_seconds': 600
-    };
 
-    subscriber.requestSubscription()
+    // Note: GOOS says don't mock what you don't own. But I'm not sure how else to test.
+    const twitchApiMock = nock('http://localhost:3001')
+      .post('/hub')
+      .reply(200);
+
+    subscriber.requestSubscription('http://localhost:3001', '12345678', 'http://localhost:3000/approval-callback', 'https://api.twitch.tv/helix')
       .then(response => {
-        expect(response.data).to.deep.equal(subscriptionRequestData);
+        expect(response.status).to.equal(200);
       });
   });
 
   it('should save a subscription', function () {
 
-    const subscription = {
-      'hub.callback': 'http://localhost:3000/approval-callback',
-      'hub.mode': 'subscribe',
-      'hub.topic': 'https://api.twitch.tv/helix/users/follows?first=1&to_id=17337557',
-      'hub.lease_seconds': 600
-    };
-
+    // TODO: create fake database in same folder as data-store fake.
     let databaseFake = [];
 
     subscriber.saveSubscription(datastore, subscription);
