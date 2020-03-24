@@ -20,4 +20,6 @@ const requestSubscription = (hubUrl, clientID, hubCallback, hubTopic) => {
   })
 };
 
-module.exports = { getAllSubscriptions, requestSubscription };
+const saveSubscription = (dataStore, subscription) => { return dataStore.saveSubscription(subscription); };
+
+module.exports = { getAllSubscriptions, requestSubscription, saveSubscription };

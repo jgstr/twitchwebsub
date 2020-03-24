@@ -19,7 +19,7 @@ describe('Subscriber Server', function () {
       .post('/hub')
       .reply(200);
 
-    subscriber.requestSubscription('http://localhost:3001', '12345678', 'http://localhost:3000/approval-callback', 'https://api.twitch.tv/helix')
+    subscriber.requestSubscription('http://localhost:3001/hub', '12345678', 'http://localhost:3000/approval-callback', 'https://api.twitch.tv/helix')
       .then(response => {
         expect(response.status).to.equal(200);
       });
@@ -27,12 +27,8 @@ describe('Subscriber Server', function () {
 
   it('should save a subscription', function () {
 
-    // TODO: create fake database in same folder as data-store fake.
-    let databaseFake = [];
-
-    subscriber.saveSubscription(datastore, subscription);
-
-    expect(dataStoreFake.length).to.equal(1);
+    subscriber.saveSubscription(dataStoreFake, subscription);
+    expect(dataStoreFake.database.length).to.equal(1);
 
   });
 

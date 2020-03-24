@@ -1,5 +1,8 @@
 import { subscription } from '../utils/test-utils';
 
-const getAllSubscriptions = () => { return [subscription]; };
+let database = [];
 
-module.exports = { getAllSubscriptions };
+const getAllSubscriptions = () => { return [subscription]; };
+const saveSubscription = subscription =>  database.push(subscription); 
+
+module.exports = { getAllSubscriptions, saveSubscription, database };
