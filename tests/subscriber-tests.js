@@ -31,7 +31,7 @@ describe('Subscriber Server', function () {
   });
 
   it('should return a list of events.', function () {
-    const events = subscriber.getEvents(dataStoreFake, subscription.id);
+    const events = subscriber.getAllEvents(dataStoreFake, subscription.id);
     expect(events).to.include.deep.members([event]);
   });
 

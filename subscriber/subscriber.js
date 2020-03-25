@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const getAllSubscriptions = (dataStore) => { return dataStore.getAllSubscriptions(); };
+const getAllSubscriptions = dataStore => { return dataStore.getAllSubscriptions(); };
 
 const requestSubscription = (hubUrl, clientID, hubCallback, hubTopic) => {
   return axios({
@@ -22,4 +22,6 @@ const requestSubscription = (hubUrl, clientID, hubCallback, hubTopic) => {
 
 const saveSubscription = (dataStore, subscription) => { return dataStore.saveSubscription(subscription); };
 
-module.exports = { getAllSubscriptions, requestSubscription, saveSubscription };
+const getAllEvents = dataStore => { return dataStore.getAllEvents(); };
+
+module.exports = { getAllSubscriptions, requestSubscription, saveSubscription, getAllEvents };
