@@ -1,7 +1,7 @@
 const subscriber = require('../subscriber/subscriber');
 import { expect } from 'chai';
 const dataStoreFake = require('../subscriber/data-store-fake');
-import { subscription } from '../utils/test-utils';
+import { subscription, event } from '../utils/test-utils';
 const nock = require('nock');
 
 describe('Subscriber Server', function () {
@@ -31,7 +31,7 @@ describe('Subscriber Server', function () {
   });
 
   it('should return a list of events.', function () {
-    const events = subscriber.getEvents(dataStoreFake, subscriptionId);
+    const events = subscriber.getEvents(dataStoreFake, subscription.id);
     expect(events).to.include.deep.members([event]);
   });
 
