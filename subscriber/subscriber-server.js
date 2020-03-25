@@ -37,6 +37,7 @@ app.get('/get-subscriptions', (request, response) => {
 
 app.get('/get-events', (request, response) => {
 
+  // TODO: Create subscriber unit test.
   dataStore.getAllEvents()
     .then((results) => {
       return response.status(200).json({ list: results });

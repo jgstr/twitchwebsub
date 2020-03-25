@@ -26,10 +26,13 @@ describe('Subscriber Server', function () {
   });
 
   it('should save a subscription', function () {
-
     subscriber.saveSubscription(dataStoreFake, subscription);
     expect(dataStoreFake.database.length).to.equal(1);
+  });
 
+  it('should return a list of events.', function () {
+    const events = subscriber.getEvents(dataStoreFake, subscriptionId);
+    expect(events).to.include.deep.members([event]);
   });
 
 });
