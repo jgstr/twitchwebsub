@@ -2,6 +2,11 @@ const axios = require('axios');
 
 const getAllSubscriptions = dataStore => { return dataStore.getAllSubscriptions(); };
 
+const requestSubscription = (twitch) => {
+  return twitch.requestSubscription();
+};
+
+/*
 const requestSubscription = (hubUrl, clientID, hubCallback, hubTopic) => {
   return axios({
     method: 'POST',
@@ -19,6 +24,7 @@ const requestSubscription = (hubUrl, clientID, hubCallback, hubTopic) => {
     }
   })
 };
+*/
 
 const saveSubscription = (dataStore, subscription) => { return dataStore.saveSubscription(subscription); };
 
