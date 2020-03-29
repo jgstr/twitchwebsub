@@ -1,8 +1,9 @@
 const subscriber = require('../subscriber/subscriber');
 import { expect } from 'chai';
-const dataStoreFake = require('../subscriber/data-store-fake');
+const dataStoreFake = require('../subscriber/doubles/data-store-fake');
 import { subscription, event } from '../utils/test-utils';
-const twitchStub = require('../subscriber/twitch-stub');
+const twitchStub = require('../subscriber/doubles/twitch-stub');
+import { subscriptionHardCoded } from '../subscriber/subscriber-utils'; // TODO: Not a good solution. Fix soon as possible.
 
 describe('Subscriber Server', function () {
 
@@ -12,7 +13,10 @@ describe('Subscriber Server', function () {
   });
 
   it('should send a subscription request.', function () {
-    subscriber.requestSubscription(twitchStub)
+
+    const subscription = subscriptionHardCoded;
+
+    subscriber.requestSubscription(twitchStub, subscription)
       .then(response => {
         expect(response).to.equal('Received');
       });

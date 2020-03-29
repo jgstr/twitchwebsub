@@ -1,4 +1,4 @@
-import { subscription, event } from '../utils/test-utils';
+import { subscription, event } from '../../utils/test-utils';
 
 let database = [];
 

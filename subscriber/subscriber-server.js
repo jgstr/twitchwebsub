@@ -3,7 +3,7 @@ const express = require('express');
 import { clientID, hubCallback, hubUrl, hubTopic, notificationsDatabaseDockerConfig } from "./authentications";
 import { requestSubscription } from './subscriber-utils';
 const subscriber = require('./subscriber');
-import { createDataStore } from './data-store';
+import { createDataStore } from './adapters/data-store';
 
 const port = 3000;
 const app = express();

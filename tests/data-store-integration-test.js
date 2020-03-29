@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { createDataStore } from '../subscriber/data-store';
+import { createDataStore } from '../subscriber/adapters/data-store';
 const testUtils = require('../utils/test-utils');
 import { notificationsDatabaseLocalConfig } from '../subscriber/authentications';
 const timestampFormatter = require('moment');
