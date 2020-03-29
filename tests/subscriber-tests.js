@@ -2,7 +2,7 @@ const subscriber = require('../subscriber/subscriber');
 import { expect } from 'chai';
 const dataStoreFake = require('../subscriber/data-store-fake');
 import { subscription, event } from '../utils/test-utils';
-const twitchFake = require('../subscriber/twitch-fake');
+const twitchStub = require('../subscriber/twitch-stub');
 
 describe('Subscriber Server', function () {
 
@@ -12,9 +12,9 @@ describe('Subscriber Server', function () {
   });
 
   it('should send a subscription request.', function () {
-    subscriber.requestSubscription(twitchFake)
+    subscriber.requestSubscription(twitchStub)
       .then(response => {
-        expect(response.status).to.equal(200);
+        expect(response).to.equal('Received');
       });
   });
 
