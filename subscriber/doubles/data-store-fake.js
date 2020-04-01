@@ -1,9 +1,9 @@
-import { subscription, event } from '../../utils/test-utils';
+import { eventRecordStub, subscriptionRecordStub } from './subscriptions';
 
 let database = [];
 
-const getAllSubscriptions = () => { return [subscription]; };
-const saveSubscription = subscription =>  database.push(subscription);
-const getAllEvents = () => { return [event]; }; 
+const getAllSubscriptions = () => { return [subscriptionRecordStub]; };
+const saveSubscription = subscription =>  database.push(subscriptionRecordStub);
+const getAllEvents = () => { return [eventRecordStub]; }; 
 
 module.exports = { database, getAllSubscriptions, saveSubscription, getAllEvents };
