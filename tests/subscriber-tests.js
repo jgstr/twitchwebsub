@@ -12,7 +12,6 @@ describe('Subscriber Server', function () {
   });
 
   it('should send a subscription request.', function () {
-
     subscriber.requestSubscription(twitchStub, subscriptionDummy)
       .then(response => {
         expect(response).to.equal('Received');
