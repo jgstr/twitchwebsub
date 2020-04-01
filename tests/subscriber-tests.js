@@ -3,7 +3,7 @@ import { expect } from 'chai';
 const dataStoreFake = require('../subscriber/doubles/data-store-fake');
 import { subscription, event } from '../utils/test-utils';
 const twitchStub = require('../subscriber/doubles/twitch-stub');
-import { createNewSubscription } from '../subscriber/subscriber-utils'; // TODO: Not a good solution. Fix soon as possible.
+import { subscriptionDummy } from '../subscriber/doubles/subscription-dummy';
 
 describe('Subscriber Server', function () {
 
@@ -14,9 +14,7 @@ describe('Subscriber Server', function () {
 
   it('should send a subscription request.', function () {
 
-    const subscription = createNewSubscription();
-
-    subscriber.requestSubscription(twitchStub, subscription)
+    subscriber.requestSubscription(twitchStub, subscriptionDummy)
       .then(response => {
         expect(response).to.equal('Received');
       });
