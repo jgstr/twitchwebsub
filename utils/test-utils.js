@@ -74,6 +74,5 @@ module.exports = {
   dockerComposeUp,
   dockerComposeDown,
   dockerComposeUpDatabase,
-  checkDatabaseIsRunning,
-  event
+  checkDatabaseIsRunning
 };
