@@ -1,13 +1,13 @@
 'use strict';
 const express = require('express');
-import { clientID, hubCallback, hubUrl, hubTopic, notificationsDatabaseDockerConfig } from "./authentications";
-// import { requestSubscription } from './subscriber-utils';
+import { notificationsDatabaseDockerConfig } from "./authentications";
 const subscriber = require('./subscriber');
 import { createDataStore } from './adapters/data-store';
 import { createTwitchAdapter } from './adapters/twitch';
 import { subscriptionRecordStub, subscriptionRequestStub } from './doubles/subscriptions';
+import { hubUrl as twitchHub } from './authentications';
 import bodyParser from "body-parser";
-
+import { uuid } from 'uuidv4';
 
 const port = 3000;
 const app = express();
@@ -55,10 +55,20 @@ app.get('/get-events', (request, response) => {
 
 app.post('/subscribe', (request, response) => {
   response.status(200).send('OK');
-  subscriber.requestSubscription(twitchAdapter, subscriptionRequestStub); // TODO: Replace stub with formatted subscription object from request.body
+
+  const subscription = {
+    id: uuid(),
+    hubUrl: twitchHub,
+    clientID: request.headers['client-id'],
+    hubCallback: request.body['hub.callback'],
+    hubTopic: request.body['hub.topic']
+  };
+
+  subscriber.requestSubscription(twitchAdapter, subscription); 
 
 });
 
+// TODO: Add express variables parameters using subscription id.
 app.get('/approval-callback', (request, response) => {
 
   if (request.query['hub.challenge']) {
