@@ -1,14 +1,20 @@
 'use strict';
 const express = require('express');
 import { clientID, hubCallback, hubUrl, hubTopic, notificationsDatabaseDockerConfig } from "./authentications";
-import { requestSubscription } from './subscriber-utils';
+// import { requestSubscription } from './subscriber-utils';
 const subscriber = require('./subscriber');
 import { createDataStore } from './adapters/data-store';
+import { createTwitchAdapter } from './adapters/twitch';
+import { subscriptionRecordStub, subscriptionRequestStub } from './doubles/subscriptions';
+import bodyParser from "body-parser";
+
 
 const port = 3000;
 const app = express();
+app.use(bodyParser.json());
 
 const dataStore = createDataStore(notificationsDatabaseDockerConfig);
+const twitchAdapter = createTwitchAdapter();
 
 app.get('/', (request, response) => {
   response.status(200).send('Welcome to a Twitch Websub Service.');
@@ -24,8 +30,7 @@ app.get('/status', (request, response) => {
 
 app.get('/get-subscriptions', (request, response) => {
 
-  // Has subscriber unit test.
-  dataStore.getAllSubscriptions()
+  subscriber.getAllSubscriptions(dataStore)
     .then((results) => {
       return response.status(200).json({ list: results });
     })
@@ -48,10 +53,9 @@ app.get('/get-events', (request, response) => {
 
 });
 
-app.get('/subscribe', (request, response) => {
+app.post('/subscribe', (request, response) => {
   response.status(200).send('OK');
-  // TODO: Has subscriber unit test but needs improvement.
-  requestSubscription(request, response, hubUrl, clientID, hubCallback, hubTopic);
+  subscriber.requestSubscription(twitchAdapter, subscriptionRequestStub); // TODO: Replace stub with formatted subscription object from request.body
 
 });
 
@@ -62,7 +66,7 @@ app.get('/approval-callback', (request, response) => {
     response.status(200).send(request.query['hub.challenge']);
   }
 
-  dataStore.saveSubscription({ data: { hubTopic: hubTopic }, hub_topic: hubTopic });
+  dataStore.saveSubscription(subscriptionRecordStub);
 
 });
 
@@ -70,6 +74,7 @@ app.post('/approval-callback', (request, response) => {
   // TODO: Must use and check for a secret in next iteration to ensure this request is genuine!
   response.set('Content-Type', 'text/html');
   response.status(200).send('Ok');
+
   dataStore.saveEvent({ data: { id: 1234, user_id: 4321 } });
 
 })

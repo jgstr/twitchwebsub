@@ -8,7 +8,7 @@ export const createTwitchAdapter = () => {
 
         axios({
           method: 'POST',
-          url: subscription.hubUrl,
+          url: (subscription.hubUrl ? subscription.hubUrl : 'https://api.twitch.tv/helix/webhooks/hub'),
           headers: {
             'Content-Type': 'application/json',
             'Client-ID': subscription.clientID

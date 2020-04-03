@@ -1,7 +1,25 @@
 const axios = require('axios');
 
 const getAllSubscriptions = () => { return axios.get('http://localhost:3000/get-subscriptions'); }
-const requestSubscription = () => { return axios.get('http://localhost:3000/subscribe'); }
+
+const requestSubscription = (subscription) => {
+  return axios({
+    method: 'POST',
+    url: 'http://localhost:3000/subscribe',
+    headers: {
+      'Content-Type': 'application/json',
+      'Client-ID': subscription.clientID
+    },
+    data:
+    {
+      'hub.callback': subscription.hubCallback,
+      'hub.mode': 'subscribe',
+      'hub.topic': subscription.hubTopic,
+      'hub.lease_seconds': 600
+    }
+  });
+};
+
 const getAllEvents = () => { return axios.get('http://localhost:3000/get-events'); }
 const removeSubscription = () => { return axios.get('http://localhost:3000/unsubscribe'); };
 

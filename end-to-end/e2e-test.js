@@ -4,6 +4,7 @@ import { expect } from 'chai';
 const fakeTwitch = require('../fake-twitch-websub/fake-twitch-server');
 const subscriber = require('../utils/subscriber-driver');
 const hubCallback = 'http://localhost:3000/approval-callback';
+import { subscriptionStub } from '../subscriber/doubles/subscriptions';
 
 let twitchApp;
 
@@ -14,7 +15,7 @@ describe('Twitch Websub Subscriber', function () {
     twitchApp = fakeTwitch.start();
     testUtils.dockerComposeUp();
     subscriber.isRunning()
-    .then(done);
+      .then(done);
   });
 
   // Walking skeleton
@@ -22,15 +23,14 @@ describe('Twitch Websub Subscriber', function () {
 
     subscriber.getAllSubscriptions()
       .then((response) => { expect(response.data.list.length).to.equal(0); })
-      .then(subscriber.requestSubscription)
+      .then(() => { return subscriber.requestSubscription(subscriptionStub); })
       .then((response) => { expect(response.status).to.equal(200); })
-      .then(() => { return fakeTwitch.sendApprovalRequest(hubCallback); })
+      .then(() => { return fakeTwitch.sendApprovalRequest(subscriptionStub.hubCallback); })
       .then(subscriber.getAllSubscriptions)
       .then((response) => {
         expect(response.data.list.length).to.equal(1);
         done();
       })
-
   });
 
   it('should receive return at least one event.', function (done) {

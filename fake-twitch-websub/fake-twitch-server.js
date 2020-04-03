@@ -41,7 +41,7 @@ app.post('/hub', (request, response) => {
   if (request.body['hub.mode'] !== 'subscribe') {
     return response.status(400).json({
       status: 'error',
-      error: 'Incorred hub.mode'
+      error: 'Incorrect hub.mode'
     });
   }
   if (!request.body['hub.topic']) {
