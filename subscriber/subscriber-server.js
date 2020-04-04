@@ -56,11 +56,13 @@ app.get('/get-events', (request, response) => {
 app.post('/subscribe', (request, response) => {
   response.status(200).send('OK');
 
+  const subId = uuid();
+
   const subscription = {
-    id: uuid(),
+    id: subId,
     hubUrl: twitchHub,
     clientID: request.headers['client-id'],
-    hubCallback: request.body['hub.callback'],
+    hubCallback: request.body['hub.callback'] + `-${subId}`,
     hubTopic: request.body['hub.topic']
   };
 
@@ -69,7 +71,7 @@ app.post('/subscribe', (request, response) => {
 });
 
 // TODO: Add express variables parameters using subscription id.
-app.get('/approval-callback', (request, response) => {
+app.get('/approval-callback*', (request, response) => {
 
   if (request.query['hub.challenge']) {
     response.set('Content-Type', 'text/html');

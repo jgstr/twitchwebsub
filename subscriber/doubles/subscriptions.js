@@ -28,6 +28,14 @@ const subscriptionStub = {
     hubTopic: 'https://api.twitch.tv/helix/users/follows?first=1&to_id=17337557'
 };
 
+const subscriptionFromUserInputStub = {
+    clientID: 'zqyp13ibm7tejwe0r61ckvz95asblpw',
+    hubUrl: 'http://host.docker.internal:3001/hub',
+    subId: '',
+    hubCallback: '',
+    hubTopic: 'https://api.twitch.tv/helix/users/follows?first=1&to_id=17337557'
+};
+
 const eventRecordStub = {
     id: '0dc956cb-4664-5695-b52f-ac7808e7aa3a',
     subscription_id: 'ac7856cb-5695-4664-b52f-0dc908e3aa7a',
