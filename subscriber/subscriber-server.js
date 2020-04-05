@@ -1,6 +1,6 @@
 'use strict';
 const express = require('express');
-import { notificationsDatabaseDockerConfig } from "./authentications";
+import { hubCallback, notificationsDatabaseDockerConfig } from "./authentications";
 const subscriber = require('./subscriber');
 import { createDataStore } from './adapters/data-store';
 import { createTwitchAdapter } from './adapters/twitch';
@@ -62,7 +62,7 @@ app.post('/subscribe', (request, response) => {
     id: subId,
     hubUrl: twitchHub,
     clientID: request.headers['client-id'],
-    hubCallback: request.body['hub.callback'] + `-${subId}`,
+    hubCallback: hubCallback + `-${subId}`,
     hubTopic: request.body['hub.topic']
   };
 

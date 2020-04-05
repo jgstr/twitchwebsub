@@ -42,4 +42,4 @@ const eventRecordStub = {
     data: {}
 };
 
-module.exports = { eventRecordStub, subscriptionDummy, subscriptionRecordStub, subscriptionRequestStub, subscriptionStub };
+module.exports = { eventRecordStub, subscriptionDummy, subscriptionFromUserInputStub, subscriptionRecordStub, subscriptionRequestStub, subscriptionStub };
