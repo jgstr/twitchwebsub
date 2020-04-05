@@ -24,7 +24,7 @@ describe('Twitch Websub Subscriber', function () {
     subscriber.getAllSubscriptions()
       .then((response) => { expect(response.data.list.length).to.equal(0); })
       .then(() => { return subscriber.requestSubscription(subscriptionStub); })
-      .then((response) => { expect(response.status).to.equal(200); })
+      .then((response) => { expect(response.data).to.equal('Received.'); })
       .then(() => { return fakeTwitch.sendApprovalRequest(subscriptionStub.hubCallback); })
       .then(subscriber.getAllSubscriptions)
       .then((response) => {

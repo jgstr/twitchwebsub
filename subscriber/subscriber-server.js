@@ -54,7 +54,7 @@ app.get('/get-events', (request, response) => {
 });
 
 app.post('/subscribe', (request, response) => {
-  response.status(200).send('OK');
+  response.status(200).send('Received.');
 
   const subId = uuid();
 

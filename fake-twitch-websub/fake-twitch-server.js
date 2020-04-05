@@ -7,7 +7,7 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 
 let subscriptions = [];
-let hubCallback;
+let hubCallbackCaptured;
 
 const start = () => {
   return app.listen(3001, () => { console.log('* Fake Twitch Listening on 3001'); });
@@ -19,7 +19,7 @@ const stop = (twitchApp) => {
 
 app.post('/hub', (request, response) => {
 
-  // TODO: Figure out why request.headers[...] is case sensitive.
+  // Note: request.headers[...] is case sensitive.
   if (!request.headers['client-id']) {
     return response.status(400).json({
       status: 'error',
@@ -57,7 +57,8 @@ app.post('/hub', (request, response) => {
     });
   }
 
-  hubCallback = request.body['hub.callback'];
+  hubCallbackCaptured = request.body['hub.callback'];
+  console.log('* Hubcallback captured from /hub, ', hubCallbackCaptured); // For debugging
   response.status(200).send('Subscription Request Received.');
 
 });
@@ -72,6 +73,7 @@ const sendApprovalRequest = (hubCallback) => {
         if (response.status === 200
           && response.data === '97jbdwcHVzb_rv7McRfpIHuMMY8UhvUXDYhA1Egd') {
           subscriptions.push(hubCallback);
+          console.log('* Hubcallback captured from sendApprovalReq, ', hubCallbackCaptured); // For debugging
           resolve();
         }
       })
