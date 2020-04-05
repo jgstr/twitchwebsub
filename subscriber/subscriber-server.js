@@ -71,7 +71,7 @@ app.post('/subscribe', (request, response) => {
 });
 
 // TODO: Add express variables parameters using subscription id.
-app.get('/approval-callback*', (request, response) => {
+app.get('/approval*', (request, response) => {
 
   if (request.query['hub.challenge']) {
     response.set('Content-Type', 'text/html');
@@ -82,7 +82,7 @@ app.get('/approval-callback*', (request, response) => {
 
 });
 
-app.post('/approval-callback', (request, response) => {
+app.post('/approval*', (request, response) => {
   // TODO: Must use and check for a secret in next iteration to ensure this request is genuine!
   response.set('Content-Type', 'text/html');
   response.status(200).send('Ok');
