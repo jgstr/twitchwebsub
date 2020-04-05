@@ -29,7 +29,6 @@ app.get('/status', (request, response) => {
 });
 
 app.get('/get-subscriptions', (request, response) => {
-
   subscriber.getAllSubscriptions(dataStore)
     .then((results) => {
       return response.status(200).json({ list: results });

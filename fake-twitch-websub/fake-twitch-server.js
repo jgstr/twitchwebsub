@@ -10,7 +10,7 @@ let subscriptions = [];
 let hubCallbackCaptured;
 
 const start = () => {
-  return app.listen(3001, () => { console.log('* Fake Twitch Listening on 3001'); });
+  return app.listen(3001, () => { console.log('* Fake Twitch Listening on 3001.'); });
 };
 
 const stop = (twitchApp) => {

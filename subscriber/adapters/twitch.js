@@ -1,7 +1,6 @@
 const axios = require('axios');
 
 export const createTwitchAdapter = () => {
-
   
   return {
     
