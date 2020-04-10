@@ -5,7 +5,7 @@
   "scripts": {
     "e2e": "npm run write-env-e2e && npm run e2e-runner",
     "e2e-runner": "mocha -r @babel/register end-to-end",
-    "write-env-e2e": "node dot-env-writer",
+    "write-env-e2e": "node utils/dot-env-writer",
     "build": "babel . --our-dir dist",
     "build-tests": "mocha -r @babel/register tests",
     "subscriber-tests": "mocha -r @babel/register tests/subscriber-tests.js",
