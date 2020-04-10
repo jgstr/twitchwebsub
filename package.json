@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Learning Test for Twitch WebSub projct",
   "scripts": {
-    "e2e": "mocha -r @babel/register end-to-end",
+    "e2e": "npm run write-env-e2e && npm run e2e-runner",
+    "e2e-runner": "mocha -r @babel/register end-to-end",
     "write-env-e2e": "node dot-env-writer",
     "build": "babel . --our-dir dist",
     "build-tests": "mocha -r @babel/register tests",
