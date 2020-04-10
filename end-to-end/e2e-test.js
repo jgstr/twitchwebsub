@@ -20,11 +20,12 @@ describe('Twitch Websub Subscriber', function () {
 
   // Walking skeleton
   it('should return one subscription.', function (done) {
-
     subscriber.getAllSubscriptions()
       .then((response) => { expect(response.data.list.length).to.equal(0); })
       .then(() => { return subscriber.requestSubscription(subscriptionStub); })
       .then((response) => { expect(response.data).to.equal('Received.'); })
+      // TODO: remove fakeTwitch call. fT calls approve from /hub handler. Then retry getAllSubs until receive sub I expect.
+      // Has to be specific sub. Expecting 1 is not accurate enough.
       .then(() => { return fakeTwitch.sendApprovalRequest(subscriptionStub.hubCallback); })
       .then(subscriber.getAllSubscriptions)
       .then((response) => {
@@ -69,8 +70,8 @@ describe('Twitch Websub Subscriber', function () {
 
   // });
 
-  // after(function (done) {
-  //   fakeTwitch.stop(twitchApp);
-  //   testUtils.dockerComposeDown(done);
-  // });
+  after(function (done) {
+    fakeTwitch.stop(twitchApp);
+    testUtils.dockerComposeDown(done);
+  });
 });

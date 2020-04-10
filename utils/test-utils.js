@@ -4,7 +4,7 @@ import mysql from 'mysql';
 
 const dockerComposeUp = () => {
   compose
-    .upAll({ cwd: path.join(__dirname, '..'), log: true, })
+    .upAll({ cwd: path.join(__dirname, '..'), log: true })
     .then(() => {
       console.log('Docker-compose up ran.');
     },

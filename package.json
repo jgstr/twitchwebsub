@@ -4,6 +4,7 @@
   "description": "Learning Test for Twitch WebSub projct",
   "scripts": {
     "e2e": "mocha -r @babel/register end-to-end",
+    "write-env-e2e": "node dot-env-writer",
     "build": "babel . --our-dir dist",
     "build-tests": "mocha -r @babel/register tests",
     "subscriber-tests": "mocha -r @babel/register tests/subscriber-tests.js",

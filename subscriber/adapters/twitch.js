@@ -7,11 +7,12 @@ export const createTwitchAdapter = () => {
     requestSubscription: (subscription) => {
       return new Promise((resolve, reject) => {
         
-        const isLocalDevelopment = subscription.hubUrl.includes('localhost');
+        // const isLocalDevelopment = subscription.hubUrl.includes('localhost');
 
         axios({
           method: 'POST',
-          url: (isLocalDevelopment ? subscription.hubUrl : 'https://api.twitch.tv/helix/webhooks/hub'),
+          url: (subscription.hubUrl),
+          // url: (isLocalDevelopment ? subscription.hubUrl : 'https://api.twitch.tv/helix/webhooks/hub'),
           headers: {
             'Content-Type': 'application/json',
             'Client-ID': subscription.clientID
@@ -25,7 +26,10 @@ export const createTwitchAdapter = () => {
           }
         })
         .then(() => resolve('Received.'))
-        .catch(() => reject('Not received.'));
+        .catch((error) => {
+          console.error(error);
+          reject('Not received.');
+        });
 
       });
     }

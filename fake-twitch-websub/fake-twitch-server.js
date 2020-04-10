@@ -63,7 +63,7 @@ app.post('/hub', (request, response) => {
 
 });
 
-const sendApprovalRequest = (hubCallback) => {
+const sendApprovalRequest = (hubCallback) => { // TODO: this gets called in /hub handler.
   return new Promise((resolve, reject) => {
     axios({
       method: 'GET',
@@ -73,7 +73,6 @@ const sendApprovalRequest = (hubCallback) => {
         if (response.status === 200
           && response.data === '97jbdwcHVzb_rv7McRfpIHuMMY8UhvUXDYhA1Egd') {
           subscriptions.push(hubCallback);
-          console.log('* Hubcallback captured from sendApprovalReq, ', hubCallbackCaptured); // For debugging
           resolve();
         }
       })

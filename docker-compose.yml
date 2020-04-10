@@ -10,8 +10,8 @@ services:
     depends_on: 
       - database
     environment:
-      - HUB_CALLBACK=http://localhost:3000/approval
-      - HUB_URL=http://host.docker.internal:3001/hub
+      - HUB_CALLBACK=hub_callback_env
+      - HUB_URL=hub_url_env
   database:
     container_name: db
     build: database
