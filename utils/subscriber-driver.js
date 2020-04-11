@@ -1,5 +1,11 @@
 const axios = require('axios');
 
+const getSubscription = (subscription) => { 
+  return new Promise((resolve) => {
+    resolve({data: subscription});
+  });
+};
+
 const getAllSubscriptions = () => { return axios.get('http://localhost:3000/get-subscriptions'); }
 
 const requestSubscription = (subscription) => {
@@ -47,4 +53,4 @@ const isRunning = () => {
   });
 };
 
-module.exports = { getAllSubscriptions, requestSubscription, getAllEvents, removeSubscription, isRunning };
+module.exports = { getSubscription, getAllSubscriptions, requestSubscription, getAllEvents, removeSubscription, isRunning };

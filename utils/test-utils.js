@@ -39,40 +39,61 @@ const dockerComposeUpDatabase = () => {
     );
 };
 
-const checkDatabaseIsRunning = () => {
+const pollForSubscription = (getSubscription, subscription) => {
   return new Promise((resolve) => {
 
-    console.log('* Checking database...');
-
-    let pool = mysql.createPool({
-      host: '127.0.0.1',
-      port: 3307,
-      user: 'user',
-      password: 'password',
-      database: 'notifications'
-    });
-
-    function pingDatabaseForReply() {
-      pool.query('SELECT 1', function (error, results) {
-        if (error) {
+    function start(){
+      getSubscription(subscription)
+      .then(results => resolve(results))
+      .catch(error => {
+        if(error) {
           setTimeout(() => {
-            pingDatabaseForReply();
+            getSubscription(subscription);
           }, 500);
-        } else {
-          console.log('* Database up.');
-          resolve();
-        }
+        };
       });
-    }
+    };
 
-    pingDatabaseForReply();
+    start();
 
   });
-}
+};
+
+// Unused? Delete?
+// const checkDatabaseIsRunning = () => {
+//   return new Promise((resolve) => {
+
+//     console.log('* Checking database...');
+
+//     let pool = mysql.createPool({
+//       host: '127.0.0.1',
+//       port: 3307,
+//       user: 'user',
+//       password: 'password',
+//       database: 'notifications'
+//     });
+
+//     function pingDatabaseForReply() {
+//       pool.query('SELECT 1', function (error, results) {
+//         if (error) {
+//           setTimeout(() => {
+//             pingDatabaseForReply();
+//           }, 500);
+//         } else {
+//           console.log('* Database up.');
+//           resolve();
+//         }
+//       });
+//     }
+
+//     pingDatabaseForReply();
+
+//   });
+// }
 
 module.exports = {
   dockerComposeUp,
   dockerComposeDown,
   dockerComposeUpDatabase,
-  checkDatabaseIsRunning
+  pollForSubscription
 };

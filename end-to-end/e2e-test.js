@@ -24,12 +24,11 @@ describe('Twitch Websub Subscriber', function () {
       .then((response) => { expect(response.data.list.length).to.equal(0); })
       .then(() => { return subscriber.requestSubscription(subscriptionStub); })
       .then((response) => { expect(response.data).to.equal('Received.'); })
-      // TODO: remove fakeTwitch call. fT calls approve from /hub handler. Then retry getAllSubs until I receive THE sub I expect.
-      // Has to be specific sub. Expecting 1 is not accurate enough.
-      .then(() => { return fakeTwitch.sendApprovalRequest(subscriptionStub.hubCallback); })
-      .then(subscriber.getAllSubscriptions) // This calls a poller to retry getAllSubs; and returns (or fails) once correct sub becomes available.
+      // This retries getSub (which doesn't exist yet)... 
+      // and returns (or fails) once correct sub becomes available.
+      .then(() => testUtils.pollForSubscription(subscriber.getSubscription, subscriptionStub)) 
       .then((response) => {
-        expect(response.data.list.length).to.equal(1);
+        expect(response.data.id).to.equal(subscriptionStub.id);
         done();
       })
   });
