@@ -28,7 +28,7 @@ describe('Twitch Websub Subscriber', function () {
       // and returns (or fails) once correct sub becomes available.
       .then(() => testUtils.pollForSubscription(subscriber.getSubscription, subscriptionStub)) 
       .then((response) => {
-        expect(response.data.id).to.equal(subscriptionStub.id);
+        expect(response.data.subscription.id).to.equal(subscriptionStub.subId);
         done();
       })
   });

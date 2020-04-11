@@ -1,9 +1,7 @@
 const axios = require('axios');
 
 const getSubscription = (subscription) => { 
-  return new Promise((resolve) => {
-    resolve({data: subscription});
-  });
+  return axios.get(`http://localhost:3000/get-subscription-${subscription.subId}`);
 };
 
 const getAllSubscriptions = () => { return axios.get('http://localhost:3000/get-subscriptions'); }

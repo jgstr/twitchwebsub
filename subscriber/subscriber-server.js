@@ -28,6 +28,21 @@ app.get('/status', (request, response) => {
 
 });
 
+app.get('/get-subscription-*', (request, response) => {
+  const subscriptionId = request.url.substring(18);
+  return response.status(200).json({subscription: subscriptionRecordStub});
+
+  // TODO: implement with dataStore and integration test.
+  
+  // subscriber.getSubscription(dataStore, subscriptionId)
+  //   .then((results) => {
+  //     return response.status(200).json({subscription: results});
+  //   })
+  //   .catch((error) => {
+  //     return response.status(400).send(error);
+  //   });
+});
+
 app.get('/get-subscriptions', (request, response) => {
 
   subscriber.getAllSubscriptions(dataStore)
