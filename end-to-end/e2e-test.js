@@ -3,41 +3,39 @@ const testUtils = require('../utils/test-utils');
 import { expect } from 'chai';
 const fakeTwitch = require('../fake-twitch-websub/fake-twitch-server');
 const subscriber = require('../utils/subscriber-driver');
-const hubCallback = 'http://localhost:3000/approval-callback';
 import { subscriptionStub } from '../subscriber/doubles/subscriptions';
 
 let twitchApp;
 
 describe('Twitch Websub Subscriber', function () {
   this.timeout(17000);
-
+  
   before(function (done) {
     twitchApp = fakeTwitch.start();
     testUtils.dockerComposeUp();
     subscriber.isRunning()
-      .then(done);
+    .then(done);
   });
-
+  
   // Walking skeleton
   it('should return one subscription.', function (done) {
     subscriber.getAllSubscriptions()
-      .then((response) => { expect(response.data.list.length).to.equal(0); })
-      .then(() => { return subscriber.requestSubscription(subscriptionStub); })
-      .then((response) => { expect(response.data).to.equal('Received.'); })
-      // TODO: remove fakeTwitch call. fT calls approve from /hub handler. Then retry getAllSubs until I receive THE sub I expect.
-      // Has to be specific sub. Expecting 1 is not accurate enough.
-      .then(() => { return fakeTwitch.sendApprovalRequest(subscriptionStub.hubCallback); })
-      .then(subscriber.getAllSubscriptions) // This calls a poller to retry getAllSubs; and returns (or fails) once correct sub becomes available.
-      .then((response) => {
-        expect(response.data.list.length).to.equal(1);
-        done();
-      })
+    .then((response) => { expect(response.data.list.length).to.equal(0); })
+    .then(() => { return subscriber.requestSubscription(subscriptionStub); })
+    .then((response) => { expect(response.data).to.equal('Received.'); })
+    .then(subscriber.getAllSubscriptions) // This calls a poller to retry getAllSubs; and returns (or fails) once correct sub becomes available.
+    .then((response) => {
+      expect(response.data.list.length).to.equal(1);
+      done();
+    })
   });
+  
+  const hubCallback = 'http://localhost:3000/approval-callback'; // Will be deleted after refactored. Kept here to avoid crashing the test.
 
   it('should receive return at least one event.', function (done) {
 
     subscriber.requestSubscription()
-      .then(() => { return fakeTwitch.sendApprovalRequest(hubCallback); })
+      .then(() => { return fakeTwitch.sendApprovalRequest(hubCallback); }) // TODO: Refactor this to work like walking skeleton.
       .then(subscriber.getAllEvents)
       .then((events) => { expect(events.data.list.length).to.equal(0); })
       .then(() => { return fakeTwitch.sendEvent(hubCallback); })

@@ -7,7 +7,7 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 
 let subscriptions = [];
-let hubCallbackCaptured;
+let hubCallbackFromRequest;
 
 const start = () => {
   return app.listen(3001, () => { console.log('* Fake Twitch Listening on 3001.'); });
@@ -57,13 +57,18 @@ app.post('/hub', (request, response) => {
     });
   }
 
-  hubCallbackCaptured = request.body['hub.callback'];
-  console.log('* Hubcallback captured from /hub, ', hubCallbackCaptured); // For debugging
-  response.status(200).send('Subscription Request Received.');
+  hubCallbackFromRequest = request.body['hub.callback'];
+
+  sendApprovalRequest(hubCallbackFromRequest)
+  .then(() => { return response.status(200).send('Subscription Request Received.'); })
+  .catch(err => { 
+    console.error('* From fake twitch: ', err);
+    return response.status(400).send('Error. Check your approval response.');
+  });
 
 });
 
-const sendApprovalRequest = (hubCallback) => { // TODO: this gets called in /hub handler.
+const sendApprovalRequest = (hubCallback) => {
   return new Promise((resolve, reject) => {
     axios({
       method: 'GET',
