@@ -11,7 +11,7 @@ describe("Data Store", function () {
 
   before(function (done) {
     testUtils.dockerComposeUpDatabase();
-    testUtils.checkDatabaseIsRunning().then(done);
+    testUtils.checkDatabaseIsRunning().then(() => done());
   });
 
   it("should return a list of subscriptions.", function (done) {
