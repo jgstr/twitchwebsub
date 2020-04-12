@@ -6,3 +6,5 @@ dist
 .DS_Store
 authentications.js
 jsconfig.json
+.prettierrc
+.eslintrc.json

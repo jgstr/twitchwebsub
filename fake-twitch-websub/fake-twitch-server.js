@@ -1,7 +1,7 @@
-'use strict';
-const axios = require('axios');
-const express = require('express');
-const bodyParser = require('body-parser');
+"use strict";
+const axios = require("axios");
+const express = require("express");
+const bodyParser = require("body-parser");
 const app = express();
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
@@ -10,73 +10,79 @@ let subscriptions = [];
 let hubCallbackFromRequest;
 
 const start = () => {
-  return app.listen(3001, () => { console.log('* Fake Twitch Listening on 3001.'); });
+  return app.listen(3001, () => {
+    console.log("* Fake Twitch Listening on 3001.");
+  });
 };
 
 const stop = (twitchApp) => {
   twitchApp.close();
-}
+};
 
-app.post('/hub', (request, response) => {
-
+app.post("/hub", (request, response) => {
   // Note: request.headers[...] is case sensitive.
-  if (!request.headers['client-id']) {
+  if (!request.headers["client-id"]) {
     return response.status(400).json({
-      status: 'error',
-      error: 'Missing Client-ID'
+      status: "error",
+      error: "Missing Client-ID",
     });
   }
-  if (request.headers['content-type'] !== 'application/json') {
+  if (request.headers["content-type"] !== "application/json") {
     return response.status(400).json({
-      status: 'error',
-      error: 'Incorrect Content-Type'
+      status: "error",
+      error: "Incorrect Content-Type",
     });
   }
-  if (!request.body['hub.callback']) {
+  if (!request.body["hub.callback"]) {
     return response.status(400).json({
-      status: 'error',
-      error: 'Missing hub.callback'
+      status: "error",
+      error: "Missing hub.callback",
     });
   }
-  if (request.body['hub.mode'] !== 'subscribe') {
+  if (request.body["hub.mode"] !== "subscribe") {
     return response.status(400).json({
-      status: 'error',
-      error: 'Incorrect hub.mode'
+      status: "error",
+      error: "Incorrect hub.mode",
     });
   }
-  if (!request.body['hub.topic']) {
+  if (!request.body["hub.topic"]) {
     return response.status(400).json({
-      status: 'error',
-      error: 'Missing hub.topic'
+      status: "error",
+      error: "Missing hub.topic",
     });
   }
-  if (!request.body['hub.lease_seconds']) {
+  if (!request.body["hub.lease_seconds"]) {
     return response.status(400).json({
-      status: 'error',
-      error: 'Missing hub.lease_seconds'
+      status: "error",
+      error: "Missing hub.lease_seconds",
     });
   }
 
-  hubCallbackFromRequest = request.body['hub.callback'];
+  hubCallbackFromRequest = request.body["hub.callback"];
 
   sendApprovalRequest(hubCallbackFromRequest)
-  .then(() => { return response.status(200).send('Subscription Request Received.'); })
-  .catch(err => { 
-    console.error('* From fake twitch: ', err);
-    return response.status(400).send('Error. Check your approval response.');
-  });
-
+    .then(() => {
+      return response.status(200).send("Subscription Request Received.");
+    })
+    .catch((err) => {
+      console.error("* From fake twitch: ", err);
+      return response.status(400).send("Error. Check your approval response.");
+    });
 });
 
 const sendApprovalRequest = (hubCallback) => {
   return new Promise((resolve, reject) => {
     axios({
-      method: 'GET',
-      url: hubCallback + '/?hub.challenge=97jbdwcHVzb_rv7McRfpIHuMMY8UhvUXDYhA1Egd'
+      method: "GET",
+      url:
+        hubCallback +
+        "/?hub.challenge=97jbdwcHVzb_rv7McRfpIHuMMY8UhvUXDYhA1Egd",
     })
       .then((response) => {
-        if (response.status === 200
-          && response.data === '97jbdwcHVzb_rv7McRfpIHuMMY8UhvUXDYhA1Egd') {
+        if (
+          response.status === 200 &&
+          response.data === "97jbdwcHVzb_rv7McRfpIHuMMY8UhvUXDYhA1Egd"
+        ) {
           subscriptions.push(hubCallback);
           resolve();
         }
@@ -88,32 +94,32 @@ const sendApprovalRequest = (hubCallback) => {
 };
 
 const sendEvent = (hubCallback) => {
-
-  const data = [{
-    from_id: "1336",
-    from_name: "userNameFrom",
-    to_id: "1337",
-    to_name: "userNameTo",
-    followed_at: "2017-08-22T22:55:24Z"
-  }];
+  const data = [
+    {
+      from_id: "1336",
+      from_name: "userNameFrom",
+      to_id: "1337",
+      to_name: "userNameTo",
+      followed_at: "2017-08-22T22:55:24Z",
+    },
+  ];
 
   return new Promise((resolve, reject) => {
     axios({
-      method: 'POST',
+      method: "POST",
       url: hubCallback,
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      data: data
+      data: data,
     })
       .then((response) => {
         if (response.status === 200) {
           resolve();
         }
       })
-      .catch(error => reject(error))
+      .catch((error) => reject(error));
   });
-}
+};
 
 module.exports = { app, sendApprovalRequest, sendEvent, start, stop };
-
