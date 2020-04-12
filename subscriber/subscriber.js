@@ -4,6 +4,10 @@ const getAllSubscriptions = (dataStore) => {
   return dataStore.getAllSubscriptions();
 };
 
+const getSubscription = (dataStore, subscription) => {
+  return dataStore.getSubscription(dataStore, subscription);
+};
+
 const requestSubscription = (twitch, subscription) => {
   return twitch.requestSubscription(subscription);
 };
@@ -18,6 +22,7 @@ const getAllEvents = (dataStore) => {
 
 module.exports = {
   getAllSubscriptions,
+  getSubscription,
   requestSubscription,
   saveSubscription,
   getAllEvents,
