@@ -5,7 +5,7 @@ const getAllSubscriptions = (dataStore) => {
 };
 
 const getSubscription = (dataStore, subscription) => {
-  return dataStore.getSubscription(dataStore, subscription);
+  return dataStore.getSubscription(subscription);
 };
 
 const requestSubscription = (twitch, subscription) => {
