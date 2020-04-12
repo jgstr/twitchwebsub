@@ -22,9 +22,17 @@ describe("Subscriber Server", function () {
       });
   });
 
-  it("should save a subscription", function () {
+  it("should save a subscription.", function () {
     subscriber.saveSubscription(dataStoreFake, subscriptionRecordStub);
     expect(dataStoreFake.database.length).to.equal(1);
+  });
+
+  it("should return one subscription.", function () {
+    const subscription = subscriber.getSubscription(
+      dataStoreFake,
+      subscriptionRecordStub
+    );
+    expect(subscription).to.deep.equal(subscriptionRecordStub);
   });
 
   it("should return a list of events.", function () {
