@@ -1,9 +1,17 @@
-import { eventRecordStub, subscriptionRecordStub } from './subscriptions';
+import { eventRecordStub, subscriptionRecordStub } from "./subscriptions";
 
 let database = [];
 
-const getAllSubscriptions = () => { return [subscriptionRecordStub]; };
-const saveSubscription = subscription =>  database.push(subscriptionRecordStub);
-const getAllEvents = () => { return [eventRecordStub]; }; 
+const getAllSubscriptions = () => [subscriptionRecordStub];
 
-module.exports = { database, getAllSubscriptions, saveSubscription, getAllEvents };
+const saveSubscription = (subscription) =>
+  database.push(subscriptionRecordStub);
+
+const getAllEvents = () => [eventRecordStub];
+
+module.exports = {
+  database,
+  getAllSubscriptions,
+  saveSubscription,
+  getAllEvents,
+};

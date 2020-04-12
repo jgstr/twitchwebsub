@@ -1,61 +1,62 @@
-const path = require('path');
-const compose = require('docker-compose');
-import mysql from 'mysql';
+const path = require("path");
+const compose = require("docker-compose");
+import mysql from "mysql";
 
 const dockerComposeUp = () => {
-  compose
-    .upAll({ cwd: path.join(__dirname, '..'), log: true })
-    .then(() => {
-      console.log('Docker-compose up ran.');
+  compose.upAll({ cwd: path.join(__dirname, ".."), log: true }).then(
+    () => {
+      console.log("Docker-compose up ran.");
     },
-      err => {
-        console.log('Error running docker-compose up:', err.message);
-      }
-    );
+    (err) => {
+      console.log("Error running docker-compose up:", err.message);
+    }
+  );
 };
 
 const dockerComposeDown = (done) => {
-  compose
-    .down(["--rmi all"])
-    .then(
-      () => {
-        console.log('Docker-compose down ran.');
-        done();
-      },
-      err => {
-        console.log('Something went wrong when trying to stop containers:', err.message);
-        done();
-      });
+  compose.down(["--rmi all"]).then(
+    () => {
+      console.log("Docker-compose down ran.");
+      done();
+    },
+    (err) => {
+      console.log(
+        "Something went wrong when trying to stop containers:",
+        err.message
+      );
+      done();
+    }
+  );
 };
 
 const dockerComposeUpDatabase = () => {
-  compose.upOne('database', { cwd: path.join(__dirname, '..'), log: true })
-    .then(() => {
-      console.log('Docker-compose up ran.');
-    },
-      err => {
-        console.log('Error running docker-compose up:', err.message);
+  compose
+    .upOne("database", { cwd: path.join(__dirname, ".."), log: true })
+    .then(
+      () => {
+        console.log("Docker-compose up ran.");
+      },
+      (err) => {
+        console.log("Error running docker-compose up:", err.message);
       }
     );
 };
 
 const pollForSubscription = (getSubscription, subscription) => {
   return new Promise((resolve) => {
-
-    function start(){
+    function start() {
       getSubscription(subscription)
-      .then(results => resolve(results))
-      .catch(error => {
-        if(error) {
-          setTimeout(() => {
-            getSubscription(subscription);
-          }, 500);
-        };
-      });
-    };
+        .then((results) => resolve(results))
+        .catch((error) => {
+          if (error) {
+            setTimeout(() => {
+              getSubscription(subscription);
+            }, 500);
+          }
+        });
+    }
 
     start();
-
   });
 };
 
@@ -95,5 +96,5 @@ module.exports = {
   dockerComposeUp,
   dockerComposeDown,
   dockerComposeUpDatabase,
-  pollForSubscription
+  pollForSubscription,
 };
