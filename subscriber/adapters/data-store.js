@@ -40,6 +40,19 @@ export const createDataStore = (config) => {
       });
     },
 
+    getSubscription: (subscription) => {
+      return new Promise((resolve) => {
+        pool.query(
+          "SELECT * FROM subscriptions WHERE id=?",
+          subscription.id,
+          (error, results) => {
+            if (error) throw error;
+            resolve(results[0]);
+          }
+        );
+      });
+    },
+
     getAllSubscriptions: () => {
       return new Promise((resolve) => {
         pool.query("SELECT * FROM subscriptions", (error, results) => {

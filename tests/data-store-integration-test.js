@@ -4,6 +4,7 @@ const testUtils = require("../utils/test-utils");
 import { notificationsDatabaseLocalConfig } from "../subscriber/authentications";
 const timestampFormatter = require("moment");
 import { uuid } from "uuidv4";
+import { subscriptionRecordStub } from "../subscriber/doubles/subscriptions";
 
 describe("Data Store", function () {
   this.timeout(13000);
@@ -31,6 +32,20 @@ describe("Data Store", function () {
       })
       .then((subscriptions) => {
         expect(subscriptions).to.include.deep.members([expectedValue]);
+        done();
+      });
+  });
+
+  it("should return one subscription.", function (done) {
+    let dataStore;
+    const expectedSubscription = subscriptionRecordStub;
+
+    dataStore = createDataStore(notificationsDatabaseLocalConfig);
+    dataStore
+      .saveSubscription(expectedSubscription)
+      .then(() => dataStore.getSubscription(expectedSubscription))
+      .then((subscription) => {
+        expect(subscription).to.deep.equal(expectedSubscription);
         done();
       });
   });

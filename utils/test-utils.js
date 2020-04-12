@@ -60,39 +60,37 @@ const pollForSubscription = (getSubscription, subscription) => {
   });
 };
 
-// Unused? Delete?
-// const checkDatabaseIsRunning = () => {
-//   return new Promise((resolve) => {
+const checkDatabaseIsRunning = () => {
+  return new Promise((resolve) => {
+    console.log("* Checking database...");
 
-//     console.log('* Checking database...');
+    let pool = mysql.createPool({
+      host: "127.0.0.1",
+      port: 3307,
+      user: "user",
+      password: "password",
+      database: "notifications",
+    });
 
-//     let pool = mysql.createPool({
-//       host: '127.0.0.1',
-//       port: 3307,
-//       user: 'user',
-//       password: 'password',
-//       database: 'notifications'
-//     });
+    function pingDatabaseForReply() {
+      pool.query("SELECT 1", function (error, results) {
+        if (error) {
+          setTimeout(() => {
+            pingDatabaseForReply();
+          }, 500);
+        } else {
+          console.log("* Database up.");
+          resolve();
+        }
+      });
+    }
 
-//     function pingDatabaseForReply() {
-//       pool.query('SELECT 1', function (error, results) {
-//         if (error) {
-//           setTimeout(() => {
-//             pingDatabaseForReply();
-//           }, 500);
-//         } else {
-//           console.log('* Database up.');
-//           resolve();
-//         }
-//       });
-//     }
-
-//     pingDatabaseForReply();
-
-//   });
-// }
+    pingDatabaseForReply();
+  });
+};
 
 module.exports = {
+  checkDatabaseIsRunning,
   dockerComposeUp,
   dockerComposeDown,
   dockerComposeUpDatabase,
