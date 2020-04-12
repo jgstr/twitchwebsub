@@ -53,6 +53,8 @@ app.get("/get-subscription-*", (request, response) => {
 });
 
 app.get("/get-subscriptions", (request, response) => {
+  console.log("* Current hub url: ", twitchHub);
+  console.log("* Current approval callback: ", hubCallback);
   subscriber
     .getAllSubscriptions(dataStore)
     .then((results) => {

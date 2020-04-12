@@ -59,7 +59,7 @@ app.post("/hub", (request, response) => {
   }
 
   hubCallbackFromRequest = request.body["hub.callback"];
-
+  console.log("* Fake Twitch callback from req: ", hubCallbackFromRequest);
   sendApprovalRequest(hubCallbackFromRequest)
     .then(() => {
       return response.status(200).send("Subscription Request Received.");

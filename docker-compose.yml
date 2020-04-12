@@ -1,5 +1,5 @@
 # e2e
-version: '3.2'
+version: "3.2"
 services:
   subscriber:
     container_name: sub
@@ -7,11 +7,11 @@ services:
       context: .
     ports:
       - "3000:3000"
-    depends_on: 
+    depends_on:
       - database
     environment:
-      - HUB_CALLBACK=hub_callback_env
-      - HUB_URL=hub_url_env
+      - HUB_CALLBACK=${hub_callback_env}
+      - HUB_URL=${hub_url_env}
   database:
     container_name: db
     build: database
