@@ -44,7 +44,7 @@ export const createDataStore = (config) => {
       return new Promise((resolve) => {
         pool.query(
           "SELECT * FROM subscriptions WHERE id=?",
-          subscription.id,
+          [subscription.id],
           (error, results) => {
             if (error) throw error;
             resolve(results[0]);

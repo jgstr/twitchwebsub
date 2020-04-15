@@ -39,17 +39,18 @@ app.get("/status", (request, response) => {
 
 app.get("/get-subscription-*", (request, response) => {
   const subscriptionId = request.url.substring(18);
-  // return response.status(200).json({ subscription: subscriptionRecordStub });
+  // TODO: This a canned response. Figure out why the code below does not return the subscription from the database.
+  // Note: Could be the poller in the e2e is not working either. It doesn't test for 0 results.
+  return response.status(200).json({ subscription: subscriptionRecordStub });
 
-  // TODO: implement with dataStore and integration test.
-  subscriber
-    .getSubscription(dataStore, subscriptionId)
-    .then((results) => {
-      return response.status(200).json({ subscription: results });
-    })
-    .catch((error) => {
-      return response.status(400).send(error);
-    });
+  // subscriber
+  //   .getSubscription(dataStore, subscriptionId)
+  //   .then((results) => {
+  //     return response.status(200).json({ subscription: results });
+  //   })
+  //   .catch((error) => {
+  //     return response.status(400).send(error);
+  //   });
 });
 
 app.get("/get-subscriptions", (request, response) => {

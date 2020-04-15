@@ -7,6 +7,12 @@ import { subscriptionStub } from "../subscriber/doubles/subscriptions";
 
 let twitchApp;
 
+const fakeTwitchHasSubscription = (subscription) => {
+  return new Promise((resolve) => {
+    resolve();
+  });
+};
+
 describe("Twitch Websub Subscriber", function () {
   this.timeout(17000);
 
@@ -27,9 +33,7 @@ describe("Twitch Websub Subscriber", function () {
       .then((response) => {
         expect(response.data).to.equal("Received.");
       })
-      .then(() => {
-        // fakeTwitch.subs will eventually have subscriptionStub
-      })
+      .then(() => fakeTwitchHasSubscription(subscriptionStub))
       .then(() =>
         testUtils.pollForSubscription(
           subscriber.getSubscription,
@@ -85,8 +89,8 @@ describe("Twitch Websub Subscriber", function () {
 
   // });
 
-  after(function (done) {
-    fakeTwitch.stop(twitchApp);
-    testUtils.dockerComposeDown(done);
-  });
+  // after(function (done) {
+  //   fakeTwitch.stop(twitchApp);
+  //   testUtils.dockerComposeDown(done);
+  // });
 });

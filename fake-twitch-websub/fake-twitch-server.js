@@ -113,7 +113,7 @@ const sendApprovalRequest = (hubCallback) => {
   axios({
     method: "GET",
     url:
-      hubCallback + "/?hub.challenge=97jbdwcHVzb_rv7McRfpIHuMMY8UhvUXDYhA1Egd",
+      hubCallback + "?hub.challenge=97jbdwcHVzb_rv7McRfpIHuMMY8UhvUXDYhA1Egd",
   })
     .then((response) => {
       if (
@@ -123,11 +123,10 @@ const sendApprovalRequest = (hubCallback) => {
         subscriptions.push(hubCallback); // I already have the subscriptions list. Now I just need a pendingSubs list.
         // But next refactor should look something like:
         // subscriptions.push(pendingSubs[pendingSubs.indexOf(subscription)]); // If so, might need to pass a subscription object instead of just hubCallback.
-        resolve();
       }
     })
     .catch((error) => {
-      reject(error);
+      console.error(error.config);
     });
 };
 
@@ -160,4 +159,11 @@ const sendEvent = (hubCallback) => {
   });
 };
 
-module.exports = { app, sendApprovalRequest, sendEvent, start, stop };
+module.exports = {
+  app,
+  sendApprovalRequest,
+  sendEvent,
+  start,
+  stop,
+  subscriptions,
+};

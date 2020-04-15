@@ -46,7 +46,9 @@ const pollForSubscription = (getSubscription, subscription) => {
   return new Promise((resolve) => {
     function start() {
       getSubscription(subscription)
-        .then((results) => resolve(results))
+        .then((results) => {
+          if (results) resolve(results);
+        })
         .catch((error) => {
           if (error) {
             setTimeout(() => {
