@@ -27,8 +27,9 @@ describe("Twitch Websub Subscriber", function () {
       .then((response) => {
         expect(response.data).to.equal("Received.");
       })
-      // This retries getSub (which doesn't exist yet)...
-      // and returns (or fails) once correct sub becomes available.
+      .then(() => {
+        // fakeTwitch.subs will eventually have subscriptionStub
+      })
       .then(() =>
         testUtils.pollForSubscription(
           subscriber.getSubscription,

@@ -59,17 +59,13 @@ app.post("/hub", (request, response) => {
   }
 
   hubCallbackFromRequest = request.body["hub.callback"];
+  sendApprovalRequest(hubCallbackFromRequest);
 
-  sendApprovalRequest(hubCallbackFromRequest)
-    .then(() => {
-      return response.status(200).send("Subscription Request Received.");
-    })
-    .catch((err) => {
-      console.error("* From fake twitch: ", err);
-      return response.status(400).send("Error. Check your approval response.");
-    });
+  return response.status(202).send("Subscription Request Received.");
 });
 
+// TODO: Remove this after implementing asynchronous approval between subscriber-server and Twitch.
+// This functions as a sort of stub for the twitch adapter for now.
 app.post("/hub-stub", (request, response) => {
   if (!request.headers["client-id"]) {
     return response.status(400).json({
@@ -114,26 +110,25 @@ app.post("/hub-stub", (request, response) => {
 });
 
 const sendApprovalRequest = (hubCallback) => {
-  return new Promise((resolve, reject) => {
-    axios({
-      method: "GET",
-      url:
-        hubCallback +
-        "/?hub.challenge=97jbdwcHVzb_rv7McRfpIHuMMY8UhvUXDYhA1Egd",
+  axios({
+    method: "GET",
+    url:
+      hubCallback + "/?hub.challenge=97jbdwcHVzb_rv7McRfpIHuMMY8UhvUXDYhA1Egd",
+  })
+    .then((response) => {
+      if (
+        response.status === 200 &&
+        response.data === "97jbdwcHVzb_rv7McRfpIHuMMY8UhvUXDYhA1Egd"
+      ) {
+        subscriptions.push(hubCallback); // I already have the subscriptions list. Now I just need a pendingSubs list.
+        // But next refactor should look something like:
+        // subscriptions.push(pendingSubs[pendingSubs.indexOf(subscription)]); // If so, might need to pass a subscription object instead of just hubCallback.
+        resolve();
+      }
     })
-      .then((response) => {
-        if (
-          response.status === 200 &&
-          response.data === "97jbdwcHVzb_rv7McRfpIHuMMY8UhvUXDYhA1Egd"
-        ) {
-          subscriptions.push(hubCallback);
-          resolve();
-        }
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
+    .catch((error) => {
+      reject(error);
+    });
 };
 
 const sendEvent = (hubCallback) => {
