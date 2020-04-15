@@ -10,6 +10,7 @@
     "build": "babel . --our-dir dist",
     "build-tests": "mocha -r @babel/register tests",
     "subscriber-tests": "mocha -r @babel/register tests/subscriber-tests.js",
+    "twitch-int-tests": "mocha -r @babel/register tests/twitch-integration-test.js",
     "serve": "node dist/subscriber-server.js",
     "start": "nodemon --exec babel-node subscriber-server.js",
     "start-locally": "docker-compose -f docker-compose.production.yml up",

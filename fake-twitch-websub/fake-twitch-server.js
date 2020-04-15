@@ -70,6 +70,49 @@ app.post("/hub", (request, response) => {
     });
 });
 
+app.post("/hub-stub", (request, response) => {
+  if (!request.headers["client-id"]) {
+    return response.status(400).json({
+      status: "error",
+      error: "Missing Client-ID",
+    });
+  }
+  if (request.headers["content-type"] !== "application/json") {
+    return response.status(400).json({
+      status: "error",
+      error: "Incorrect Content-Type",
+    });
+  }
+  if (!request.body["hub.callback"]) {
+    return response.status(400).json({
+      status: "error",
+      error: "Missing hub.callback",
+    });
+  }
+  if (request.body["hub.mode"] !== "subscribe") {
+    return response.status(400).json({
+      status: "error",
+      error: "Incorrect hub.mode",
+    });
+  }
+  if (!request.body["hub.topic"]) {
+    return response.status(400).json({
+      status: "error",
+      error: "Missing hub.topic",
+    });
+  }
+  if (!request.body["hub.lease_seconds"]) {
+    return response.status(400).json({
+      status: "error",
+      error: "Missing hub.lease_seconds",
+    });
+  }
+
+  hubCallbackFromRequest = request.body["hub.callback"];
+
+  return response.status(200).send("Subscription Request Received.");
+});
+
 const sendApprovalRequest = (hubCallback) => {
   return new Promise((resolve, reject) => {
     axios({
