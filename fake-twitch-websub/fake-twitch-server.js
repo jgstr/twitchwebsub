@@ -159,6 +159,16 @@ const sendEvent = (hubCallback) => {
   });
 };
 
+const has = (subscription) => {
+  if (subscriptions.length === 0) return false;
+
+  subscriptions.forEach((sub) => {
+    if (sub === subscription.hubCallback) return true;
+  });
+
+  return false;
+};
+
 module.exports = {
   app,
   sendApprovalRequest,
@@ -166,4 +176,5 @@ module.exports = {
   start,
   stop,
   subscriptions,
+  has,
 };

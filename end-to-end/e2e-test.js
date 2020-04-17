@@ -33,7 +33,11 @@ describe("Twitch Websub Subscriber", function () {
       .then((response) => {
         expect(response.data).to.equal("Received.");
       })
-      .then(() => fakeTwitchHasSubscription(subscriptionStub))
+      .then(() =>
+        setTimeout(() => {
+          fakeTwitch.has(subscriptionStub);
+        }, 1500)
+      )
       .then(() =>
         testUtils.pollForSubscription(
           subscriber.getSubscription,
