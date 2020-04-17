@@ -77,17 +77,24 @@ app.get("/get-events", (request, response) => {
 });
 
 app.post("/subscribe", (request, response) => {
-  response.status(200).send("Received.");
-
   const subId = uuid();
+  response.status(200).send("Received.");
 
   const subscription = {
     id: subId,
     hubUrl: twitchHub,
     clientID: request.headers["client-id"],
     hubCallback: hubCallback + `-${subId}`,
-    hubTopic: request.body["hub.topic"],
+    // TODO: Figure out why request.body is undefined. Requests.http tool broken?
+    // Also: the subID saved in the database is not the same as what gets used in the
+    // approval-callback.
+    // Nevertheless, the callback still accepts POSTs from the real twitch.
+    hubTopic: request.body["hub.topic"]
+      ? request.body["hub.topic"]
+      : "https://api.twitch.tv/helix/users/follows?first=1&to_id=36769016",
   };
+
+  console.log("* Request: ", request);
 
   subscriber.requestSubscription(twitchAdapter, subscription);
 });
