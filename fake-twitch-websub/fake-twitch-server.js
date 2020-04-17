@@ -120,9 +120,7 @@ const sendApprovalRequest = (hubCallback) => {
         response.status === 200 &&
         response.data === "97jbdwcHVzb_rv7McRfpIHuMMY8UhvUXDYhA1Egd"
       ) {
-        subscriptions.push(hubCallback); // I already have the subscriptions list. Now I just need a pendingSubs list.
-        // But next refactor should look something like:
-        // subscriptions.push(pendingSubs[pendingSubs.indexOf(subscription)]); // If so, might need to pass a subscription object instead of just hubCallback.
+        subscriptions.push(hubCallback);
       }
     })
     .catch((error) => {

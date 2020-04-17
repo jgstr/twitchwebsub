@@ -7,12 +7,6 @@ import { subscriptionStub } from "../subscriber/doubles/subscriptions";
 
 let twitchApp;
 
-const fakeTwitchHasSubscription = (subscription) => {
-  return new Promise((resolve) => {
-    resolve();
-  });
-};
-
 describe("Twitch Websub Subscriber", function () {
   this.timeout(17000);
 
@@ -36,7 +30,7 @@ describe("Twitch Websub Subscriber", function () {
       .then(() =>
         setTimeout(() => {
           fakeTwitch.has(subscriptionStub);
-        }, 1500)
+        }, 1000)
       )
       .then(() =>
         testUtils.pollForSubscription(
