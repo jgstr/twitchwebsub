@@ -14,6 +14,7 @@
     "serve": "node dist/subscriber-server.js",
     "start": "nodemon --exec babel-node subscriber-server.js",
     "start-locally": "npm run write-env-production && docker-compose up",
+    "start-ngrok": "cd ~ && ./ngrok http 3000",
     "build-subscriber": "docker build -t twitchwebsub_subscriber .",
     "build-database": "docker build -t twitchwebsub_database database",
     "build-all": "npm run build-subscriber && npm run build-database && npm run clean-volumes",
