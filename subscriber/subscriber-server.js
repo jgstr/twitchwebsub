@@ -1,6 +1,5 @@
 "use strict";
 const express = require("express");
-const bodyParser = require("body-parser");
 import {
   hubCallback,
   notificationsDatabaseDockerConfig,
@@ -14,8 +13,7 @@ import { uuid } from "uuidv4";
 
 const port = 3000;
 const app = express();
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(express.json());
 
 const dataStore = createDataStore(notificationsDatabaseDockerConfig);
 const twitchAdapter = createTwitchAdapter();
@@ -74,8 +72,6 @@ app.get("/get-events", (request, response) => {
 
 app.post("/subscribe", (request, response) => {
   const subId = uuid();
-  console.log("* Request.body from /subscribe: ", request.body);
-
   response.status(200).send("Received.");
 
   const subscription = {
