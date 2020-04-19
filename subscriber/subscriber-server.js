@@ -38,8 +38,6 @@ app.get("/status", (request, response) => {
 
 app.get("/get-subscription-*", (request, response) => {
   const subscriptionId = request.url.substring(18);
-  // TODO: This a canned response. Figure out why the code below does not return the subscription from the database.
-  // Note: Could be the poller in the e2e is not working either. It doesn't test for 0 results.
   return response.status(200).json({ subscription: subscriptionRecordStub });
 
   // subscriber
