@@ -12,12 +12,11 @@ import {
   subscriptionRequestStub,
 } from "./doubles/subscriptions";
 import { hubUrl as twitchHub } from "./authentications";
-import bodyParser from "body-parser";
 import { uuid } from "uuidv4";
 
 const port = 3000;
 const app = express();
-app.use(bodyParser.json());
+app.use(express.json());
 
 const dataStore = createDataStore(notificationsDatabaseDockerConfig);
 const twitchAdapter = createTwitchAdapter();
@@ -85,16 +84,13 @@ app.post("/subscribe", (request, response) => {
     hubUrl: twitchHub,
     clientID: request.headers["client-id"],
     hubCallback: hubCallback + `-${subId}`,
-    // TODO: Figure out why request.body is undefined. Requests.http tool broken?
-    // Also: the subID saved in the database is not the same as what gets used in the
+    // TODO: the subID saved in the database is not the same as what gets used in the
     // approval-callback.
     // Nevertheless, the callback still accepts POSTs from the real twitch.
     hubTopic: request.body["hub.topic"]
       ? request.body["hub.topic"]
       : "https://api.twitch.tv/helix/users/follows?first=1&to_id=36769016",
   };
-
-  console.log("* Request: ", request);
 
   subscriber.requestSubscription(twitchAdapter, subscription);
 });
