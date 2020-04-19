@@ -20,7 +20,7 @@ export const createTwitchAdapter = () => {
         })
           .then(() => resolve("Received."))
           .catch((error) => {
-            console.error(error);
+            console.error("* Response message: ", error.response.data.message);
             reject("Not received.");
           });
       });

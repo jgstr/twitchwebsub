@@ -1,5 +1,6 @@
 "use strict";
 const express = require("express");
+const bodyParser = require("body-parser");
 import {
   hubCallback,
   notificationsDatabaseDockerConfig,
@@ -7,16 +8,14 @@ import {
 const subscriber = require("./subscriber");
 import { createDataStore } from "./adapters/data-store";
 import { createTwitchAdapter } from "./adapters/twitch";
-import {
-  subscriptionRecordStub,
-  subscriptionRequestStub,
-} from "./doubles/subscriptions";
+import { subscriptionRecordStub } from "./doubles/subscriptions";
 import { hubUrl as twitchHub } from "./authentications";
 import { uuid } from "uuidv4";
 
 const port = 3000;
 const app = express();
-app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 const dataStore = createDataStore(notificationsDatabaseDockerConfig);
 const twitchAdapter = createTwitchAdapter();
@@ -75,6 +74,8 @@ app.get("/get-events", (request, response) => {
 
 app.post("/subscribe", (request, response) => {
   const subId = uuid();
+  console.log("* Request.body from /subscribe: ", request.body);
+
   response.status(200).send("Received.");
 
   const subscription = {
@@ -85,11 +86,10 @@ app.post("/subscribe", (request, response) => {
     // TODO: the subID saved in the database is not the same as what gets used in the
     // approval-callback.
     // Nevertheless, the callback still accepts POSTs from the real twitch.
-    hubTopic: request.body["hub.topic"]
-      ? request.body["hub.topic"]
-      : "https://api.twitch.tv/helix/users/follows?first=1&to_id=36769016",
+    hubTopic: request.body["hub.topic"],
   };
 
+  console.log("* Subscription from /subscribe ", subscription);
   subscriber.requestSubscription(twitchAdapter, subscription);
 });
 
