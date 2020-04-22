@@ -15,7 +15,7 @@ const app = express();
 app.use(express.json());
 
 const dataStore = createDataStore(notificationsDatabaseDockerConfig);
-const twitchAdapter = createTwitchAdapter(twitchHub);
+const twitchAdapter = createTwitchAdapter(twitchHub, hubCallback);
 
 // TODO: Delete and replace with pending-subscription queue.
 const subscriptionRecordStub = {
@@ -80,13 +80,6 @@ app.post("/subscribe", (request, response) => {
   const subId = uuid();
   response.status(200).send("Received.");
 
-  // TODO: create subscription based on conditions:
-  // topic type and to/from user IDs.
-
-  // if topic === follows
-
-  // if topic === streams
-
   const subscription = {
     id: subId,
     topic: request.query.topic,
@@ -94,10 +87,8 @@ app.post("/subscribe", (request, response) => {
     fromID: request.query.from_id ? request.query.from_id : "",
     userID: request.query.user_id ? request.query.user_id : "",
     clientID: request.headers["client-id"],
-    hubCallback: hubCallback + `-${subId}`,
   };
 
-  console.log("* Subscription from /subscribe ", subscription);
   subscriber.requestSubscription(twitchAdapter, subscription);
 });
 
