@@ -90,15 +90,11 @@ app.post("/subscribe", (request, response) => {
   const subscription = {
     id: subId,
     topic: request.query.topic,
-    toID: request.query.to_id,
-    fromID: request.query.from_id,
+    toID: request.query.to_id ? request.query.to_id : "",
+    fromID: request.query.from_id ? request.query.from_id : "",
+    userID: request.query.user_id ? request.query.user_id : "",
     clientID: request.headers["client-id"],
     hubCallback: hubCallback + `-${subId}`,
-    // TODO: the subID saved in the database is not the same as what gets used in the
-    // approval-callback.
-    // Nevertheless, the callback still accepts POSTs from the real twitch.
-
-    hubTopic: request.query.topic, // replace with "topic" above after making updates to the driver and doubles.
   };
 
   console.log("* Subscription from /subscribe ", subscription);

@@ -14,7 +14,7 @@ export const createTwitchAdapter = (twitchHub) => {
           data: {
             "hub.callback": subscription.hubCallback,
             "hub.mode": "subscribe",
-            "hub.topic": subscription.topic,
+            "hub.topic": subscription.topic, // createHubTopicURL(topicType, to, from, userID)
             "hub.lease_seconds": 600,
           },
         })
