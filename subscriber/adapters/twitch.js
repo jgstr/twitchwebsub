@@ -1,7 +1,23 @@
 const axios = require("axios");
 
 const createHubTopicURL = (topicType, toID, fromID, userID) => {
-  return "https://api.twitch.tv/helix/users/follows?first=1&to_id=17337557";
+  if (topicType === "follows") {
+    if (toID !== "" && fromID !== "") {
+      return `https://api.twitch.tv/helix/users/follows?first=1&from_id=${fromID}&to_id=${toID}`;
+    }
+    if (toID !== "") {
+      return `https://api.twitch.tv/helix/users/follows?first=1&to_id=${toID}`;
+    }
+    if (fromID !== "") {
+      return `https://api.twitch.tv/helix/users/follows?first=1&from_id=${fromID}`;
+    }
+  }
+
+  if (topicType === "streams") {
+    return `https://api.twitch.tv/helix/streams?user_id=${userID}`;
+  }
+
+  // TODO: needs error handling.
 };
 
 export const createTwitchAdapter = (twitchHub) => {
