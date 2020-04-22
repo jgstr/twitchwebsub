@@ -82,7 +82,8 @@ app.post("/subscribe", (request, response) => {
     // TODO: the subID saved in the database is not the same as what gets used in the
     // approval-callback.
     // Nevertheless, the callback still accepts POSTs from the real twitch.
-    hubTopic: request.body["hub.topic"],
+
+    hubTopic: request.query.topic,
   };
 
   console.log("* Subscription from /subscribe ", subscription);

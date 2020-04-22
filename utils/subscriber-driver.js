@@ -14,15 +14,12 @@ const requestSubscription = (subscription) => {
   return axios({
     method: "POST",
     url: "http://localhost:3000/subscribe",
+    params: {
+      topic: subscription.hubTopic,
+    },
     headers: {
       "Content-Type": "application/json",
       "Client-ID": subscription.clientID,
-    },
-    data: {
-      "hub.callback": subscription.hubCallback,
-      "hub.mode": "subscribe",
-      "hub.topic": subscription.hubTopic,
-      "hub.lease_seconds": 600,
     },
   });
 };
