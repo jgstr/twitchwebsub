@@ -1,12 +1,12 @@
 const axios = require("axios");
 
-export const createTwitchAdapter = () => {
+export const createTwitchAdapter = (twitchHub) => {
   return {
     requestSubscription: (subscription) => {
       return new Promise((resolve, reject) => {
         axios({
           method: "POST",
-          url: subscription.hubUrl,
+          url: twitchHub,
           headers: {
             "Content-Type": "application/json",
             "Client-ID": subscription.clientID,
@@ -14,7 +14,7 @@ export const createTwitchAdapter = () => {
           data: {
             "hub.callback": subscription.hubCallback,
             "hub.mode": "subscribe",
-            "hub.topic": subscription.hubTopic,
+            "hub.topic": subscription.topic,
             "hub.lease_seconds": 600,
           },
         })
