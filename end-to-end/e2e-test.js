@@ -3,7 +3,7 @@ const testUtils = require("../utils/test-utils");
 import { expect } from "chai";
 const fakeTwitch = require("../fake-twitch-websub/fake-twitch-server");
 const subscriber = require("../utils/subscriber-driver");
-import { subscriptionStub } from "../subscriber/doubles/subscriptions";
+import { subscriptionRequestByUserStub } from "./doubles/subscriptions";
 
 let twitchApp;
 
@@ -23,23 +23,25 @@ describe("Twitch Websub Subscriber", function () {
       .then((response) => {
         expect(response.data.list.length).to.equal(0);
       })
-      .then(() => subscriber.requestSubscription(subscriptionStub))
+      .then(() => subscriber.requestSubscription(subscriptionRequestByUserStub))
       .then((response) => {
         expect(response.data).to.equal("Received.");
       })
       .then(() =>
         setTimeout(() => {
-          fakeTwitch.has(subscriptionStub);
+          fakeTwitch.has(subscriptionRequestByUserStub);
         }, 1000)
       )
       .then(() =>
         testUtils.pollForSubscription(
           subscriber.getSubscription,
-          subscriptionStub
+          subscriptionRequestByUserStub
         )
       )
       .then((response) => {
-        expect(response.data.subscription.id).to.equal(subscriptionStub.subId);
+        expect(response.data.subscription.id).to.equal(
+          subscriptionRequestByUserStub.subId
+        );
         done();
       });
   });

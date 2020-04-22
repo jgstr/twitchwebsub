@@ -16,6 +16,8 @@ const requestSubscription = (subscription) => {
     url: "http://localhost:3000/subscribe",
     params: {
       topic: subscription.hubTopic,
+      to_id: subscription.toID,
+      from_id: subscription.fromID,
     },
     headers: {
       "Content-Type": "application/json",

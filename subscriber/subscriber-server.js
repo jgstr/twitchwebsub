@@ -7,7 +7,6 @@ import {
 const subscriber = require("./subscriber");
 import { createDataStore } from "./adapters/data-store";
 import { createTwitchAdapter } from "./adapters/twitch";
-import { subscriptionRecordStub } from "./doubles/subscriptions";
 import { hubUrl as twitchHub } from "./authentications";
 import { uuid } from "uuidv4";
 
@@ -17,6 +16,13 @@ app.use(express.json());
 
 const dataStore = createDataStore(notificationsDatabaseDockerConfig);
 const twitchAdapter = createTwitchAdapter();
+
+// TODO: Delete and replace with pending-subscription queue.
+const subscriptionRecordStub = {
+  id: "ac7856cb-5695-4664-b52f-0dc908e3aa7a",
+  hub_topic: "https://twitch.com",
+  lease_start: "2020-03-21 01:01:01",
+};
 
 app.get("/", (request, response) => {
   response.status(200).send("Welcome to a Twitch Websub Service.");
@@ -77,13 +83,16 @@ app.post("/subscribe", (request, response) => {
   const subscription = {
     id: subId,
     hubUrl: twitchHub,
+    topic: request.query.topic,
+    toID: request.query.to_id,
+    fromID: request.query.from_id,
     clientID: request.headers["client-id"],
     hubCallback: hubCallback + `-${subId}`,
     // TODO: the subID saved in the database is not the same as what gets used in the
     // approval-callback.
     // Nevertheless, the callback still accepts POSTs from the real twitch.
 
-    hubTopic: request.query.topic,
+    hubTopic: request.query.topic, // replace with "topic" above after making updates to the driver and doubles.
   };
 
   console.log("* Subscription from /subscribe ", subscription);
