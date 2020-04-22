@@ -8,3 +8,6 @@ authentications.js
 jsconfig.json
 .prettierrc
 .eslintrc.json
+.env
+dot-env-writer-local.js
+dot-env-writer-production.js
