@@ -8,6 +8,14 @@ const formatSubscription = (subscription) => {
   };
 };
 
+const formatDatabaseResult = (result) => {
+  return {
+    subID: result.id,
+    hubTopic: result.hub_topic,
+    leaseStart: result.lease_start,
+  };
+};
+
 export const createDataStore = (config) => {
   let pool = mysql.createPool({
     host: config.host,
@@ -44,13 +52,19 @@ export const createDataStore = (config) => {
     },
 
     getSubscription: (subscription) => {
+      const formattedSubscription = formatSubscription(subscription);
+
       return new Promise((resolve) => {
         pool.query(
           "SELECT * FROM subscriptions WHERE id=?",
-          [subscription.subID],
+          [formattedSubscription.id],
           (error, results) => {
             if (error) throw error;
-            resolve(results[0]);
+            if (results.length === 0) {
+              resolve(results);
+            } else {
+              resolve(formatDatabaseResult(results[0]));
+            }
           }
         );
       });

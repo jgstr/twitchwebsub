@@ -58,7 +58,7 @@ describe("Data Store", function () {
       .saveSubscription(expectedValue)
       .then(() => dataStore.getSubscription(expectedValue))
       .then((subscription) => {
-        expect(subscription).to.deep.equal(expectedValue);
+        expect(subscription.subID).to.equal(expectedValue.subID);
         done();
       });
   });
@@ -95,6 +95,6 @@ describe("Data Store", function () {
   */
 
   after(function (done) {
-    // testUtils.dockerComposeDown(done);
+    testUtils.dockerComposeDown(done);
   });
 });
