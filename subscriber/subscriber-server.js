@@ -90,6 +90,7 @@ app.post("/subscribe", (request, response) => {
     clientID: request.headers["client-id"],
   };
 
+  subscriptionsWaitingForTwitchApproval.push(subscription);
   subscriber.requestSubscription(twitchAdapter, subscription);
 });
 
