@@ -45,7 +45,7 @@ describe("Data Store", function () {
   it("should return one subscription.", function (done) {
     let dataStore;
 
-    const expectedIncomingValue = {
+    const expectedValue = {
       subID: uuid(),
       hubTopic: "follows",
       leaseStart: timestampFormatter
@@ -53,18 +53,12 @@ describe("Data Store", function () {
         .format("YYYY-MM-DD HH:mm:ss"),
     };
 
-    const expectedFormattedValue = {
-      id: expectedIncomingValue.subID,
-      hub_topic: expectedIncomingValue.hubTopic,
-      lease_start: expectedIncomingValue.leaseStart,
-    };
-
     dataStore = createDataStore(notificationsDatabaseLocalConfig);
     dataStore
-      .saveSubscription(expectedIncomingValue)
-      .then(() => dataStore.getSubscription(expectedIncomingValue))
+      .saveSubscription(expectedValue)
+      .then(() => dataStore.getSubscription(expectedValue))
       .then((subscription) => {
-        expect(subscription).to.deep.equal(expectedFormattedValue);
+        expect(subscription).to.deep.equal(expectedValue);
         done();
       });
   });

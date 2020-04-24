@@ -1,5 +1,13 @@
 import mysql from "mysql";
 
+const formatSubscription = (subscription) => {
+  return {
+    id: subscription.subID,
+    hub_topic: subscription.hubTopic,
+    lease_start: subscription.leaseStart,
+  };
+};
+
 export const createDataStore = (config) => {
   let pool = mysql.createPool({
     host: config.host,
@@ -26,12 +34,7 @@ export const createDataStore = (config) => {
       return new Promise((resolve) => {
         pool.query(
           "INSERT INTO subscriptions SET ?",
-          {
-            id: subscription.subID,
-            hub_topic: subscription.hubTopic,
-            lease_start: subscription.leaseStart,
-          },
-
+          formatSubscription(subscription),
           (error) => {
             if (error) throw error;
             resolve();
