@@ -9,6 +9,22 @@ export const createDataStore = (config) => {
     database: config.database,
   });
 
+  const formatSubscriptionForSaving = (subscription) => {
+    const formattedSubscription = {
+      id: "",
+      hub_topic: "",
+      lease_start: "",
+    };
+
+    if (subscription.subID) formattedSubscription.id = subscription.subID;
+
+    if (subscription.hubTopic)
+      formattedSubscription.hub_topic = subscription.hubTopic;
+
+    if (subscription.leaseStart)
+      formattedSubscription.lease_start = subscription.leaseStart;
+  };
+
   return {
     checkStatus: () => {
       return new Promise((resolve, reject) => {

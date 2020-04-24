@@ -79,6 +79,6 @@ describe("Data Store", function () {
   });
 
   after(function (done) {
-    testUtils.dockerComposeDown(done);
+    // testUtils.dockerComposeDown(done);
   });
 });
