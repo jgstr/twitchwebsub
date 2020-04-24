@@ -16,13 +16,21 @@ export const createDataStore = (config) => {
       lease_start: "",
     };
 
-    if (subscription.subID) formattedSubscription.id = subscription.subID;
+    if (subscription.subID) {
+      formattedSubscription.id = subscription.subID;
+    } else {
+      return subscription;
+    }
 
-    if (subscription.hubTopic)
+    if (subscription.hubTopic) {
       formattedSubscription.hub_topic = subscription.hubTopic;
+    }
 
-    if (subscription.leaseStart)
+    if (subscription.leaseStart) {
       formattedSubscription.lease_start = subscription.leaseStart;
+    }
+
+    return formattedSubscription;
   };
 
   return {
@@ -39,6 +47,8 @@ export const createDataStore = (config) => {
     },
 
     saveSubscription: (subscription) => {
+      const formattedSubscription = formatSubscriptionForSaving(subscription);
+
       return new Promise((resolve) => {
         pool.query(
           "INSERT INTO subscriptions SET ?",
