@@ -1,21 +1,22 @@
 "use strict";
 const express = require("express");
+import { uuid } from "uuidv4";
+const subscriber = require("./subscriber");
 import {
   hubCallback,
   notificationsDatabaseDockerConfig,
 } from "./authentications";
-const subscriber = require("./subscriber");
 import { createDataStore } from "./adapters/data-store";
 import { createTwitchAdapter } from "./adapters/twitch";
 import { hubUrl as twitchHub } from "./authentications";
-import { uuid } from "uuidv4";
+
+const dataStore = createDataStore(notificationsDatabaseDockerConfig);
+const twitchAdapter = createTwitchAdapter(twitchHub, hubCallback);
+const subscriptionsWaitingForTwitchApproval = [];
 
 const port = 3000;
 const app = express();
 app.use(express.json());
-
-const dataStore = createDataStore(notificationsDatabaseDockerConfig);
-const twitchAdapter = createTwitchAdapter(twitchHub, hubCallback);
 
 // TODO: Delete and replace with pending-subscription queue.
 const subscriptionRecordStub = {
@@ -98,6 +99,8 @@ app.get("/approval*", (request, response) => {
     response.status(200).send(request.query["hub.challenge"]);
   }
 
+  // TODO: see stub created above. This will retrieve a subscription from a list of
+  // pending subscriptions and send to the data-store.
   dataStore.saveSubscription(subscriptionRecordStub);
 });
 
