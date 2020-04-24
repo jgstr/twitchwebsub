@@ -9,30 +9,6 @@ export const createDataStore = (config) => {
     database: config.database,
   });
 
-  const formatSubscriptionForSaving = (subscription) => {
-    const formattedSubscription = {
-      id: "",
-      hub_topic: "",
-      lease_start: "",
-    };
-
-    if (subscription.subID) {
-      formattedSubscription.id = subscription.subID;
-    } else {
-      return subscription;
-    }
-
-    if (subscription.hubTopic) {
-      formattedSubscription.hub_topic = subscription.hubTopic;
-    }
-
-    if (subscription.leaseStart) {
-      formattedSubscription.lease_start = subscription.leaseStart;
-    }
-
-    return formattedSubscription;
-  };
-
   return {
     checkStatus: () => {
       return new Promise((resolve, reject) => {
@@ -47,15 +23,13 @@ export const createDataStore = (config) => {
     },
 
     saveSubscription: (subscription) => {
-      const formattedSubscription = formatSubscriptionForSaving(subscription);
-
       return new Promise((resolve) => {
         pool.query(
           "INSERT INTO subscriptions SET ?",
           {
-            id: subscription.id,
-            hub_topic: subscription.hub_topic,
-            lease_start: subscription.lease_start,
+            id: subscription.subID,
+            hub_topic: subscription.hubTopic,
+            lease_start: subscription.leaseStart,
           },
 
           (error) => {
@@ -70,7 +44,7 @@ export const createDataStore = (config) => {
       return new Promise((resolve) => {
         pool.query(
           "SELECT * FROM subscriptions WHERE id=?",
-          [subscription.id],
+          [subscription.subID],
           (error, results) => {
             if (error) throw error;
             resolve(results[0]);

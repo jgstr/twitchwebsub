@@ -27,6 +27,7 @@ const subscriptionStub = {
   hubTopic: "follows",
   to: "17337557",
   from: null,
+  leaseStart: "2020-03-21 01:01:01",
 };
 
 const subscriptionFromUserInputStub = {
