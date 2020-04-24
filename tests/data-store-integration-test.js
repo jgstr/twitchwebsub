@@ -59,6 +59,7 @@ describe("Data Store", function () {
       subscription_id: eventSubscriptionId,
       data: { id: 1234, user_id: 4321 },
     };
+
     const expectedEvent = {
       id: eventUuid,
       subscription_id: eventSubscriptionId,

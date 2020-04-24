@@ -95,14 +95,23 @@ app.post("/subscribe", (request, response) => {
 });
 
 app.get("/approval*", (request, response) => {
+  const requestSubscriptionId = request.path.slice(10);
+
   if (request.query["hub.challenge"]) {
     response.set("Content-Type", "text/html");
     response.status(200).send(request.query["hub.challenge"]);
   }
 
-  // TODO: see stub created above. This will retrieve a subscription from a list of
-  // pending subscriptions and send to the data-store.
-  dataStore.saveSubscription(subscriptionRecordStub);
+  console.log("* Subscription Record Stub: ", subscriptionRecordStub);
+
+  for (const subscription of subscriptionsWaitingForTwitchApproval) {
+    if (subscription.id === requestSubscriptionId) {
+      // dataStore.saveSubscription(subscriptionRecordStub); // Original used for testing.
+      // TODO: saveSubscription will now need to change the subscription object received...
+      // to match database needs (or some other utility in anothe layer will).
+      dataStore.saveSubscription(subscription);
+    }
+  }
 });
 
 app.post("/approval*", (request, response) => {

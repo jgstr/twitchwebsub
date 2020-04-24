@@ -11,6 +11,7 @@
     "build-tests": "mocha -r @babel/register tests",
     "subscriber-tests": "mocha -r @babel/register tests/subscriber-tests.js",
     "twitch-int-tests": "mocha -r @babel/register tests/twitch-integration-test.js",
+    "data-store-int-tests": "mocha -r @babel/register tests/data-store-integration-test.js",
     "serve": "node dist/subscriber-server.js",
     "start": "nodemon --exec babel-node subscriber-server.js",
     "start-locally": "npm run write-env-production && docker-compose up",
