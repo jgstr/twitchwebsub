@@ -28,15 +28,14 @@ export const createTwitchAdapter = (twitchHub, hubCallback) => {
           method: "POST",
           url: twitchHub,
           headers: {
-            "Content-Type": "application/json",
-            "Client-ID": subscription.clientID,
+            "content-type": "application/json",
+            "client-id": subscription.clientID,
           },
           data: {
-            "hub.callback": hubCallback + `-${subscription.id}`,
+            "hub.callback": hubCallback + `-${subscription.subID}`,
             "hub.mode": "subscribe",
-            // "hub.topic": subscription.topic,
             "hub.topic": createHubTopicURL(
-              subscription.topic,
+              subscription.hubTopic,
               subscription.toID,
               subscription.fromID,
               subscription.userID
@@ -45,8 +44,7 @@ export const createTwitchAdapter = (twitchHub, hubCallback) => {
           },
         })
           .then(() => resolve("Received."))
-          .catch((error) => {
-            console.error(error);
+          .catch(() => {
             reject("Not received.");
           });
       });

@@ -46,6 +46,8 @@ describe("Twitch Websub Subscriber", function () {
       });
   });
 
+  /* Commented out while refactoring code related to walking skeleton.
+
   const hubCallback = "http://localhost:3000/approval-callback"; // Will be deleted after refactored. Kept here to avoid crashing the test.
 
   it("should receive return at least one event.", function (done) {
@@ -67,28 +69,30 @@ describe("Twitch Websub Subscriber", function () {
         done();
       });
   });
+  */
 
-  // it('should remove one subscription from the database.', function (done) {
-  //   const subscription = "12345";
-  //   let originalSubscriptionLength;
+  /*
+  it('should remove one subscription from the database.', function (done) {
+    const subscription = "12345";
+    let originalSubscriptionLength;
 
-  //   subscriber.requestSubscription()
-  //     .then((response) => { expect(response.status).to.equal(200); })
-  //     .then(() => { return fakeTwitch.sendApprovalRequest(hubCallback); })
-  //     .then(subscriber.getAllSubscriptions)
-  //     .then((response) => {
-  //       originalSubscriptionLength = response.data.list.length;
-  //       expect(originalSubscriptionLength).to.be.at.least(1);
-  //     })
-  //     .then(subscriber.removeSubscription(subscription))
-  //     .then(subscriber.getAllSubscriptions)
-  //     .then((subscriptions) => {
-  //       expect(subscriptions.data.list.length).to.equal(originalSubscriptionLength - 1);
-  //       done();
-  //     })
+    subscriber.requestSubscription()
+      .then((response) => { expect(response.status).to.equal(200); })
+      .then(() => { return fakeTwitch.sendApprovalRequest(hubCallback); })
+      .then(subscriber.getAllSubscriptions)
+      .then((response) => {
+        originalSubscriptionLength = response.data.list.length;
+        expect(originalSubscriptionLength).to.be.at.least(1);
+      })
+      .then(subscriber.removeSubscription(subscription))
+      .then(subscriber.getAllSubscriptions)
+      .then((subscriptions) => {
+        expect(subscriptions.data.list.length).to.equal(originalSubscriptionLength - 1);
+        done();
+      })
 
-  // });
-
+  });
+*/
   // after(function (done) {
   //   fakeTwitch.stop(twitchApp);
   //   testUtils.dockerComposeDown(done);

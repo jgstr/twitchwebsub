@@ -12,11 +12,14 @@ describe("Twitch", function (done) {
     setTimeout(done, 1000);
   });
 
-  const twitchAdapter = twitch.createTwitchAdapter();
+  const twitchAdapter = twitch.createTwitchAdapter(
+    "http://localhost:3001/hub",
+    "/approval"
+  );
 
   it("should send a subscription request.", function (done) {
     const subscriptionStubWithLocalhost = subscriptionStub;
-    subscriptionStubWithLocalhost.hubUrl = "http://localhost:3001/hub-stub";
+    subscriptionStubWithLocalhost.hubUrl = "http://localhost:3001/hub";
 
     subscriber
       .requestSubscription(twitchAdapter, subscriptionStubWithLocalhost)
