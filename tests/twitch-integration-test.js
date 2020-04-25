@@ -27,6 +27,8 @@ describe("Twitch", function (done) {
         expect(response).to.equal("Received.");
         done();
       });
+    // Note: Fake-twitch tries to call subscriber-server/approval, which is not running.
+    // You will notice an error print out reading as such.
   });
 
   after(function () {

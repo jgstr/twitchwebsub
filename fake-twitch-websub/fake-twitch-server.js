@@ -64,51 +64,6 @@ app.post("/hub", (request, response) => {
   return response.status(202).send("Subscription Request Received.");
 });
 
-// TODO: Remove this after implementing asynchronous approval between subscriber-server and Twitch.
-// This functions as a sort of stub for the twitch adapter for now.
-app.post("/hub-stub", (request, response) => {
-  if (!request.headers["client-id"]) {
-    return response.status(400).json({
-      status: "error",
-      error: "Missing Client-ID",
-    });
-  }
-  if (request.headers["content-type"] !== "application/json") {
-    return response.status(400).json({
-      status: "error",
-      error: "Incorrect Content-Type",
-    });
-  }
-  if (!request.body["hub.callback"]) {
-    return response.status(400).json({
-      status: "error",
-      error: "Missing hub.callback",
-    });
-  }
-  if (request.body["hub.mode"] !== "subscribe") {
-    return response.status(400).json({
-      status: "error",
-      error: "Incorrect hub.mode",
-    });
-  }
-  if (!request.body["hub.topic"]) {
-    return response.status(400).json({
-      status: "error",
-      error: "Missing hub.topic",
-    });
-  }
-  if (!request.body["hub.lease_seconds"]) {
-    return response.status(400).json({
-      status: "error",
-      error: "Missing hub.lease_seconds",
-    });
-  }
-
-  hubCallbackFromRequest = request.body["hub.callback"];
-
-  return response.status(200).send("Subscription Request Received.");
-});
-
 const sendApprovalRequest = (hubCallback) => {
   axios({
     method: "GET",
@@ -123,8 +78,10 @@ const sendApprovalRequest = (hubCallback) => {
         subscriptions.push(hubCallback);
       }
     })
-    .catch((error) => {
-      console.error(error.config);
+    .catch(() => {
+      console.error(
+        "* Fake twitch called /approval, but received error or no response."
+      );
     });
 };
 
