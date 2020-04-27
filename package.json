@@ -19,7 +19,8 @@
     "build-subscriber": "docker build -t twitchwebsub_subscriber .",
     "build-database": "docker build -t twitchwebsub_database database",
     "build-all": "npm run build-subscriber && npm run build-database && npm run clean-volumes",
-    "clean-volumes": "docker volume rm $(docker volume ls -qf dangling=true)"
+    "clean-volumes": "docker volume rm $(docker volume ls -qf dangling=true)",
+    "get-twitch-user-id": "babel-node utils/get-twitch-live-streams.js"
   },
   "repository": {
     "type": "git",

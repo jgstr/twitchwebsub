@@ -8,9 +8,7 @@ const getTwitchLiveStreams = () => {
     headers: {
       "Client-ID": clientID,
     },
-  }).then((streams) => streams.data.data);
+  }).then((streams) => console.log("* Twitch streams: ", streams.data.data));
 };
 
-const getFirstLiveUserID = () => getTwitchLiveStreams[0].user_id;
-
-module.exports = { getTwitchLiveStreams, getFirstLiveUserID };
+getTwitchLiveStreams();
