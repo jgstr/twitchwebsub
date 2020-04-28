@@ -23,6 +23,13 @@ const createHubTopicURL = (topicType, toID, fromID, userID) => {
 export const createTwitchAdapter = (twitchHub, hubCallback) => {
   return {
     requestSubscription: (subscription) => {
+      const hubTopicURL = createHubTopicURL(
+        subscription.topic,
+        subscription.toID,
+        subscription.fromID,
+        subscription.userID
+      );
+
       return new Promise((resolve, reject) => {
         axios({
           method: "POST",
@@ -34,17 +41,13 @@ export const createTwitchAdapter = (twitchHub, hubCallback) => {
           data: {
             "hub.callback": hubCallback + `-${subscription.subID}`,
             "hub.mode": "subscribe",
-            "hub.topic": createHubTopicURL(
-              subscription.hubTopic,
-              subscription.toID,
-              subscription.fromID,
-              subscription.userID
-            ),
+            "hub.topic": hubTopicURL,
             "hub.lease_seconds": 600,
           },
         })
           .then(() => resolve("Received."))
-          .catch(() => {
+          .catch((err) => {
+            console.log("* Error from Twitch: ", err.response.data.message);
             reject("Not received.");
           });
       });

@@ -39,10 +39,12 @@ export const createDataStore = (config) => {
     },
 
     saveSubscription: (subscription) => {
+      const formattedSubscription = formatSubscription(subscription);
+
       return new Promise((resolve) => {
         pool.query(
           "INSERT INTO subscriptions SET ?",
-          formatSubscription(subscription),
+          formattedSubscription,
           (error) => {
             if (error) throw error;
             resolve();
