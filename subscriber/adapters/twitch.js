@@ -45,9 +45,7 @@ export const createTwitchAdapter = (twitchHub, hubCallback) => {
             "hub.lease_seconds": 600,
           },
         })
-          .then((res) => {
-            resolve("Received.");
-          })
+          .then((() => { resolve("Received.") })
           .catch((err) => {
             console.log("* Error from Twitch: ", err.response.data);
             reject("Not received.");

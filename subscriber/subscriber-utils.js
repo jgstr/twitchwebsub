@@ -15,4 +15,7 @@ const formatSubscriptionFromRequest = (headers, data) => {
   };
 };
 
-module.exports = { createNewSubscription, formatSubscriptionFromRequest };
+module.exports = {
+  createNewSubscription,
+  formatSubscriptionFromRequest,
+};
