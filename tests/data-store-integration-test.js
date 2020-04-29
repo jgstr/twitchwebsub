@@ -2,9 +2,7 @@ import { expect } from "chai";
 import { createDataStore } from "../subscriber/adapters/data-store";
 const testUtils = require("../utils/test-utils");
 import { notificationsDatabaseLocalConfig } from "../subscriber/authentications";
-const timestampFormatter = require("moment");
 import { uuid } from "uuidv4";
-import { subscriptionStub } from "../subscriber/doubles/subscriptions";
 
 describe("Data Store", function () {
   this.timeout(13000);
@@ -18,11 +16,8 @@ describe("Data Store", function () {
     let dataStore;
 
     const expectedValue = {
-      subID: uuid(),
-      hubTopic: "follows",
-      leaseStart: timestampFormatter
-        .utc(new Date())
-        .format("YYYY-MM-DD HH:mm:ss"),
+      id: uuid(),
+      topic: "follows",
     };
 
     dataStore = createDataStore(notificationsDatabaseLocalConfig);
@@ -34,8 +29,8 @@ describe("Data Store", function () {
       })
       .then((subscriptions) => {
         for (const sub of subscriptions) {
-          if (sub.id === expectedValue.subID) {
-            expect(sub.id).to.equal(expectedValue.subID);
+          if (sub.id === expectedValue.id) {
+            expect(sub.id).to.equal(expectedValue.id);
             done();
           }
         }
@@ -46,19 +41,16 @@ describe("Data Store", function () {
     let dataStore;
 
     const expectedValue = {
-      subID: uuid(),
-      hubTopic: "follows",
-      leaseStart: timestampFormatter
-        .utc(new Date())
-        .format("YYYY-MM-DD HH:mm:ss"),
+      id: uuid(),
+      topic: "follows",
     };
 
     dataStore = createDataStore(notificationsDatabaseLocalConfig);
     dataStore
       .saveSubscription(expectedValue)
-      .then(() => dataStore.getSubscription(expectedValue))
+      .then(() => dataStore.getSubscription(expectedValue.id))
       .then((subscription) => {
-        expect(subscription.subID).to.equal(expectedValue.subID);
+        expect(subscription.id).to.equal(expectedValue.id);
         done();
       });
   });

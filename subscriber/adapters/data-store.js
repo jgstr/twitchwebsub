@@ -1,17 +1,20 @@
 import mysql from "mysql";
+const timestampFormatter = require("moment");
 
 const formatSubscription = (subscription) => {
   return {
     id: subscription.id,
     hub_topic: subscription.topic,
-    lease_start: "ADD-TIMESTAMP",
+    lease_start: timestampFormatter
+      .utc(new Date())
+      .format("YYYY-MM-DD HH:mm:ss"),
   };
 };
 
 const formatDatabaseResult = (result) => {
   return {
-    subID: result.id,
-    hubTopic: result.hub_topic,
+    id: result.id,
+    topic: result.hub_topic,
     leaseStart: result.lease_start,
   };
 };
@@ -53,13 +56,11 @@ export const createDataStore = (config) => {
       });
     },
 
-    getSubscription: (subscription) => {
-      const formattedSubscription = formatSubscription(subscription);
-
+    getSubscription: (subscriptionID) => {
       return new Promise((resolve) => {
         pool.query(
           "SELECT * FROM subscriptions WHERE id=?",
-          [formattedSubscription.id],
+          subscriptionID,
           (error, results) => {
             if (error) throw error;
             if (results.length === 0) {
