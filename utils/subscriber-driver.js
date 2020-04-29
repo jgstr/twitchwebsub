@@ -1,9 +1,7 @@
 const axios = require("axios");
 
-const getSubscription = (subscription) => {
-  return axios.get(
-    `http://localhost:3000/get-subscription-${subscription.subId}`
-  );
+const getSubscription = (subscriptionID) => {
+  return axios.get(`http://localhost:3000/get-subscription-${subscriptionID}`);
 };
 
 const getAllSubscriptions = () => {

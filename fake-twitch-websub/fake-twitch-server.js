@@ -114,11 +114,11 @@ const sendEvent = (hubCallback) => {
   });
 };
 
-const has = (subscription) => {
+const has = (subscriptionID) => {
   if (subscriptions.length === 0) return false;
 
   subscriptions.forEach((sub) => {
-    if (sub === subscription.hubCallback) return true;
+    if (sub.includes(subscriptionID)) return true;
   });
 
   return false;

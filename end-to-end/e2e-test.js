@@ -18,12 +18,39 @@ describe("Twitch Websub Subscriber", function () {
 
   // Walking skeleton
   it("should return one subscription.", function (done) {
+    let subscriptionID;
     subscriber
       .getAllSubscriptions()
       .then((response) => {
         expect(response.data.list.length).to.equal(0);
       })
       .then(() => subscriber.requestSubscription(subscriptionRequestByUserStub))
+      .then((response) => {
+        expect(response.data.message).to.equal("Received.");
+        subscriptionID = response.data.subscriptionID;
+      })
+      .then(() =>
+        setTimeout(() => {
+          fakeTwitch.has(subscriptionID);
+        }, 1000)
+      )
+      .then(() =>
+        testUtils.pollForSubscription(
+          subscriber.getSubscription,
+          subscriptionID
+        )
+      )
+      .then((response) => {
+        expect(response.data.subscription.id).to.equal(subscriptionID);
+        done();
+      });
+  });
+
+  /* Currently refactoring this...
+
+  it("should receive return at least one event.", function (done) {
+    subscriber
+      .requestSubscription(subscriptionRequestByUserStub)
       .then((response) => {
         expect(response.data).to.equal("Received.");
       })
@@ -32,23 +59,23 @@ describe("Twitch Websub Subscriber", function () {
           fakeTwitch.has(subscriptionRequestByUserStub);
         }, 1000)
       )
-      .then(() =>
-        testUtils.pollForSubscription(
-          subscriber.getSubscription,
-          subscriptionRequestByUserStub
-        )
-      )
-      .then((response) => {
-        expect(response.data.subscription.id).to.equal(
-          subscriptionRequestByUserStub.subId
-        );
+      .then(subscriber.getAllEvents)
+      .then((events) => {
+        expect(events.data.list.length).to.equal(0);
+      })
+      .then(() => {
+        return fakeTwitch.sendEvent(hubCallback);
+      })
+      .then(subscriber.getAllEvents)
+      .then((events) => {
+        expect(events.data.list.length).to.be.at.least(1);
         done();
       });
   });
 
-  /* Commented out while refactoring code related to walking skeleton.
+  */
 
-  const hubCallback = "http://localhost:3000/approval-callback"; // Will be deleted after refactored. Kept here to avoid crashing the test.
+  /* Original one event test.
 
   it("should receive return at least one event.", function (done) {
     subscriber
@@ -69,6 +96,7 @@ describe("Twitch Websub Subscriber", function () {
         done();
       });
   });
+  
   */
 
   /*

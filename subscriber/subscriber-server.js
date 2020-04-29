@@ -18,13 +18,6 @@ const port = 3000;
 const app = express();
 app.use(express.json());
 
-// TODO: Delete and replace with pending-subscription queue.
-const subscriptionRecordStub = {
-  id: "ac7856cb-5695-4664-b52f-0dc908e3aa7a",
-  hub_topic: "https://twitch.com",
-  lease_start: "2020-03-21 01:01:01",
-};
-
 app.get("/", (request, response) => {
   response.status(200).send("Welcome to a Twitch Websub Service.");
 });
@@ -41,8 +34,12 @@ app.get("/status", (request, response) => {
 });
 
 app.get("/get-subscription-*", (request, response) => {
-  const subscriptionId = request.url.substring(18);
-  return response.status(200).json({ subscription: subscriptionRecordStub });
+  const subscriptionID = request.url.substring(18);
+
+  const subscriptionStub = {
+    id: subscriptionID,
+  };
+  return response.status(200).json({ subscription: subscriptionStub });
 
   // subscriber
   //   .getSubscription(dataStore, subscriptionId)
@@ -79,7 +76,8 @@ app.get("/get-events", (request, response) => {
 
 app.post("/subscribe", (request, response) => {
   const subId = uuid();
-  response.status(200).send("Received.");
+  // response.status(200).send("Received.");
+  response.status(200).json({ message: "Received.", subscriptionID: subId });
 
   const subscription = {
     id: subId,
