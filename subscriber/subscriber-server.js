@@ -102,8 +102,6 @@ app.get("/approval*", (request, response) => {
     response.status(200).send(request.query["hub.challenge"]);
   }
 
-  console.log("* Subscription Record Stub: ", subscriptionRecordStub);
-
   for (const subscription of subscriptionsWaitingForTwitchApproval) {
     if (subscription.id === requestSubscriptionId) {
       // dataStore.saveSubscription(subscriptionRecordStub); // Original used for testing.

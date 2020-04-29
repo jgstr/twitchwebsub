@@ -39,13 +39,15 @@ export const createTwitchAdapter = (twitchHub, hubCallback) => {
             "client-id": subscription.clientID,
           },
           data: {
-            "hub.callback": hubCallback + `-${subscription.subID}`,
+            "hub.callback": hubCallback + `-${subscription.id}`,
             "hub.mode": "subscribe",
             "hub.topic": hubTopicURL,
             "hub.lease_seconds": 600,
           },
         })
-          .then(() => resolve("Received."))
+          .then((res) => {
+            resolve("Received.");
+          })
           .catch((err) => {
             console.log("* Error from Twitch: ", err.response.data);
             reject("Not received.");
