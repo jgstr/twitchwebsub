@@ -2,9 +2,9 @@ import mysql from "mysql";
 
 const formatSubscription = (subscription) => {
   return {
-    id: subscription.subID,
-    hub_topic: subscription.hubTopic,
-    lease_start: subscription.leaseStart,
+    id: subscription.id,
+    hub_topic: subscription.topic,
+    lease_start: "ADD-TIMESTAMP",
   };
 };
 
@@ -40,7 +40,10 @@ export const createDataStore = (config) => {
 
     saveSubscription: (subscription) => {
       const formattedSubscription = formatSubscription(subscription);
-
+      console.log(
+        "* Data store formatted Subscription: ",
+        formattedSubscription
+      );
       return new Promise((resolve) => {
         pool.query(
           "INSERT INTO subscriptions SET ?",

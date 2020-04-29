@@ -104,6 +104,7 @@ app.get("/approval*", (request, response) => {
 
   for (const subscription of subscriptionsWaitingForTwitchApproval) {
     if (subscription.id === requestSubscriptionId) {
+      console.log("* Sub from /approval: ", subscription);
       // dataStore.saveSubscription(subscriptionRecordStub); // Original used for testing.
       // TODO: saveSubscription will now need to change the subscription object received...
       // to match database needs (or some other utility in anothe layer will).
