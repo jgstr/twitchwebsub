@@ -2,13 +2,13 @@ const axios = require("axios");
 
 const createHubTopicURL = (topicType, toID, fromID, userID) => {
   if (topicType === "follows") {
-    if (toID !== "" && fromID !== "") {
+    if (toID !== "" && toID !== null && fromID !== "" && fromID !== null) {
       return `https://api.twitch.tv/helix/users/follows?first=1&from_id=${fromID}&to_id=${toID}`;
     }
-    if (toID !== "") {
+    if (toID !== "" && toID !== null) {
       return `https://api.twitch.tv/helix/users/follows?first=1&to_id=${toID}`;
     }
-    if (fromID !== "") {
+    if (fromID !== "" && fromID !== null) {
       return `https://api.twitch.tv/helix/users/follows?first=1&from_id=${fromID}`;
     }
   }
@@ -47,7 +47,7 @@ export const createTwitchAdapter = (twitchHub, hubCallback) => {
         })
           .then(() => resolve("Received."))
           .catch((err) => {
-            console.log("* Error from Twitch: ", err.response.data.message);
+            console.log("* Error from Twitch: ", err.response.data);
             reject("Not received.");
           });
       });

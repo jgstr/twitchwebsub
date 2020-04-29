@@ -23,10 +23,10 @@ const subscriptionStub = {
   clientID: "zqyp13ibm7tejwe0r61ckvz95asblpw",
   hubUrl: "http://host.docker.internal:3001/hub",
   subID: "ac7856cb-5695-4664-b52f-0dc908e3aa7a",
-  hubCallback: "http://localhost:3000/approval-callback",
-  hubTopic: "follows",
-  to: "17337557",
-  from: null,
+  hubCallback: "http://localhost:3000/approval",
+  topic: "follows",
+  toID: "17337557",
+  fromID: null,
   leaseStart: "2020-03-21 01:01:01",
 };
 
