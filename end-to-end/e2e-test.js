@@ -19,6 +19,7 @@ describe("Twitch Websub Subscriber", function () {
   // Walking skeleton
   it("should return one subscription.", function (done) {
     let subscriptionID;
+
     subscriber
       .getAllSubscriptions()
       .then((response) => {
@@ -46,34 +47,31 @@ describe("Twitch Websub Subscriber", function () {
       });
   });
 
-  /* Currently refactoring this...
-
   it("should receive return at least one event.", function (done) {
+    let subscriptionID;
+
     subscriber
       .requestSubscription(subscriptionRequestByUserStub)
       .then((response) => {
-        expect(response.data).to.equal("Received.");
+        expect(response.data.message).to.equal("Received.");
+        subscriptionID = response.data.subscriptionID;
       })
       .then(() =>
         setTimeout(() => {
-          fakeTwitch.has(subscriptionRequestByUserStub);
+          fakeTwitch.has(subscriptionID);
         }, 1000)
       )
-      .then(subscriber.getAllEvents)
-      .then((events) => {
-        expect(events.data.list.length).to.equal(0);
+      .then(subscriber.getAllEvents(subscriptionID))
+      .then((results) => {
+        expect(results.data.events.length).to.equal(0);
       })
-      .then(() => {
-        return fakeTwitch.sendEvent(hubCallback);
-      })
-      .then(subscriber.getAllEvents)
-      .then((events) => {
-        expect(events.data.list.length).to.be.at.least(1);
+      .then(() => fakeTwitch.sendEvent(subscriptionID))
+      .then(subscriber.getAllEvents(subscriptionID))
+      .then((results) => {
+        expect(results.data.events.length).to.be.at.least(1);
         done();
       });
   });
-
-  */
 
   /* Original one event test.
 
