@@ -63,11 +63,8 @@ export const createDataStore = (config) => {
           subscriptionID,
           (error, results) => {
             if (error) throw error;
-            if (results.length === 0) {
-              resolve(results);
-            } else {
-              resolve(formatDatabaseResult(results[0]));
-            }
+            if (results.length === 0) resolve(results);
+            else resolve(formatDatabaseResult(results[0]));
           }
         );
       });

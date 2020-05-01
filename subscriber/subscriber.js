@@ -1,11 +1,9 @@
-const axios = require("axios");
-
 const getAllSubscriptions = (dataStore) => {
   return dataStore.getAllSubscriptions();
 };
 
-const getSubscription = (dataStore, subscription) => {
-  return dataStore.getSubscription(subscription);
+const getSubscription = (dataStore, subscriptionID) => {
+  return dataStore.getSubscription(subscriptionID);
 };
 
 const requestSubscription = (twitch, subscription) => {

@@ -41,7 +41,7 @@ describe("Twitch Websub Subscriber", function () {
         )
       )
       .then((response) => {
-        expect(response.data.subscription.id).to.equal(subscriptionID);
+        expect(response.id).to.equal(subscriptionID);
         done();
       });
   });

@@ -36,19 +36,14 @@ app.get("/status", (request, response) => {
 app.get("/get-subscription-*", (request, response) => {
   const subscriptionID = request.url.substring(18);
 
-  const subscriptionStub = {
-    id: subscriptionID,
-  };
-  return response.status(200).json({ subscription: subscriptionStub });
-
-  // subscriber
-  //   .getSubscription(dataStore, subscriptionId)
-  //   .then((results) => {
-  //     return response.status(200).json({ subscription: results });
-  //   })
-  //   .catch((error) => {
-  //     return response.status(400).send(error);
-  //   });
+  subscriber
+    .getSubscription(dataStore, subscriptionID)
+    .then((results) => {
+      return response.status(200).json({ subscription: results });
+    })
+    .catch((error) => {
+      return response.status(400).send(error);
+    });
 });
 
 app.get("/get-subscriptions", (request, response) => {
