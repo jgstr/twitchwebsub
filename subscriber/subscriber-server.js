@@ -57,21 +57,20 @@ app.get("/get-subscriptions", (request, response) => {
     });
 });
 
-app.get("/get-events", (request, response) => {
-  // TODO: Create subscriber unit test.
-  dataStore
-    .getAllEvents()
-    .then((results) => {
-      return response.status(200).json({ list: results });
-    })
-    .catch((error) => {
-      return response.status(500).send(error);
-    });
+app.get("/get-events-*", (request, response) => {
+  return response.status(200).json({ events: {} }); // Stub response.
+  // dataStore
+  //   .getAllEvents()
+  //   .then((results) => {
+  //     return response.status(200).json({ events: results });
+  //   })
+  //   .catch((error) => {
+  //     return response.status(500).send(error);
+  //   });
 });
 
 app.post("/subscribe", (request, response) => {
   const subId = uuid();
-  // response.status(200).send("Received.");
   response.status(200).json({ message: "Received.", subscriptionID: subId });
 
   const subscription = {

@@ -31,11 +31,6 @@ describe("Twitch Websub Subscriber", function () {
         subscriptionID = response.data.subscriptionID;
       })
       .then(() =>
-        setTimeout(() => {
-          fakeTwitch.has(subscriptionID);
-        }, 1000)
-      )
-      .then(() =>
         testUtils.pollForSubscription(
           subscriber.getSubscription,
           subscriptionID
@@ -63,7 +58,8 @@ describe("Twitch Websub Subscriber", function () {
       )
       .then(subscriber.getAllEvents(subscriptionID))
       .then((results) => {
-        expect(results.data.events.length).to.equal(0);
+        console.log("* getEvent e2e results: ", results);
+        expect(results.data.events).to.deep.equal({});
       })
       .then(() => fakeTwitch.sendEvent(subscriptionID))
       .then(subscriber.getAllEvents(subscriptionID))

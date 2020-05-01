@@ -47,7 +47,6 @@ const pollForSubscription = (getSubscription, subscriptionID) => {
   return new Promise((resolve) => {
     function poll() {
       getSubscription(subscriptionID).then((results) => {
-        console.log("* Results.data from pollForSub: ", results.data);
         if (results.data.subscription.id) {
           resolve(results.data.subscription);
         } else {
