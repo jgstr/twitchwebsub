@@ -51,18 +51,12 @@ describe("Twitch Websub Subscriber", function () {
         expect(response.data.message).to.equal("Received.");
         subscriptionID = response.data.subscriptionID;
       })
-      .then(() =>
-        setTimeout(() => {
-          fakeTwitch.has(subscriptionID);
-        }, 1000)
-      )
-      .then(subscriber.getAllEvents(subscriptionID))
+      .then(() => subscriber.getAllEvents(subscriptionID))
       .then((results) => {
-        console.log("* getEvent e2e results: ", results);
         expect(results.data.events).to.deep.equal({});
       })
       .then(() => fakeTwitch.sendEvent(subscriptionID))
-      .then(subscriber.getAllEvents(subscriptionID))
+      .then(() => subscriber.getAllEvents(subscriptionID))
       .then((results) => {
         expect(results.data.events.length).to.be.at.least(1);
         done();

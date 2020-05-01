@@ -27,6 +27,7 @@ const requestSubscription = (subscription) => {
 const getAllEvents = (subscriptionID) => {
   return axios.get(`http://localhost:3000/get-events-${subscriptionID}`);
 };
+
 const removeSubscription = () => {
   return axios.get("http://localhost:3000/unsubscribe");
 };
