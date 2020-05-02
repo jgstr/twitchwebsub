@@ -85,8 +85,8 @@ const sendApprovalRequest = (hubCallback) => {
     });
 };
 
-const sendEvent = (hubCallback) => {
-  const data = [
+const sendEvent = (subscriptionID) => {
+  const eventDataStub = [
     {
       from_id: "1336",
       from_name: "userNameFrom",
@@ -99,11 +99,11 @@ const sendEvent = (hubCallback) => {
   return new Promise((resolve, reject) => {
     axios({
       method: "POST",
-      url: hubCallback,
+      url: hubCallbackFromRequest,
       headers: {
         "Content-Type": "application/json",
       },
-      data: data,
+      data: eventDataStub,
     })
       .then((response) => {
         if (response.status === 200) {

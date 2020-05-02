@@ -101,8 +101,10 @@ app.get("/approval*", (request, response) => {
   }
 });
 
+// TODO: Must use and check for a secret in next iteration to ensure this request is genuine!
 app.post("/approval*", (request, response) => {
-  // TODO: Must use and check for a secret in next iteration to ensure this request is genuine!
+  // TODO: Get sub ID from the path URL. Send proper data to saveEvent. Check data-store is formatting and
+  // saving event properly.
   response.set("Content-Type", "text/html");
   response.status(200).send("Ok");
 

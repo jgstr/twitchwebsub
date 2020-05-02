@@ -55,37 +55,19 @@ describe("Twitch Websub Subscriber", function () {
       .then((results) => {
         expect(results.data.events).to.deep.equal({});
       })
-      .then(() => fakeTwitch.sendEvent(subscriptionID))
-      .then(() => subscriber.getAllEvents(subscriptionID))
+      .then(() => {
+        console.log("* Got to fakeTwitch sendEvent.");
+        return fakeTwitch.sendEvent(subscriptionID);
+      })
+      .then(() => {
+        console.log("* Got to getAllEvents II.");
+        return subscriber.getAllEvents(subscriptionID);
+      })
       .then((results) => {
         expect(results.data.events.length).to.be.at.least(1);
         done();
       });
   });
-
-  /* Original one event test.
-
-  it("should receive return at least one event.", function (done) {
-    subscriber
-      .requestSubscription()
-      .then(() => {
-        return fakeTwitch.sendApprovalRequest(hubCallback);
-      }) // TODO: Refactor this to work like walking skeleton.
-      .then(subscriber.getAllEvents)
-      .then((events) => {
-        expect(events.data.list.length).to.equal(0);
-      })
-      .then(() => {
-        return fakeTwitch.sendEvent(hubCallback);
-      })
-      .then(subscriber.getAllEvents)
-      .then((events) => {
-        expect(events.data.list.length).to.be.at.least(1);
-        done();
-      });
-  });
-  
-  */
 
   /*
   it('should remove one subscription from the database.', function (done) {
