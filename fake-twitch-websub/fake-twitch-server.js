@@ -85,16 +85,8 @@ const sendApprovalRequest = (hubCallback) => {
     });
 };
 
-const sendEvent = (subscriptionID) => {
-  const eventDataStub = [
-    {
-      from_id: "1336",
-      from_name: "userNameFrom",
-      to_id: "1337",
-      to_name: "userNameTo",
-      followed_at: "2017-08-22T22:55:24Z",
-    },
-  ];
+const sendEvent = (subscriptionID, event) => {
+  const eventDataStub = event;
 
   return new Promise((resolve, reject) => {
     axios({

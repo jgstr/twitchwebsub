@@ -103,7 +103,6 @@ export const createDataStore = (config) => {
           },
           (error) => {
             if (error) throw error;
-            console.log("* eventID saved. Id: ", eventID);
             resolve();
           }
         );

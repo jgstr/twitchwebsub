@@ -44,6 +44,15 @@ describe("Twitch Websub Subscriber", function () {
 
   it("should receive return at least one event.", function (done) {
     let subscriptionID;
+    const eventDataStub = [
+      {
+        from_id: "1336",
+        from_name: "userNameFrom",
+        to_id: "1337",
+        to_name: "userNameTo",
+        followed_at: "2017-08-22T22:55:24Z",
+      },
+    ];
 
     subscriber
       .requestSubscription(subscriptionRequestByUserStub)
@@ -55,16 +64,13 @@ describe("Twitch Websub Subscriber", function () {
       .then((results) => {
         expect(results.data.events).to.deep.equal({});
       })
-      .then(() => {
-        console.log("* Got to fakeTwitch sendEvent.");
-        return fakeTwitch.sendEvent(subscriptionID);
-      })
-      .then(() => {
-        console.log("* Got to getAllEvents II.");
-        return subscriber.getAllEvents(subscriptionID);
-      })
+      .then(() => fakeTwitch.sendEvent(subscriptionID, eventDataStub))
+      .then(() => new Promise((resolve) => setTimeout(resolve, 1500))) // Debugging. Needs a poll.
+      .then(() => subscriber.getAllEvents(subscriptionID))
       .then((results) => {
-        expect(results.data.events.length).to.be.at.least(1);
+        // Debugging
+        console.log("* results.data.events: ", results.data.events);
+        expect(results.data.events).to.include.deep.members([eventDataStub[0]]);
         done();
       });
   });
