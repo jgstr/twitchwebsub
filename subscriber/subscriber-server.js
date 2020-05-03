@@ -108,7 +108,13 @@ app.post("/approval*", (request, response) => {
   response.set("Content-Type", "text/html");
   response.status(200).send("Ok");
 
-  dataStore.saveEvent({ data: { id: 1234, user_id: 4321 } });
+  const subID = request.url.slice(10);
+  const eventData = request.body;
+  const eventID = uuid();
+
+  // Debugging
+  console.log("* from post /app subID: ", subID, "\neventData: ", eventData);
+  dataStore.saveEvent(subID, eventID, eventData);
 });
 
 const start = () => {

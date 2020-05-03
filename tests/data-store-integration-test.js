@@ -55,36 +55,27 @@ describe("Data Store", function () {
       });
   });
 
-  /*
-
   it("should return a list of events.", function (done) {
     let dataStore;
     const eventUuid = uuid();
     const eventSubscriptionId = uuid();
-    const rawEvent = {
-      id: eventUuid,
-      subscription_id: eventSubscriptionId,
-      data: { id: 1234, user_id: 4321 },
-    };
+    const eventData = { id: 1234, user_id: 4321 };
 
     const expectedEvent = {
       id: eventUuid,
       subscription_id: eventSubscriptionId,
-      data: JSON.stringify({ id: 1234, user_id: 4321 }),
+      data: JSON.stringify(eventData),
     };
 
     dataStore = createDataStore(notificationsDatabaseLocalConfig);
     dataStore
-      .saveEvent(rawEvent)
-      .then(() => {
-        return dataStore.getAllEvents(eventSubscriptionId);
-      })
+      .saveEvent(eventSubscriptionId, eventUuid, eventData)
+      .then(() => dataStore.getAllEvents(eventSubscriptionId))
       .then((events) => {
         expect(events).to.include.deep.members([expectedEvent]);
         done();
       });
   });
-  */
 
   after(function (done) {
     testUtils.dockerComposeDown(done);
