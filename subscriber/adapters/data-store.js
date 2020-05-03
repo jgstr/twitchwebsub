@@ -86,6 +86,10 @@ export const createDataStore = (config) => {
           [subscriptionId],
           (error, results) => {
             if (error) throw error;
+            // Debugging
+            console.log("* data-store getAllEvents subID: ", subscriptionId);
+            console.log("* From data-store getAllEvents results: ", results);
+
             resolve(results);
           }
         );
@@ -93,6 +97,10 @@ export const createDataStore = (config) => {
     },
 
     saveEvent: (subscriptionID, eventID, eventData) => {
+      // Debugging
+      console.log(
+        `data-store saveEvent subID ${subscriptionID}, eventID ${eventID}, eventData ${eventData}`
+      );
       return new Promise((resolve) => {
         pool.query(
           "INSERT INTO events SET ?",

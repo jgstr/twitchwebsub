@@ -85,8 +85,14 @@ const sendApprovalRequest = (hubCallback) => {
     });
 };
 
-const sendEvent = (subscriptionID, event) => {
+const sendEvent = (event) => {
   const eventDataStub = event;
+
+  // Debugging
+  console.log(
+    "* Fake Twitch, sendEvent, hubCallbackFromReq: ",
+    hubCallbackFromRequest
+  );
 
   return new Promise((resolve, reject) => {
     axios({

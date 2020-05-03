@@ -57,21 +57,30 @@ app.get("/get-subscriptions", (request, response) => {
     });
 });
 
-app.get("/get-events-*", (request, response) => {
-  return response.status(200).json({ events: {} }); // Stub response.
-  // dataStore
-  //   .getAllEvents()
-  //   .then((results) => {
-  //     return response.status(200).json({ events: results });
-  //   })
-  //   .catch((error) => {
-  //     return response.status(500).send(error);
-  //   });
+app.get("/get-events*", (request, response) => {
+  const subscriptionID = request.url.slice(12);
+
+  // Debugging
+  console.log("* /get-events* subID: ", subscriptionID);
+
+  dataStore
+    .getAllEvents(subscriptionID)
+    .then((results) => {
+      // Debugging
+      console.log("* From /get-events* results: ", results);
+      return response.status(200).json({ events: results });
+    })
+    .catch((error) => {
+      return response.status(500).send(error);
+    });
 });
 
 app.post("/subscribe", (request, response) => {
   const subId = uuid();
   response.status(200).json({ message: "Received.", subscriptionID: subId });
+
+  // Debugging
+  console.log("* From sub-server, subID created and returned: ", subId);
 
   const subscription = {
     id: subId,
@@ -83,11 +92,23 @@ app.post("/subscribe", (request, response) => {
   };
 
   subscriptionsWaitingForTwitchApproval.push(subscription);
+
+  // Debugging
+  console.log(
+    "* From sub-server /subscribe. Pending subs: ",
+    subscriptionsWaitingForTwitchApproval
+  );
+
   subscriber.requestSubscription(twitchAdapter, subscription);
 });
 
 app.get("/approval*", (request, response) => {
   const requestSubscriptionId = request.path.slice(10);
+  // Debugging
+  console.log(
+    "* From /approval. Sub from approval url: ",
+    requestSubscriptionId
+  );
 
   if (request.query["hub.challenge"]) {
     response.set("Content-Type", "text/html");
@@ -96,6 +117,9 @@ app.get("/approval*", (request, response) => {
 
   for (const subscription of subscriptionsWaitingForTwitchApproval) {
     if (subscription.id === requestSubscriptionId) {
+      // Debugging
+      console.log("* From /approval. Sub matched: ", subscription.id);
+      // TODO: Needs subscriber method instead.
       dataStore.saveSubscription(subscription);
     }
   }
@@ -110,6 +134,7 @@ app.post("/approval*", (request, response) => {
   const eventData = request.body[0];
   const eventID = uuid();
 
+  // TODO: Needs subscriber method instead.
   dataStore.saveEvent(subID, eventID, eventData);
 });
 

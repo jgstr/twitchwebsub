@@ -17,30 +17,30 @@ describe("Twitch Websub Subscriber", function () {
   });
 
   // Walking skeleton
-  it("should return one subscription.", function (done) {
-    let subscriptionID;
+  // it("should return one subscription.", function (done) {
+  //   let subscriptionID;
 
-    subscriber
-      .getAllSubscriptions()
-      .then((response) => {
-        expect(response.data.list.length).to.equal(0);
-      })
-      .then(() => subscriber.requestSubscription(subscriptionRequestByUserStub))
-      .then((response) => {
-        expect(response.data.message).to.equal("Received.");
-        subscriptionID = response.data.subscriptionID;
-      })
-      .then(() =>
-        testUtils.pollForSubscription(
-          subscriber.getSubscription,
-          subscriptionID
-        )
-      )
-      .then((response) => {
-        expect(response.id).to.equal(subscriptionID);
-        done();
-      });
-  });
+  //   subscriber
+  //     .getAllSubscriptions()
+  //     .then((response) => {
+  //       expect(response.data.list.length).to.equal(0);
+  //     })
+  //     .then(() => subscriber.requestSubscription(subscriptionRequestByUserStub))
+  //     .then((response) => {
+  //       expect(response.data.message).to.equal("Received.");
+  //       subscriptionID = response.data.subscriptionID;
+  //     })
+  //     .then(() =>
+  //       testUtils.pollForSubscription(
+  //         subscriber.getSubscription,
+  //         subscriptionID
+  //       )
+  //     )
+  //     .then((response) => {
+  //       expect(response.id).to.equal(subscriptionID);
+  //       done();
+  //     });
+  // });
 
   it("should receive return at least one event.", function (done) {
     let subscriptionID;
@@ -59,19 +59,36 @@ describe("Twitch Websub Subscriber", function () {
       .then((response) => {
         expect(response.data.message).to.equal("Received.");
         subscriptionID = response.data.subscriptionID;
+
+        // Debugging
+        // console.log("* e2e: SubID captured in e2e: ", subscriptionID);
       })
-      .then(() => subscriber.getAllEvents(subscriptionID))
+      .then(() => {
+        // Debugging
+        // console.log("* e2e: SubId given to getAllEvents: ", subscriptionID);
+        return subscriber.getAllEvents(subscriptionID);
+      })
       .then((results) => {
-        expect(results.data.events).to.deep.equal({});
+        expect(results.data.events.length).to.equal(0);
       })
-      .then(() => fakeTwitch.sendEvent(subscriptionID, eventDataStub))
+      .then(() => {
+        // console.log("* e2e: fakeTwitch called from e2e.");
+        return fakeTwitch.sendEvent(eventDataStub);
+      })
       .then(() => new Promise((resolve) => setTimeout(resolve, 1500))) // Debugging. Needs a poll.
       .then(() => subscriber.getAllEvents(subscriptionID))
       .then((results) => {
         // Debugging
-        console.log("* results.data.events: ", results.data.events);
-        expect(results.data.events).to.include.deep.members([eventDataStub[0]]);
-        done();
+        console.log("* e2e: results.data.events: ", results.data.events);
+        console.log("* e2e: eventDataStub: ", JSON.stringify(eventDataStub[0]));
+        // TODO: need to loop through results and test .data of each result against eventDataStub[0]
+        for (const event of results.data.events) {
+          // console.log("* looped event data: ", event.data);
+          if (event.data === JSON.stringify(eventDataStub[0])) {
+            expect(event.data).to.equal(JSON.stringify(eventDataStub[0]));
+            done();
+          }
+        }
       });
   });
 
