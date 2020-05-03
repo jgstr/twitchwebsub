@@ -88,12 +88,6 @@ const sendApprovalRequest = (hubCallback) => {
 const sendEvent = (event) => {
   const eventDataStub = event;
 
-  // Debugging
-  console.log(
-    "* Fake Twitch, sendEvent, hubCallbackFromReq: ",
-    hubCallbackFromRequest
-  );
-
   return new Promise((resolve, reject) => {
     axios({
       method: "POST",
