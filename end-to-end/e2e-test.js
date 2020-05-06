@@ -69,8 +69,8 @@ describe("Twitch Websub Subscriber", function () {
       .then(() => subscriber.getAllEvents(subscriptionID))
       .then((results) => {
         for (const event of results.data.events) {
-          if (event.data === JSON.stringify(eventDataStub[0])) {
-            expect(event.data).to.equal(JSON.stringify(eventDataStub[0]));
+          if (event.data === JSON.stringify(eventDataStub)) {
+            expect(event.data).to.equal(JSON.stringify(eventDataStub));
             done();
           }
         }

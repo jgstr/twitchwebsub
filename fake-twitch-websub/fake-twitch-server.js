@@ -86,7 +86,7 @@ const sendApprovalRequest = (hubCallback) => {
 };
 
 const sendEvent = (event) => {
-  const eventDataStub = event;
+  const eventDataStub = { data: event };
 
   return new Promise((resolve, reject) => {
     axios({
