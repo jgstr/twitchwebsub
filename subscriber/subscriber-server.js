@@ -97,8 +97,7 @@ app.get("/approval*", (request, response) => {
 
   for (const subscription of subscriptionsWaitingForTwitchApproval) {
     if (subscription.id === requestSubscriptionId) {
-      // TODO: Needs subscriber method instead.
-      dataStore.saveSubscription(subscription);
+      subscriber.saveSubscription(dataStore, subscription);
     }
   }
 });
