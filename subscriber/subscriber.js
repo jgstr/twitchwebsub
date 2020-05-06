@@ -14,6 +14,10 @@ const saveSubscription = (dataStore, subscription) => {
   return dataStore.saveSubscription(subscription);
 };
 
+const saveEvent = (dataStore, subID, eventID, eventData) => {
+  return dataStore.saveEvent(subID, eventID, eventData);
+};
+
 const getAllEvents = (dataStore) => {
   return dataStore.getAllEvents();
 };
@@ -23,5 +27,6 @@ module.exports = {
   getSubscription,
   requestSubscription,
   saveSubscription,
+  saveEvent,
   getAllEvents,
 };

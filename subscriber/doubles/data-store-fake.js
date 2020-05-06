@@ -1,20 +1,25 @@
 import { eventRecordStub, subscriptionRecordStub } from "./subscriptions";
 
-let database = [];
+let subscriptionDatabase = [];
+let eventDatabase = [];
 
 const getAllSubscriptions = () => [subscriptionRecordStub];
 
 const getSubscription = (subscription) => subscription;
 
 const saveSubscription = (subscription) =>
-  database.push(subscriptionRecordStub);
+  subscriptionDatabase.push(subscriptionRecordStub);
+
+const saveEvent = (event) => eventDatabase.push(event);
 
 const getAllEvents = () => [eventRecordStub];
 
 module.exports = {
-  database,
+  eventDatabase,
+  subscriptionDatabase,
   getAllSubscriptions,
   getSubscription,
   saveSubscription,
+  saveEvent,
   getAllEvents,
 };

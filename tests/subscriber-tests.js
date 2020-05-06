@@ -24,7 +24,7 @@ describe("Subscriber Server", function () {
 
   it("should save a subscription.", function () {
     subscriber.saveSubscription(dataStoreFake, subscriptionRecordStub);
-    expect(dataStoreFake.database.length).to.equal(1);
+    expect(dataStoreFake.subscriptionDatabase.length).to.equal(1);
   });
 
   it("should return one subscription.", function () {
@@ -33,6 +33,15 @@ describe("Subscriber Server", function () {
       subscriptionRecordStub
     );
     expect(subscription).to.deep.equal(subscriptionRecordStub);
+  });
+
+  it("should save an event.", function () {
+    const subID = "1234";
+    const eventID = "5678";
+    const eventData = { data: "data" };
+
+    subscriber.saveEvent(dataStoreFake, subID, eventID, eventData);
+    expect(dataStoreFake.eventDatabase.length).to.equal(1);
   });
 
   it("should return a list of events.", function () {
