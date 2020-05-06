@@ -10,7 +10,14 @@ const getSubscription = (subscription) => subscription;
 const saveSubscription = (subscription) =>
   subscriptionDatabase.push(subscriptionRecordStub);
 
-const saveEvent = (event) => eventDatabase.push(event);
+const saveEvent = (subID, eventID, eventData) => {
+  const event = {
+    subID,
+    eventID,
+    eventData,
+  };
+  eventDatabase.push(event);
+};
 
 const getAllEvents = () => [eventRecordStub];
 
