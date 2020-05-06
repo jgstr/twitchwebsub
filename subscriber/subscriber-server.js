@@ -109,7 +109,7 @@ app.post("/approval*", (request, response) => {
   response.status(200).send("Ok");
 
   const subID = request.url.slice(10);
-  const eventData = request.body[0];
+  const eventData = request.body.data;
   const eventID = uuid();
 
   // TODO: Needs subscriber method instead.
