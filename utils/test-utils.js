@@ -1,7 +1,6 @@
 const path = require("path");
 const compose = require("docker-compose");
 import mysql from "mysql";
-import { get } from "http";
 
 const dockerComposeUp = () => {
   compose.upAll({ cwd: path.join(__dirname, ".."), log: true }).then(
@@ -57,34 +56,6 @@ const pollForSubscription = (getSubscription, subscriptionID) => {
     poll();
   });
 };
-
-// const pollForSubscription = (getSubscription, subscriptionID) => {
-//   return new Promise((resolve) => {
-//     getSubscription(subscriptionID)
-//       .then((results) => {
-//         // Debugging
-//         console.log("* From pollForSub: results.id", results.id);
-
-//         if (results.id) {
-//           resolve(results);
-//         } else {
-//           // Debugging
-//           console.log("* From pollForSub try again, results.id", results.id);
-
-//           setTimeout(() => {
-//             pollForSubscription(getSubscription, subscriptionID);
-//           }, 1000);
-//         }
-//       })
-//       .catch((error) => {
-//         if (error) {
-//           setTimeout(() => {
-//             pollForSubscription(getSubscription, subscriptionID);
-//           }, 1000);
-//         }
-//       });
-//   });
-// };
 
 const checkDatabaseIsRunning = () => {
   return new Promise((resolve) => {
