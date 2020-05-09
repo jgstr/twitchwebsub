@@ -13,7 +13,7 @@ describe("Twitch Websub appUser", function () {
   before(function (done) {
     twitchApp = fakeTwitch.start();
     testUtils.dockerComposeUp();
-    appUser.isRunning().then(done);
+    appUser.checkServerIsRunning().then(done);
   });
 
   // Walking skeleton

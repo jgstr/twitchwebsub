@@ -32,7 +32,7 @@ const removeSubscription = () => {
   return axios.get("http://localhost:3000/unsubscribe");
 };
 
-const isRunning = () => {
+const checkServerIsRunning = () => {
   return new Promise((resolve) => {
     function pollStatus() {
       axios
@@ -61,5 +61,5 @@ module.exports = {
   requestSubscription,
   getAllEvents,
   removeSubscription,
-  isRunning,
+  checkServerIsRunning,
 };
