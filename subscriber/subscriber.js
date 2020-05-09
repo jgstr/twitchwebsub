@@ -1,3 +1,5 @@
+const status = (dataStore) => dataStore.checkStatus();
+
 const getAllSubscriptions = (dataStore) => {
   return dataStore.getAllSubscriptions();
 };
@@ -23,6 +25,7 @@ const getAllEvents = (dataStore) => {
 };
 
 module.exports = {
+  status,
   getAllSubscriptions,
   getSubscription,
   requestSubscription,

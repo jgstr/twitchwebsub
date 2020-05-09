@@ -23,8 +23,8 @@ app.get("/", (request, response) => {
 });
 
 app.get("/status", (request, response) => {
-  dataStore
-    .checkStatus()
+  subscriber
+    .status(dataStore)
     .then(() => {
       return response.status(200).send("Running.");
     })

@@ -83,8 +83,8 @@ describe("Twitch Websub appUser", function () {
 
   });
 */
-  after(function (done) {
-    fakeTwitch.stop(twitchAPI);
-    dockerComposeDown(done);
-  });
+  // after(function (done) {
+  //   fakeTwitch.stop(twitchAPI);
+  //   dockerComposeDown(done);
+  // });
 });
