@@ -34,7 +34,7 @@ app.get("/status", (request, response) => {
 });
 
 app.get("/get-subscription-*", (request, response) => {
-  const subscriptionID = request.url.substring(18);
+  const subscriptionID = request.url.slice(18);
 
   subscriber
     .getSubscription(dataStore, subscriptionID)
