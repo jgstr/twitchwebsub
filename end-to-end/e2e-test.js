@@ -10,7 +10,6 @@ const {
   expectZeroEvents,
   expectEventsToMatch,
 } = require("../utils/test-utils");
-import { expect } from "chai";
 const fakeTwitch = require("../fake-twitch-websub/fake-twitch-server");
 const appUser = require("../utils/subscriber-driver");
 import { subscriptionRequestByUserStub } from "./doubles/subscriptions";
