@@ -3,13 +3,15 @@ const {
   dockerComposeUp,
   dockerComposeDown,
   pollForSubscription,
+  expectZeroSubscriptions,
+  expectRequestConfirmation,
+  getSubscriptionID,
+  expectIDsToMatch,
 } = require("../utils/test-utils");
-
 import { expect } from "chai";
 const fakeTwitch = require("../fake-twitch-websub/fake-twitch-server");
 const appUser = require("../utils/subscriber-driver");
 import { subscriptionRequestByUserStub } from "./doubles/subscriptions";
-
 let twitchAPI;
 
 describe("Twitch Websub appUser", function () {
@@ -27,20 +29,15 @@ describe("Twitch Websub appUser", function () {
 
     appUser
       .getAllSubscriptions()
-      // .then((results) => {
-      //   expectZeroSubscriptions(results);
-      // })
-      .then((response) => {
-        expect(response.data.list.length).to.equal(0);
-      })
+      .then((results) => expectZeroSubscriptions(results))
       .then(() => appUser.requestSubscription(subscriptionRequestByUserStub))
-      .then((response) => {
-        expect(response.data.message).to.equal("Received.");
-        subscriptionID = response.data.subscriptionID;
+      .then((results) => {
+        expectRequestConfirmation(results);
+        subscriptionID = getSubscriptionID(results);
       })
       .then(() => pollForSubscription(appUser.getSubscription, subscriptionID))
-      .then((response) => {
-        expect(response.id).to.equal(subscriptionID);
+      .then((results) => {
+        expectIDsToMatch(results, subscriptionID);
         done();
       });
   });

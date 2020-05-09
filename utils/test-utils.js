@@ -1,6 +1,7 @@
 const path = require("path");
 const compose = require("docker-compose");
 import mysql from "mysql";
+import { expect } from "chai";
 
 const dockerComposeUp = () => {
   compose.upAll({ cwd: path.join(__dirname, ".."), log: true }).then(
@@ -86,10 +87,25 @@ const checkDatabaseIsRunning = () => {
   });
 };
 
+const expectZeroSubscriptions = (results) =>
+  expect(results.data.list.length).to.equal(0);
+
+const expectRequestConfirmation = (results) =>
+  expect(results.data.message).to.equal("Received.");
+
+const getSubscriptionID = (results) => results.data.subscriptionID;
+
+const expectIDsToMatch = (results, subscriptionID) =>
+  expect(results.id).to.equal(subscriptionID);
+
 module.exports = {
   checkDatabaseIsRunning,
   dockerComposeUp,
   dockerComposeDown,
   dockerComposeUpDatabase,
   pollForSubscription,
+  expectZeroSubscriptions,
+  expectRequestConfirmation,
+  getSubscriptionID,
+  expectIDsToMatch,
 };
