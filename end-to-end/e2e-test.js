@@ -2,39 +2,36 @@
 const testUtils = require("../utils/test-utils");
 import { expect } from "chai";
 const fakeTwitch = require("../fake-twitch-websub/fake-twitch-server");
-const subscriber = require("../utils/subscriber-driver");
+const appUser = require("../utils/subscriber-driver");
 import { subscriptionRequestByUserStub } from "./doubles/subscriptions";
 
 let twitchApp;
 
-describe("Twitch Websub Subscriber", function () {
+describe("Twitch Websub appUser", function () {
   this.timeout(17000);
 
   before(function (done) {
     twitchApp = fakeTwitch.start();
     testUtils.dockerComposeUp();
-    subscriber.isRunning().then(done);
+    appUser.isRunning().then(done);
   });
 
   // Walking skeleton
   it("should return one subscription.", function (done) {
     let subscriptionID;
 
-    subscriber
+    appUser
       .getAllSubscriptions()
       .then((response) => {
         expect(response.data.list.length).to.equal(0);
       })
-      .then(() => subscriber.requestSubscription(subscriptionRequestByUserStub))
+      .then(() => appUser.requestSubscription(subscriptionRequestByUserStub))
       .then((response) => {
         expect(response.data.message).to.equal("Received.");
         subscriptionID = response.data.subscriptionID;
       })
       .then(() =>
-        testUtils.pollForSubscription(
-          subscriber.getSubscription,
-          subscriptionID
-        )
+        testUtils.pollForSubscription(appUser.getSubscription, subscriptionID)
       )
       .then((response) => {
         expect(response.id).to.equal(subscriptionID);
@@ -54,19 +51,19 @@ describe("Twitch Websub Subscriber", function () {
       },
     ];
 
-    subscriber
+    appUser
       .requestSubscription(subscriptionRequestByUserStub)
       .then((response) => {
         expect(response.data.message).to.equal("Received.");
         subscriptionID = response.data.subscriptionID;
       })
-      .then(() => subscriber.getAllEvents(subscriptionID))
+      .then(() => appUser.getAllEvents(subscriptionID))
       .then((results) => {
         expect(results.data.events.length).to.equal(0);
       })
       .then(() => fakeTwitch.sendEvent(eventDataStub))
       .then(() => new Promise((resolve) => setTimeout(resolve, 1500))) // Debugging. Needs a poll.
-      .then(() => subscriber.getAllEvents(subscriptionID))
+      .then(() => appUser.getAllEvents(subscriptionID))
       .then((results) => {
         for (const event of results.data.events) {
           if (event.data === JSON.stringify(eventDataStub)) {
@@ -82,16 +79,16 @@ describe("Twitch Websub Subscriber", function () {
     const subscription = "12345";
     let originalSubscriptionLength;
 
-    subscriber.requestSubscription()
+    appUser.requestSubscription()
       .then((response) => { expect(response.status).to.equal(200); })
       .then(() => { return fakeTwitch.sendApprovalRequest(hubCallback); })
-      .then(subscriber.getAllSubscriptions)
+      .then(appUser.getAllSubscriptions)
       .then((response) => {
         originalSubscriptionLength = response.data.list.length;
         expect(originalSubscriptionLength).to.be.at.least(1);
       })
-      .then(subscriber.removeSubscription(subscription))
-      .then(subscriber.getAllSubscriptions)
+      .then(appUser.removeSubscription(subscription))
+      .then(appUser.getAllSubscriptions)
       .then((subscriptions) => {
         expect(subscriptions.data.list.length).to.equal(originalSubscriptionLength - 1);
         done();
