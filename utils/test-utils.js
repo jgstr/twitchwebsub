@@ -98,6 +98,18 @@ const getSubscriptionID = (results) => results.data.subscriptionID;
 const expectIDsToMatch = (results, subscriptionID) =>
   expect(results.id).to.equal(subscriptionID);
 
+const expectZeroEvents = (results) =>
+  expect(results.data.events.length).to.equal(0);
+
+const expectEventsToMatch = (results, eventData, done) => {
+  for (const event of results.data.events) {
+    if (event.data === JSON.stringify(eventData)) {
+      expect(event.data).to.equal(JSON.stringify(eventData));
+      done();
+    }
+  }
+};
+
 module.exports = {
   checkDatabaseIsRunning,
   dockerComposeUp,
@@ -108,4 +120,6 @@ module.exports = {
   expectRequestConfirmation,
   getSubscriptionID,
   expectIDsToMatch,
+  expectZeroEvents,
+  expectEventsToMatch,
 };

@@ -7,6 +7,8 @@ const {
   expectRequestConfirmation,
   getSubscriptionID,
   expectIDsToMatch,
+  expectZeroEvents,
+  expectEventsToMatch,
 } = require("../utils/test-utils");
 import { expect } from "chai";
 const fakeTwitch = require("../fake-twitch-websub/fake-twitch-server");
@@ -56,25 +58,16 @@ describe("Twitch Websub appUser", function () {
 
     appUser
       .requestSubscription(subscriptionRequestByUserStub)
-      .then((response) => {
-        expect(response.data.message).to.equal("Received.");
-        subscriptionID = response.data.subscriptionID;
+      .then((results) => {
+        expectRequestConfirmation(results);
+        subscriptionID = getSubscriptionID(results);
       })
       .then(() => appUser.getAllEvents(subscriptionID))
-      .then((results) => {
-        expect(results.data.events.length).to.equal(0);
-      })
+      .then((results) => expectZeroEvents(results))
       .then(() => fakeTwitch.sendEvent(eventDataStub))
       .then(() => new Promise((resolve) => setTimeout(resolve, 1500))) // Debugging. Needs a poll.
       .then(() => appUser.getAllEvents(subscriptionID))
-      .then((results) => {
-        for (const event of results.data.events) {
-          if (event.data === JSON.stringify(eventDataStub)) {
-            expect(event.data).to.equal(JSON.stringify(eventDataStub));
-            done();
-          }
-        }
-      });
+      .then((results) => expectEventsToMatch(results, eventDataStub, done));
   });
 
   /*
