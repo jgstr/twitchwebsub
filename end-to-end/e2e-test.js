@@ -1,18 +1,23 @@
 "use strict";
-const testUtils = require("../utils/test-utils");
+const {
+  dockerComposeUp,
+  dockerComposeDown,
+  pollForSubscription,
+} = require("../utils/test-utils");
+
 import { expect } from "chai";
 const fakeTwitch = require("../fake-twitch-websub/fake-twitch-server");
 const appUser = require("../utils/subscriber-driver");
 import { subscriptionRequestByUserStub } from "./doubles/subscriptions";
 
-let twitchApp;
+let twitchAPI;
 
 describe("Twitch Websub appUser", function () {
   this.timeout(17000);
 
   before(function (done) {
-    twitchApp = fakeTwitch.start();
-    testUtils.dockerComposeUp();
+    twitchAPI = fakeTwitch.start();
+    dockerComposeUp();
     appUser.checkServerIsRunning().then(done);
   });
 
@@ -22,6 +27,9 @@ describe("Twitch Websub appUser", function () {
 
     appUser
       .getAllSubscriptions()
+      // .then((results) => {
+      //   expectZeroSubscriptions(results);
+      // })
       .then((response) => {
         expect(response.data.list.length).to.equal(0);
       })
@@ -30,9 +38,7 @@ describe("Twitch Websub appUser", function () {
         expect(response.data.message).to.equal("Received.");
         subscriptionID = response.data.subscriptionID;
       })
-      .then(() =>
-        testUtils.pollForSubscription(appUser.getSubscription, subscriptionID)
-      )
+      .then(() => pollForSubscription(appUser.getSubscription, subscriptionID))
       .then((response) => {
         expect(response.id).to.equal(subscriptionID);
         done();
@@ -96,8 +102,8 @@ describe("Twitch Websub appUser", function () {
 
   });
 */
-  // after(function (done) {
-  //   fakeTwitch.stop(twitchApp);
-  //   testUtils.dockerComposeDown(done);
-  // });
+  after(function (done) {
+    fakeTwitch.stop(twitchAPI);
+    dockerComposeDown(done);
+  });
 });
