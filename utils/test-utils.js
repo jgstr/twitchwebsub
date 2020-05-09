@@ -110,6 +110,25 @@ const expectEventsToMatch = (results, eventData, callback) => {
   }
 };
 
+const subscriptionRequestByUserStub = {
+  clientID: "zqyp13ibm7tejwe0r61ckvz95asblpw",
+  hubUrl: "http://host.docker.internal:3001/hub",
+  hubCallback: "http://localhost:3000/approval",
+  hubTopic: "follows",
+  toID: "17337557",
+  fromID: null,
+};
+
+const eventDataStub = [
+  {
+    from_id: "1336",
+    from_name: "userNameFrom",
+    to_id: "1337",
+    to_name: "userNameTo",
+    followed_at: "2017-08-22T22:55:24Z",
+  },
+];
+
 module.exports = {
   checkDatabaseIsRunning,
   dockerComposeUp,
@@ -122,4 +141,6 @@ module.exports = {
   expectIDsToMatch,
   expectZeroEvents,
   expectEventsToMatch,
+  subscriptionRequestByUserStub,
+  eventDataStub,
 };

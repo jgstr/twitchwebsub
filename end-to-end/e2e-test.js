@@ -9,10 +9,11 @@ const {
   expectIDsToMatch,
   expectZeroEvents,
   expectEventsToMatch,
+  subscriptionRequestByUserStub,
+  eventDataStub,
 } = require("../utils/test-utils");
 const fakeTwitch = require("../fake-twitch-websub/fake-twitch-server");
 const appUser = require("../utils/subscriber-driver");
-import { subscriptionRequestByUserStub } from "./doubles/subscriptions";
 let twitchAPI;
 
 describe("Twitch Websub appUser", function () {
@@ -45,15 +46,6 @@ describe("Twitch Websub appUser", function () {
 
   it("should receive return at least one event.", function (done) {
     let subscriptionID;
-    const eventDataStub = [
-      {
-        from_id: "1336",
-        from_name: "userNameFrom",
-        to_id: "1337",
-        to_name: "userNameTo",
-        followed_at: "2017-08-22T22:55:24Z",
-      },
-    ];
 
     appUser
       .requestSubscription(subscriptionRequestByUserStub)
