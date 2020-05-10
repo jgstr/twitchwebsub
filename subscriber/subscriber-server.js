@@ -9,11 +9,10 @@ import {
 import { createDataStore } from "./adapters/data-store";
 import { createTwitchAdapter } from "./adapters/twitch";
 import { hubUrl as twitchHub } from "./authentications";
-
+import { createSubscriptionFromRequest } from "./subscriber-utils";
 const dataStore = createDataStore(notificationsDatabaseDockerConfig);
 const twitchAdapter = createTwitchAdapter(twitchHub, hubCallback);
-const subscriptionsWaitingForTwitchApproval = [];
-
+const subscriptionsWaitingForTwitchApproval = new Map();
 const port = 3000;
 const app = express();
 app.use(express.json());
@@ -60,6 +59,7 @@ app.get("/get-subscriptions", (request, response) => {
 app.get("/get-events*", (request, response) => {
   const subscriptionID = request.url.slice(12);
 
+  // Replace with subscriber method.
   dataStore
     .getAllEvents(subscriptionID)
     .then((results) => {
@@ -73,32 +73,24 @@ app.get("/get-events*", (request, response) => {
 app.post("/subscribe", (request, response) => {
   const subId = uuid();
   response.status(200).json({ message: "Received.", subscriptionID: subId });
-
-  const subscription = {
-    id: subId,
-    topic: request.query.topic,
-    toID: request.query.to_id ? request.query.to_id : "",
-    fromID: request.query.from_id ? request.query.from_id : "",
-    userID: request.query.user_id ? request.query.user_id : "",
-    clientID: request.headers["client-id"],
-  };
-
-  subscriptionsWaitingForTwitchApproval.push(subscription);
+  const subscription = createSubscriptionFromRequest(subId, request);
+  subscriptionsWaitingForTwitchApproval.set(subId, subscription);
   subscriber.requestSubscription(twitchAdapter, subscription);
 });
 
 app.get("/approval*", (request, response) => {
-  const requestSubscriptionId = request.path.slice(10);
+  const approvedSubscriptionID = request.path.slice(10);
 
   if (request.query["hub.challenge"]) {
     response.set("Content-Type", "text/html");
     response.status(200).send(request.query["hub.challenge"]);
   }
 
-  for (const subscription of subscriptionsWaitingForTwitchApproval) {
-    if (subscription.id === requestSubscriptionId) {
+  for (const [id, subscription] of subscriptionsWaitingForTwitchApproval) {
+    if (id === approvedSubscriptionID) {
       subscriber.saveSubscription(dataStore, subscription);
     }
+    subscriptionsWaitingForTwitchApproval.delete(id);
   }
 });
 
