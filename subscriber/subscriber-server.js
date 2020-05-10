@@ -59,9 +59,8 @@ app.get("/get-subscriptions", (request, response) => {
 app.get("/get-events*", (request, response) => {
   const subscriptionID = request.url.slice(12);
 
-  // Replace with subscriber method.
-  dataStore
-    .getAllEvents(subscriptionID)
+  subscriber
+    .getAllEvents(dataStore, subscriptionID)
     .then((results) => {
       return response.status(200).json({ events: results });
     })
@@ -102,8 +101,6 @@ app.post("/approval*", (request, response) => {
   const subID = request.url.slice(10);
   const eventID = uuid();
   const eventData = request.body.data; // Note, this is important. Twitch uses this shape.
-
-  console.log("* POST /approval request.body: ", request.body);
 
   // TODO: Needs subscriber method instead.
   dataStore.saveEvent(subID, eventID, eventData);

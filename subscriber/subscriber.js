@@ -20,8 +20,8 @@ const saveEvent = (dataStore, subID, eventID, eventData) => {
   return dataStore.saveEvent(subID, eventID, eventData);
 };
 
-const getAllEvents = (dataStore) => {
-  return dataStore.getAllEvents();
+const getAllEvents = (dataStore, subscriptionID) => {
+  return dataStore.getAllEvents(subscriptionID);
 };
 
 module.exports = {
