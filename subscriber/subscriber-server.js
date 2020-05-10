@@ -102,8 +102,7 @@ app.post("/approval*", (request, response) => {
   const eventID = uuid();
   const eventData = request.body.data; // Note, this is important. Twitch uses this shape.
 
-  // TODO: Needs subscriber method instead.
-  dataStore.saveEvent(subID, eventID, eventData);
+  subscriber.saveEvent(dataStore, subID, eventID, eventData);
 });
 
 const start = () => {
