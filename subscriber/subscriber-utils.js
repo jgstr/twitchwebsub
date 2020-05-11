@@ -26,17 +26,17 @@ const createSubscriptionFromRequest = (subscriptionID, request) => {
   };
 };
 
-const saveApprovedSubscriptionFrom = (
-  subscriptions,
-  approvedID,
+const saveApprovedSubscription = (
   subscriber,
-  dataStore
+  dataStore,
+  subscriptionsWaitingForTwitchApproval,
+  approvedSubscriptionID
 ) => {
-  for (const sub of subscriptions) {
-    if (sub.id === approvedID) {
-      subscriber.saveSubscription(dataStore, sub);
+  for (const [id, subscription] of subscriptionsWaitingForTwitchApproval) {
+    if (id === approvedSubscriptionID) {
+      subscriber.saveSubscription(dataStore, subscription);
     }
-    // TODO: then remove subscription from waiting list.
+    subscriptionsWaitingForTwitchApproval.delete(id);
   }
 };
 
@@ -44,5 +44,5 @@ module.exports = {
   createNewSubscription,
   formatSubscriptionFromRequest,
   createSubscriptionFromRequest,
-  saveApprovedSubscriptionFrom,
+  saveApprovedSubscription,
 };

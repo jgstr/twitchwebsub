@@ -9,7 +9,10 @@ import {
 import { createDataStore } from "./adapters/data-store";
 import { createTwitchAdapter } from "./adapters/twitch";
 import { hubUrl as twitchHub } from "./authentications";
-import { createSubscriptionFromRequest } from "./subscriber-utils";
+import {
+  createSubscriptionFromRequest,
+  saveApprovedSubscription,
+} from "./subscriber-utils";
 const dataStore = createDataStore(notificationsDatabaseDockerConfig);
 const twitchAdapter = createTwitchAdapter(twitchHub, hubCallback);
 const subscriptionsWaitingForTwitchApproval = new Map();
@@ -85,12 +88,13 @@ app.get("/approval*", (request, response) => {
     response.status(200).send(request.query["hub.challenge"]);
   }
 
-  for (const [id, subscription] of subscriptionsWaitingForTwitchApproval) {
-    if (id === approvedSubscriptionID) {
-      subscriber.saveSubscription(dataStore, subscription);
-    }
-    subscriptionsWaitingForTwitchApproval.delete(id);
-  }
+  // TODO: check this abstraction with Nimrod.
+  saveApprovedSubscription(
+    subscriber,
+    dataStore,
+    subscriptionsWaitingForTwitchApproval,
+    approvedSubscriptionID
+  );
 });
 
 // TODO: Must use and check for a secret in next iteration to ensure this request is genuine!
