@@ -1,11 +1,11 @@
 const axios = require("axios");
 import { appAccessToken, clientID } from "../references/authentications";
 
-const daysTillTokenExpiry = () => {
-  const millisInDay = 1000 * 60 * 60 * 24;
-  const tokenExpiry = new Date(2020, 6, 3); // July 7, 2020
-  const millisTillExpiry = tokenExpiry - Date.now();
-  return Math.floor(millisTillExpiry / millisInDay);
+// TODO: Eventually, all this might needs its own tests
+// and API.
+const daysTillTokenExpiry = (milliSeconds) => {
+  const secondsInDay = 60 * 60 * 24;
+  return Math.floor(milliSeconds / secondsInDay);
 };
 
 const validateAccessToken = () => {
@@ -17,7 +17,11 @@ const validateAccessToken = () => {
     },
   })
     .then((response) =>
-      console.log("* App Access Token expiry: ", response.data.expires_in)
+      console.log(
+        "* App Access Token expiry: ",
+        daysTillTokenExpiry(response.data.expires_in),
+        " days."
+      )
     )
     .catch((err) => console.error("* Twitch error: ", err));
 };
