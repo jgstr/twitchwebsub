@@ -1,15 +1,25 @@
 const axios = require("axios");
-import {
-  appAccessToken,
-  clientID,
-  clientSecret,
-} from "../references/authentications";
+import { appAccessToken, clientID } from "../references/authentications";
 
 const daysTillTokenExpiry = () => {
   const millisInDay = 1000 * 60 * 60 * 24;
-  const tokenExpiry = new Date(2020, 6, 7); // July 7, 2020
+  const tokenExpiry = new Date(2020, 6, 3); // July 7, 2020
   const millisTillExpiry = tokenExpiry - Date.now();
   return Math.floor(millisTillExpiry / millisInDay);
+};
+
+const validateAccessToken = () => {
+  axios({
+    method: "GET",
+    url: "https://id.twitch.tv/oauth2/validate",
+    headers: {
+      Authorization: `OAuth ${appAccessToken}`,
+    },
+  })
+    .then((response) =>
+      console.log("* App Access Token expiry: ", response.data.expires_in)
+    )
+    .catch((err) => console.error("* Twitch error: ", err));
 };
 
 const getTwitchLiveStreams = () => {
@@ -22,22 +32,13 @@ const getTwitchLiveStreams = () => {
     },
   })
     .then((streams) => {
-      console.log(
-        "* Days until App Access Token expiry: about ",
-        daysTillTokenExpiry()
+      streams.data.data.forEach((stream) =>
+        console.log("User ID: ", stream.user_id, " Name: ", stream.user_name)
       );
-      console.log("* Twitch streams: ", streams.data.data);
     })
-    .catch((err) => {
-      console.log(
-        "* Check that your OAuth is valid.\n* Days until App Access Token expiry: about ",
-        daysTillTokenExpiry()
-      );
-      console.error(
-        "* get-twitch-live-streams error: ",
-        err.response.data.message
-      );
-    });
+    .catch((err) =>
+      console.error("* Twitch error: ", err.response.data.message)
+    );
 };
-
+validateAccessToken();
 getTwitchLiveStreams();
