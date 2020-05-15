@@ -90,8 +90,11 @@ const checkDatabaseIsRunning = () => {
 const expectZeroSubscriptions = (results) =>
   expect(results.data.list.length).to.equal(0);
 
-const expectRequestConfirmation = (results) =>
-  expect(results.data.message).to.equal("Received.");
+// const expectRequestConfirmation = (results) =>
+//   expect(results.data.message).to.equal("Received.");
+
+const expectMessageToMatch = (results, message) =>
+  expect(results.data.message).to.equal(message);
 
 const getSubscriptionID = (results) => results.data.subscriptionID;
 
@@ -136,7 +139,7 @@ module.exports = {
   dockerComposeUpDatabase,
   pollForSubscription,
   expectZeroSubscriptions,
-  expectRequestConfirmation,
+  expectMessageToMatch,
   getSubscriptionID,
   expectIDsToMatch,
   expectZeroEvents,

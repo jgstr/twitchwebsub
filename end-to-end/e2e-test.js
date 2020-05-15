@@ -4,7 +4,7 @@ const {
   dockerComposeDown,
   pollForSubscription,
   expectZeroSubscriptions,
-  expectRequestConfirmation,
+  expectMessageToMatch,
   getSubscriptionID,
   expectIDsToMatch,
   expectZeroEvents,
@@ -34,7 +34,7 @@ describe("Twitch Websub appUser", function () {
       .then((results) => expectZeroSubscriptions(results))
       .then(() => appUser.requestSubscription(subscriptionRequestByUserStub))
       .then((results) => {
-        expectRequestConfirmation(results);
+        expectMessageToMatch(results, "Received.");
         subscriptionID = getSubscriptionID(results);
       })
       .then(() => pollForSubscription(appUser.getSubscription, subscriptionID))
@@ -50,7 +50,7 @@ describe("Twitch Websub appUser", function () {
     appUser
       .requestSubscription(subscriptionRequestByUserStub)
       .then((results) => {
-        expectRequestConfirmation(results);
+        expectMessageToMatch(results, "Received.");
         subscriptionID = getSubscriptionID(results);
       })
       .then(() => appUser.getAllEvents(subscriptionID))
@@ -65,17 +65,15 @@ describe("Twitch Websub appUser", function () {
     let subscriptionID;
 
     appUser
-      .getAllSubscriptions()
-      .then((results) => expectZeroSubscriptions(results))
-      .then(() => appUser.requestSubscription(subscriptionRequestByUserStub))
+      .requestSubscription(subscriptionRequestByUserStub)
       .then((results) => {
-        expectRequestConfirmation(results);
+        expectMessageToMatch(results, "Received.");
         subscriptionID = getSubscriptionID(results);
       })
       .then(() => pollForSubscription(appUser.getSubscription, subscriptionID))
       .then(() => appUser.removeSubscription(subscriptionID))
       .then(() => appUser.getSubscription(subscriptionID))
-      .then((results) => expect(results.length).to.equal(0));
+      .then((results) => expectMessageToMatch(results, "Unsubscribed."));
   });
 
   /* Unsure whether to include this as a feature.

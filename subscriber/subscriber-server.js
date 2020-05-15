@@ -87,6 +87,13 @@ app.post("/subscribe", (request, response) => {
   subscriber.requestSubscription(twitchAdapter, subscription);
 });
 
+app.get("/unsubscribe/:subID", (request, response) => {
+  // Stub response.
+  response
+    .status(200)
+    .json({ message: "Unsubscribed.", subscriptionID: request.params.subID });
+});
+
 app.get("/approval*", (request, response) => {
   const approvedSubscriptionID = request.path.slice(10);
 
