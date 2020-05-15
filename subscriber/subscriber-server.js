@@ -18,9 +18,15 @@ import {
 const dataStore = createDataStore(notificationsDatabaseDockerConfig);
 const twitchAdapter = createTwitchAdapter(twitchHub, hubCallback);
 const subscriptionsWaitingForTwitchApproval = new Map();
-const port = 3000;
+// const port = 3000;
 const app = express();
 app.use(express.json());
+
+const start = (port) => {
+  return app.listen(port, () => {
+    console.log(`Running on port ${port}`);
+  });
+};
 
 app.get("/", (request, response) => {
   response.status(200).send("Welcome to a Twitch Websub Service.");
@@ -110,12 +116,6 @@ app.post("/approval*", (request, response) => {
 
   subscriber.saveEvent(dataStore, subID, eventID, eventData);
 });
-
-const start = () => {
-  return app.listen(port, () => {
-    console.log(`Running on port ${port}`);
-  });
-};
 
 // app.listen(port);
 // console.log(`Running on port: ${port}`);

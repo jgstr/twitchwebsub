@@ -65,24 +65,31 @@ describe("Twitch Websub appUser", function () {
   it('should remove one subscription from the database.', function (done) {
     const subscription = "12345";
     let originalSubscriptionLength;
-
+    
     appUser.requestSubscription()
-      .then((response) => { expect(response.status).to.equal(200); })
-      .then(() => { return fakeTwitch.sendApprovalRequest(hubCallback); })
-      .then(appUser.getAllSubscriptions)
-      .then((response) => {
-        originalSubscriptionLength = response.data.list.length;
-        expect(originalSubscriptionLength).to.be.at.least(1);
-      })
-      .then(appUser.removeSubscription(subscription))
-      .then(appUser.getAllSubscriptions)
-      .then((subscriptions) => {
-        expect(subscriptions.data.list.length).to.equal(originalSubscriptionLength - 1);
-        done();
-      })
-
+    .then((response) => { expect(response.status).to.equal(200); })
+    .then(() => { return fakeTwitch.sendApprovalRequest(hubCallback); })
+    .then(appUser.getAllSubscriptions)
+    .then((response) => {
+      originalSubscriptionLength = response.data.list.length;
+      expect(originalSubscriptionLength).to.be.at.least(1);
+    })
+    .then(appUser.removeSubscription(subscription))
+    .then(appUser.getAllSubscriptions)
+    .then((subscriptions) => {
+      expect(subscriptions.data.list.length).to.equal(originalSubscriptionLength - 1);
+      done();
+    })
+    
   });
-*/
+  */
+
+  it("should return a list of live streams.", function (done) {
+    appUser.getLiveStreams().then((results) => {
+      expect(results).to.equal(liveStreamsStub);
+    });
+  }); // See get-twitch... helper for code.
+
   // after(function (done) {
   //   fakeTwitch.stop(twitchAPI);
   //   dockerComposeDown(done);
