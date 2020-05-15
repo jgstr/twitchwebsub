@@ -53,14 +53,8 @@ describe("Subscriber Server", function () {
   });
 
   it("should return a list of events.", function () {
-    const subscriptionStub = {
-      id: "fa1856cb-5695-8579-b52f-0dc908e3aad4",
-      hub_topic: "https://twitch.com",
-      lease_start: "2020-05-13 01:01:01",
-    };
-
-    subscriber.saveSubscription(dataStoreFake, subscriptionStub);
-    expect(dataStoreFake.subscriptionDatabase.size).to.equal(1);
-    subscriber.removeSubscription(dataStoreFake, subID);
+    expect(subscriber.removeSubscription(dataStoreFake, "12345")).to.equal(
+      "Removed."
+    );
   });
 });

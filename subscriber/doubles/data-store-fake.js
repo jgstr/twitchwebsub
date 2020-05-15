@@ -10,6 +10,9 @@ const getSubscription = (subscription) => subscription;
 const saveSubscription = (subscription) =>
   subscriptionDatabase.set(subscription.id, subscription);
 
+const removeSubscription = (subscriptionID) => {
+  return "Removed.";
+};
 const saveEvent = (subID, eventID, eventData) => {
   const event = {
     subID,
@@ -27,6 +30,7 @@ module.exports = {
   getAllSubscriptions,
   getSubscription,
   saveSubscription,
+  removeSubscription,
   saveEvent,
   getAllEvents,
 };
