@@ -74,8 +74,8 @@ app.get("/get-events*", (request, response) => {
     .then((results) => {
       return response.status(200).json({ events: results });
     })
-    .catch((error) => {
-      return response.status(500).send(error);
+    .catch(() => {
+      return response.status(500).send("There was an error with your request.");
     });
 });
 
@@ -88,10 +88,17 @@ app.post("/subscribe", (request, response) => {
 });
 
 app.get("/unsubscribe/:subID", (request, response) => {
-  // Stub response.
-  response
-    .status(200)
-    .json({ message: "Unsubscribed.", subscriptionID: request.params.subID });
+  subscriber
+    .removeSubscription(dataStore, request.params.subID)
+    .then(() => {
+      return response.status(200).json({
+        message: "Unsubscribed.",
+        subscriptionID: request.params.subID,
+      });
+    })
+    .catch(() => {
+      return response.status(500).send("There was an error with your request.");
+    });
 });
 
 app.get("/approval*", (request, response) => {

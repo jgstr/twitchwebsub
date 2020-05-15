@@ -12,6 +12,7 @@ const {
   subscriptionRequestByUserStub,
   eventDataStub,
 } = require("../utils/test-utils");
+import { expect } from "chai";
 const fakeTwitch = require("../fake-twitch-websub/fake-twitch-server");
 const appUser = require("../utils/subscriber-driver");
 let twitchAPI;
@@ -72,8 +73,12 @@ describe("Twitch Websub appUser", function () {
       })
       .then(() => pollForSubscription(appUser.getSubscription, subscriptionID))
       .then(() => appUser.removeSubscription(subscriptionID))
+      .then((results) => expectMessageToMatch(results, "Unsubscribed."))
       .then(() => appUser.getSubscription(subscriptionID))
-      .then((results) => expectMessageToMatch(results, "Unsubscribed."));
+      .then((results) => {
+        expect(results.data.subscription.length).to.equal(0);
+        done();
+      });
   });
 
   /* Unsure whether to include this as a feature.
