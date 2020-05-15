@@ -1,6 +1,6 @@
 import { eventRecordStub, subscriptionRecordStub } from "./subscriptions";
 
-let subscriptionDatabase = [];
+let subscriptionDatabase = new Map();
 let eventDatabase = [];
 
 const getAllSubscriptions = () => [subscriptionRecordStub];
@@ -8,7 +8,7 @@ const getAllSubscriptions = () => [subscriptionRecordStub];
 const getSubscription = (subscription) => subscription;
 
 const saveSubscription = (subscription) =>
-  subscriptionDatabase.push(subscriptionRecordStub);
+  subscriptionDatabase.set(subscription.id, subscription);
 
 const saveEvent = (subID, eventID, eventData) => {
   const event = {

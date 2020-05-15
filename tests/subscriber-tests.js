@@ -24,7 +24,7 @@ describe("Subscriber Server", function () {
 
   it("should save a subscription.", function () {
     subscriber.saveSubscription(dataStoreFake, subscriptionRecordStub);
-    expect(dataStoreFake.subscriptionDatabase.length).to.equal(1);
+    expect(dataStoreFake.subscriptionDatabase.size).to.equal(1);
   });
 
   it("should return one subscription.", function () {
@@ -50,5 +50,17 @@ describe("Subscriber Server", function () {
       subscriptionRecordStub.id
     );
     expect(events).to.include.deep.members([eventRecordStub]);
+  });
+
+  it("should return a list of events.", function () {
+    const subscriptionStub = {
+      id: "fa1856cb-5695-8579-b52f-0dc908e3aad4",
+      hub_topic: "https://twitch.com",
+      lease_start: "2020-05-13 01:01:01",
+    };
+
+    subscriber.saveSubscription(dataStoreFake, subscriptionStub);
+    expect(dataStoreFake.subscriptionDatabase.size).to.equal(1);
+    subscriber.removeSubscription(dataStoreFake, subID);
   });
 });
