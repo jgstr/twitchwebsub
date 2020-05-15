@@ -23,6 +23,7 @@ const createSubscriptionFromRequest = (subscriptionID, request) => {
     fromID: request.query.from_id ? request.query.from_id : "",
     userID: request.query.user_id ? request.query.user_id : "",
     clientID: request.headers["client-id"],
+    authorization: request.headers["authorization"],
   };
 };
 
