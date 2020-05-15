@@ -77,6 +77,7 @@ describe("Data Store", function () {
       });
   });
 
+  // Note: This does NOT remove all events related to a subscription.
   it("should remove a subscription.", function (done) {
     let dataStore;
 

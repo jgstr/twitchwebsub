@@ -111,7 +111,14 @@ export const createDataStore = (config) => {
 
     removeSubscription: (subscriptionID) => {
       return new Promise((resolve) => {
-        resolve("Removed.");
+        pool.query(
+          "DELETE FROM subscriptions WHERE id=?",
+          subscriptionID,
+          (error) => {
+            if (error) throw error;
+            resolve("Removed.");
+          }
+        );
       });
     },
   };
