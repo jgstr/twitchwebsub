@@ -18,7 +18,6 @@ import {
 const dataStore = createDataStore(notificationsDatabaseDockerConfig);
 const twitchAdapter = createTwitchAdapter(twitchHub, hubCallback);
 const subscriptionsWaitingForTwitchApproval = new Map();
-// const port = 3000;
 const app = express();
 app.use(express.json());
 
@@ -116,8 +115,5 @@ app.post("/approval*", (request, response) => {
 
   subscriber.saveEvent(dataStore, subID, eventID, eventData);
 });
-
-// app.listen(port);
-// console.log(`Running on port: ${port}`);
 
 module.exports = { start };
