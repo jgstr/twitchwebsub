@@ -24,6 +24,10 @@ const getAllEvents = (dataStore, subscriptionID) => {
   return dataStore.getAllEvents(subscriptionID);
 };
 
+const removeSubscription = (dataStore, subscriptionID) => {
+  return dataStore.removeSubscription(subscriptionID);
+};
+
 module.exports = {
   status,
   getAllSubscriptions,
@@ -32,4 +36,5 @@ module.exports = {
   saveSubscription,
   saveEvent,
   getAllEvents,
+  removeSubscription,
 };

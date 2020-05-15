@@ -90,9 +90,6 @@ const checkDatabaseIsRunning = () => {
 const expectZeroSubscriptions = (results) =>
   expect(results.data.list.length).to.equal(0);
 
-// const expectRequestConfirmation = (results) =>
-//   expect(results.data.message).to.equal("Received.");
-
 const expectMessageToMatch = (results, message) =>
   expect(results.data.message).to.equal(message);
 

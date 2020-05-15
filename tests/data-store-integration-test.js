@@ -77,6 +77,25 @@ describe("Data Store", function () {
       });
   });
 
+  it("should remove a subscription.", function (done) {
+    let dataStore;
+
+    const expectedValue = {
+      id: uuid(),
+      topic: "follows",
+    };
+
+    dataStore = createDataStore(notificationsDatabaseLocalConfig);
+    dataStore
+      .saveSubscription(expectedValue)
+      .then(() => dataStore.getSubscription(expectedValue.id))
+      .then((subscription) =>
+        expect(subscription.id).to.equal(expectedValue.id)
+      )
+      .then(() => dataStore.removeSubscription(expectedValue.id))
+      .then((results) => expect(results).to.equal("Unsubscribed."));
+  });
+
   after(function (done) {
     testUtils.dockerComposeDown(done);
   });
