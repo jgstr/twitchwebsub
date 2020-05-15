@@ -93,7 +93,7 @@ describe("Data Store", function () {
         expect(subscription.id).to.equal(expectedValue.id)
       )
       .then(() => dataStore.removeSubscription(expectedValue.id))
-      .then((results) => expect(results).to.equal("Unsubscribed."));
+      .then((results) => expect(results).to.equal("Removed."));
   });
 
   after(function (done) {

@@ -52,7 +52,7 @@ describe("Subscriber Server", function () {
     expect(events).to.include.deep.members([eventRecordStub]);
   });
 
-  it("should return a list of events.", function () {
+  it("should removed a subscription.", function () {
     expect(subscriber.removeSubscription(dataStoreFake, "12345")).to.equal(
       "Removed."
     );
