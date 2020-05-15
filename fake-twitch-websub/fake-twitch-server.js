@@ -33,6 +33,12 @@ app.post("/hub", (request, response) => {
       error: "Incorrect Content-Type",
     });
   }
+  if (!request.headers["authorization"]) {
+    return response.status(400).json({
+      status: "Unauthorized",
+      error: "Missing OAuth Token",
+    });
+  }
   if (!request.body["hub.callback"]) {
     return response.status(400).json({
       status: "error",
