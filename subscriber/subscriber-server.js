@@ -1,3 +1,5 @@
+// TODO: Question for N: does this server need to be more like a "class" or wrapped in a function?
+// Should it use dependencies rather than imports?
 "use strict";
 const express = require("express");
 import { uuid } from "uuidv4";
@@ -115,7 +117,7 @@ const start = () => {
   });
 };
 
-app.listen(port);
-console.log(`Running on port: ${port}`);
+// app.listen(port);
+// console.log(`Running on port: ${port}`);
 
 module.exports = { start };

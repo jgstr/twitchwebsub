@@ -14,7 +14,7 @@
     "twitch-int-tests": "mocha -r @babel/register tests/twitch-integration-test.js",
     "data-store-int-tests": "mocha -r @babel/register tests/data-store-integration-test.js",
     "serve": "node dist/subscriber-server.js",
-    "start": "nodemon --exec babel-node subscriber-server.js",
+    "start": "nodemon --exec babel-node initialize.js",
     "start-locally": "npm run write-env-production && docker-compose up",
     "start-ngrok": "cd ~ && ./ngrok http 3000",
     "build-subscriber": "docker build -t twitchwebsub_subscriber .",
