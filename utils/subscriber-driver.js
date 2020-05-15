@@ -1,5 +1,7 @@
 const axios = require("axios");
 
+const getLiveStreams = () => {};
+
 const getSubscription = (subscriptionID) => {
   return axios.get(`http://localhost:3000/get-subscription-${subscriptionID}`);
 };
@@ -56,6 +58,7 @@ const checkServerIsRunning = () => {
 };
 
 module.exports = {
+  getLiveStreams,
   getSubscription,
   getAllSubscriptions,
   requestSubscription,
