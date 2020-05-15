@@ -22,6 +22,7 @@ const requestSubscription = (subscription) => {
     headers: {
       "Content-Type": "application/json",
       "Client-ID": subscription.clientID,
+      Authorization: `Bearer ${subscription.Authorization}`,
     },
   });
 };

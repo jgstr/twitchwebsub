@@ -120,6 +120,7 @@ const subscriptionRequestByUserStub = {
   hubTopic: "follows",
   toID: "17337557",
   fromID: null,
+  Authorization: "12334567",
 };
 
 const eventDataStub = [
