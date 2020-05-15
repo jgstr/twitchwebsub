@@ -108,5 +108,11 @@ export const createDataStore = (config) => {
         );
       });
     },
+
+    removeSubscription: (subscriptionID) => {
+      return new Promise((resolve) => {
+        resolve("Removed.");
+      });
+    },
   };
 };
