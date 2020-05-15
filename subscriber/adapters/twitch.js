@@ -37,6 +37,7 @@ export const createTwitchAdapter = (twitchHub, hubCallback) => {
           headers: {
             "content-type": "application/json",
             "client-id": subscription.clientID,
+            authorization: subscription.authorization,
           },
           data: {
             "hub.callback": hubCallback + `-${subscription.id}`,
