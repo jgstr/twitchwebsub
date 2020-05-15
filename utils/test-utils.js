@@ -93,6 +93,9 @@ const expectZeroSubscriptions = (results) =>
 const expectMessageToMatch = (results, message) =>
   expect(results.data.message).to.equal(message);
 
+const expectNo = (results) =>
+  expect(results.data.subscription.length).to.equal(0);
+
 const getSubscriptionID = (results) => results.data.subscriptionID;
 
 const expectIDsToMatch = (results, subscriptionID) =>
@@ -137,6 +140,7 @@ module.exports = {
   pollForSubscription,
   expectZeroSubscriptions,
   expectMessageToMatch,
+  expectNo,
   getSubscriptionID,
   expectIDsToMatch,
   expectZeroEvents,

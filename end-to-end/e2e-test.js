@@ -5,6 +5,7 @@ const {
   pollForSubscription,
   expectZeroSubscriptions,
   expectMessageToMatch,
+  expectNo,
   getSubscriptionID,
   expectIDsToMatch,
   expectZeroEvents,
@@ -12,7 +13,6 @@ const {
   subscriptionRequestByUserStub,
   eventDataStub,
 } = require("../utils/test-utils");
-import { expect } from "chai";
 const fakeTwitch = require("../fake-twitch-websub/fake-twitch-server");
 const appUser = require("../utils/subscriber-driver");
 let twitchAPI;
@@ -76,7 +76,7 @@ describe("Twitch Websub appUser", function () {
       .then((results) => expectMessageToMatch(results, "Unsubscribed."))
       .then(() => appUser.getSubscription(subscriptionID))
       .then((results) => {
-        expect(results.data.subscription.length).to.equal(0);
+        expectNo(results);
         done();
       });
   });
