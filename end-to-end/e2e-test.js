@@ -81,14 +81,16 @@ describe("Twitch Websub appUser", function () {
       });
   });
 
-  /* Unsure whether to include this as a feature.
-  
-  it("should return a list of live streams.", function (done) {
-    appUser.getLiveStreams().then((results) => {
-      expect(results).to.equal(liveStreamsStub);
-    });
-  }); // See get-twitch... helper for code.
-*/
+  // TODO:
+  // it("should return a list of the incoming events.", function(){});
+
+  // TODO: The system should handle duplicate events gracefully.
+
+  // TODO: subscription lease should be set to 600 seconds and be renewed before it expires.
+
+  // TODO: basic logging and metrics.
+
+  // TODO: Test all stream and follows possibilities?
 
   // after(function (done) {
   //   fakeTwitch.stop(twitchAPI);
