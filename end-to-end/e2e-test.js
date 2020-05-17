@@ -12,6 +12,7 @@ const {
   expectEventsToMatch,
   subscriptionRequestByUserStub,
   eventDataStub,
+  eventsDataStubs,
 } = require("../utils/test-utils");
 const fakeTwitch = require("../fake-twitch-websub/fake-twitch-server");
 const appUser = require("../utils/subscriber-driver");
@@ -91,7 +92,7 @@ describe("Twitch Websub appUser", function () {
         expectMessageToMatch(results, "Received.");
         subscriptionID = getSubscriptionID(results);
       })
-      .then(() => fakeTwitch.sendEvents(eventsDataStubs))
+      .then(() => fakeTwitch.sendMultipleEvents(eventsDataStubs))
       .then(() => new Promise((resolve) => setTimeout(resolve, 1000))) // Debugging. Needs a poll.
       .then(() => appUser.getLatestEvents(subscriptionID))
       .then((results) => expectEventsToMatch(results, eventsDataStubs, done));

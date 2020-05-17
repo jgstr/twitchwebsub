@@ -112,6 +112,13 @@ const sendEvent = (event) => {
   });
 };
 
+const sendMultipleEvents = (events) => {
+  // For each event...
+  // Send axios request...
+  // If all doen and 200, resolve.
+  // Catch non-200s.
+};
+
 const has = (subscriptionID) => {
   if (subscriptions.length === 0) return false;
 
@@ -126,6 +133,7 @@ module.exports = {
   app,
   sendApprovalRequest,
   sendEvent,
+  sendMultipleEvents,
   start,
   stop,
   subscriptions,
