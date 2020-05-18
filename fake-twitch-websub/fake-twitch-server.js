@@ -126,7 +126,6 @@ module.exports = {
   app,
   sendApprovalRequest,
   sendEvent,
-  sendMultipleEvents,
   start,
   stop,
   subscriptions,

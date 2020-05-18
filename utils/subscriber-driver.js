@@ -63,7 +63,6 @@ const checkServerIsRunning = () => {
 };
 
 module.exports = {
-  getLiveStreams,
   getSubscription,
   getAllSubscriptions,
   requestSubscription,
