@@ -1,6 +1,6 @@
 const axios = require("axios");
 
-const getLiveStreams = () => {};
+// TODO: refactoring using URL parameters instead of hyphens.
 
 const getSubscription = (subscriptionID) => {
   return axios.get(`http://localhost:3000/get-subscription-${subscriptionID}`);
@@ -29,6 +29,10 @@ const requestSubscription = (subscription) => {
 
 const getAllEvents = (subscriptionID) => {
   return axios.get(`http://localhost:3000/get-events-${subscriptionID}`);
+};
+
+const getLatestEvents = (subscriptionID) => {
+  return axios.get(`http://localhost:3000/events/${subscriptionID}`);
 };
 
 const removeSubscription = (subscriptionID) => {
@@ -64,6 +68,7 @@ module.exports = {
   getAllSubscriptions,
   requestSubscription,
   getAllEvents,
+  getLatestEvents,
   removeSubscription,
   checkServerIsRunning,
 };

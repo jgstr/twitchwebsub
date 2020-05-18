@@ -134,27 +134,33 @@ const eventDataStub = [
 ];
 
 const eventsDataStubs = [
-  {
-    from_id: "1247",
-    from_name: "userNameFrom",
-    to_id: "1337",
-    to_name: "userNameTo",
-    followed_at: "2017-08-22T22:55:24Z",
-  },
-  {
-    from_id: "1248",
-    from_name: "userNameFrom",
-    to_id: "1337",
-    to_name: "userNameTo",
-    followed_at: "2017-08-22T22:55:24Z",
-  },
-  {
-    from_id: "1249",
-    from_name: "userNameFrom",
-    to_id: "1337",
-    to_name: "userNameTo",
-    followed_at: "2017-08-22T22:55:24Z",
-  },
+  [
+    {
+      from_id: "1247",
+      from_name: "userNameFrom",
+      to_id: "1337",
+      to_name: "userNameTo",
+      followed_at: "2017-08-22T22:55:24Z",
+    },
+  ],
+  [
+    {
+      from_id: "1248",
+      from_name: "userNameFrom",
+      to_id: "1337",
+      to_name: "userNameTo",
+      followed_at: "2017-08-22T22:55:24Z",
+    },
+  ],
+  [
+    {
+      from_id: "1249",
+      from_name: "userNameFrom",
+      to_id: "1337",
+      to_name: "userNameTo",
+      followed_at: "2017-08-22T22:55:24Z",
+    },
+  ],
 ];
 
 module.exports = {

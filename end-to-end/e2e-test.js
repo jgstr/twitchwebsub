@@ -85,6 +85,7 @@ describe("Twitch Websub appUser", function () {
   // TODO:
   it("should return a list of the incoming events.", function (done) {
     let subscriptionID;
+    let expectedEvents = [eventsDataStubs[0], eventsDataStubs[1]];
 
     appUser
       .requestSubscription(subscriptionRequestByUserStub)
@@ -92,10 +93,11 @@ describe("Twitch Websub appUser", function () {
         expectMessageToMatch(results, "Received.");
         subscriptionID = getSubscriptionID(results);
       })
-      .then(() => fakeTwitch.sendMultipleEvents(eventsDataStubs))
+      .then(() => fakeTwitch.sendEvent(eventsDataStubs[0]))
+      .then(() => fakeTwitch.sendEvent(eventsDataStubs[1]))
       .then(() => new Promise((resolve) => setTimeout(resolve, 1000))) // Debugging. Needs a poll.
       .then(() => appUser.getLatestEvents(subscriptionID))
-      .then((results) => expectEventsToMatch(results, eventsDataStubs, done));
+      .then((results) => expectEventsToMatch(results, expectedEvents, done));
   });
 
   // TODO: The system should handle duplicate events gracefully.
