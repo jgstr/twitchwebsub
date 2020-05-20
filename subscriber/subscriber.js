@@ -28,6 +28,8 @@ const removeSubscription = (dataStore, subscriptionID) => {
   return dataStore.removeSubscription(subscriptionID);
 };
 
+// export default subscriber = {};
+// TODO: use export keyword (but also use import). Or put them all in an object.
 module.exports = {
   status,
   getAllSubscriptions,

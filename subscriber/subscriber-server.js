@@ -1,9 +1,11 @@
 // TODO: Question for N: does this server need to be more like a "class" or wrapped in a function?
 // Should it use dependencies rather than imports?
+// const express = require("express"); // TODO: use either import or require.
+// const subscriber = require("./subscriber");
 "use strict";
-const express = require("express");
+import express from "express";
 import { uuid } from "uuidv4";
-const subscriber = require("./subscriber");
+import subscriber from "./subscriber";
 import {
   hubCallback,
   notificationsDatabaseDockerConfig,
@@ -15,9 +17,12 @@ import {
   createSubscriptionFromRequest,
   saveApprovedSubscription,
 } from "./subscriber-utils";
+
 const dataStore = createDataStore(notificationsDatabaseDockerConfig);
 const twitchAdapter = createTwitchAdapter(twitchHub, hubCallback);
 const subscriptionsWaitingForTwitchApproval = new Map();
+
+// TODO: Maybe move everything express-related (and start function) and put into some object.
 const app = express();
 app.use(express.json());
 
@@ -79,9 +84,11 @@ app.get("/get-events*", (request, response) => {
     });
 });
 
+// TODO: Overall, abstract this logic into another, separate method/module. This code needs unit tests.
 app.post("/subscribe", (request, response) => {
   const subId = uuid();
   response.status(200).json({ message: "Received.", subscriptionID: subId });
+  // TODO: Instead, extract required info from request object. Pass that info instead.
   const subscription = createSubscriptionFromRequest(subId, request);
   subscriptionsWaitingForTwitchApproval.set(subId, subscription);
   subscriber.requestSubscription(twitchAdapter, subscription);
@@ -95,6 +102,17 @@ app.get("/unsubscribe/:subID", (request, response) => {
         message: "Unsubscribed.",
         subscriptionID: request.params.subID,
       });
+    })
+    .catch(() => {
+      return response.status(500).send("There was an error with your request.");
+    });
+});
+
+app.get("/events/:subID", (request, response) => {
+  subscriber
+    .getCurrentEventsFor(request.params.subID)
+    .then((results) => {
+      return response.status(200).json(results);
     })
     .catch(() => {
       return response.status(500).send("There was an error with your request.");
@@ -118,6 +136,7 @@ app.get("/approval*", (request, response) => {
   );
 });
 
+// TODO: Possibly find better name than "approval".
 // TODO: Must use and check for a secret in next iteration to ensure this request is genuine!
 app.post("/approval*", (request, response) => {
   response.set("Content-Type", "text/html");
