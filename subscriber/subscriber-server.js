@@ -1,7 +1,3 @@
-// TODO: Question for N: does this server need to be more like a "class" or wrapped in a function?
-// Should it use dependencies rather than imports?
-// const express = require("express"); // TODO: use either import or require.
-// const subscriber = require("./subscriber");
 "use strict";
 import express from "express";
 import { uuid } from "uuidv4";
