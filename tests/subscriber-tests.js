@@ -1,4 +1,4 @@
-const subscriber = require("../subscriber/subscriber");
+import subscriber from "../subscriber/subscriber";
 import { expect } from "chai";
 const dataStoreFake = require("../subscriber/doubles/data-store-fake");
 const twitchStub = require("../subscriber/doubles/twitch-stub");
