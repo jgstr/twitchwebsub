@@ -1,28 +1,22 @@
 "use strict";
-import express from "express";
 import { uuid } from "uuidv4";
-import subscriber from "./subscriber";
-import {
+
+const start = (
+  port,
+  app,
+  subscriber,
   hubCallback,
   notificationsDatabaseDockerConfig,
-} from "./authentications";
-import { createDataStore } from "./adapters/data-store";
-import { createTwitchAdapter } from "./adapters/twitch";
-import { hubUrl as twitchHub } from "./authentications";
-import {
+  createDataStore,
+  createTwitchAdapter,
+  twitchHub,
   createSubscriptionFromRequest,
-  saveApprovedSubscription,
-} from "./subscriber-utils";
+  saveApprovedSubscription
+) => {
+  const dataStore = createDataStore(notificationsDatabaseDockerConfig);
+  const twitchAdapter = createTwitchAdapter(twitchHub, hubCallback);
+  const subscriptionsWaitingForTwitchApproval = new Map();
 
-const dataStore = createDataStore(notificationsDatabaseDockerConfig);
-const twitchAdapter = createTwitchAdapter(twitchHub, hubCallback);
-const subscriptionsWaitingForTwitchApproval = new Map();
-
-// TODO: Maybe move everything express-related (and start function) and put into some object.
-const app = express();
-app.use(express.json());
-
-const start = (port) => {
   app.get("/", (request, response) => {
     response.status(200).send("Welcome to a Twitch Websub Service.");
   });
