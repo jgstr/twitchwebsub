@@ -32,8 +32,9 @@ const start = (
       });
   });
 
-  app.get("/get-subscription-*", (request, response) => {
-    const subscriptionID = request.url.slice(18);
+  // TODO: Replace all * url parsing with params (see unsubscribe/:subID below)
+  app.get("/get-subscription/:subID", (request, response) => {
+    const subscriptionID = request.params.subID;
 
     subscriber
       .getSubscription(dataStore, subscriptionID)
@@ -110,6 +111,7 @@ const start = (
       });
   });
 
+  // TODO: Find a better, more appropriate name than 'approval'.
   app.get("/approval*", (request, response) => {
     const approvedSubscriptionID = request.path.slice(10);
 
