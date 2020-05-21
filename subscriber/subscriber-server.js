@@ -128,11 +128,11 @@ const start = (
 
   // TODO: Possibly find better name than "approval".
   // TODO: Must use and check for a secret in next iteration to ensure this request is genuine!
-  app.post("/approval*", (request, response) => {
+  app.post("/approval/:subID", (request, response) => {
     response.set("Content-Type", "text/html");
     response.status(200).send("Ok");
 
-    const subID = request.url.slice(10);
+    const subID = request.params.subID;
     const eventID = uuid();
     const eventData = request.body.data; // Note, this is important. Twitch uses this shape.
 
