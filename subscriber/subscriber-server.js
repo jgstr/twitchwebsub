@@ -110,15 +110,14 @@ const start = (
       });
   });
 
-  app.get("/approval*", (request, response) => {
-    const approvedSubscriptionID = request.path.slice(10);
+  app.get("/approval/:subID", (request, response) => {
+    const approvedSubscriptionID = request.params.subID;
 
     if (request.query["hub.challenge"]) {
       response.set("Content-Type", "text/html");
       response.status(200).send(request.query["hub.challenge"]);
     }
 
-    // TODO: check this abstraction with Nimrod.
     saveApprovedSubscription(
       subscriber,
       dataStore,

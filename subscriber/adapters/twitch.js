@@ -40,7 +40,7 @@ export const createTwitchAdapter = (twitchHub, hubCallback) => {
             authorization: subscription.authorization,
           },
           data: {
-            "hub.callback": hubCallback + `-${subscription.id}`,
+            "hub.callback": hubCallback + `/${subscription.id}`,
             "hub.mode": "subscribe",
             "hub.topic": hubTopicURL,
             "hub.lease_seconds": 600,
@@ -50,7 +50,7 @@ export const createTwitchAdapter = (twitchHub, hubCallback) => {
             resolve("Received.");
           })
           .catch((err) => {
-            console.log("* Error from Twitch: ", err.response.data);
+            console.log("* Error from Twitch: ", err);
             reject("Not received.");
           });
       });

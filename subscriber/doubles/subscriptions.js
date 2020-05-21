@@ -28,6 +28,7 @@ const subscriptionStub = {
   toID: "17337557",
   fromID: null,
   leaseStart: "2020-03-21 01:01:01",
+  authorization: 12345,
 };
 
 const subscriptionFromUserInputStub = {

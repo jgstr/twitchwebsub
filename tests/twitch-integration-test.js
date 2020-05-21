@@ -1,7 +1,7 @@
 import { expect } from "chai";
 const fakeTwitch = require("../fake-twitch-websub/fake-twitch-server");
 const twitch = require("../subscriber/adapters/twitch");
-const subscriber = require("../subscriber/subscriber");
+import subscriber from "../subscriber/subscriber";
 import { subscriptionStub } from "../subscriber/doubles/subscriptions";
 
 let twitchApp;
