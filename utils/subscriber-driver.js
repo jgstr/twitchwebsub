@@ -28,7 +28,7 @@ const requestSubscription = (subscription) => {
 };
 
 const getAllEvents = (subscriptionID) => {
-  return axios.get(`http://localhost:3000/get-events-${subscriptionID}`);
+  return axios.get(`http://localhost:3000/get-events/${subscriptionID}`);
 };
 
 const getLatestEvents = (subscriptionID) => {

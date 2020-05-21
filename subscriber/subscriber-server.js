@@ -57,8 +57,8 @@ const start = (
       });
   });
 
-  app.get("/get-events*", (request, response) => {
-    const subscriptionID = request.url.slice(12);
+  app.get("/get-events/:subID", (request, response) => {
+    const subscriptionID = request.params.subID;
 
     subscriber
       .getAllEvents(dataStore, subscriptionID)
