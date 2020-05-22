@@ -71,7 +71,8 @@ const start = (
       });
   });
 
-  // TODO: Overall, abstract this logic into another, separate method/module. This code needs unit tests.
+  // TODO: Overall, abstract this logic into another, separate method/module.
+  // This code needs unit tests.
   app.post("/subscribe", (request, response) => {
     const subId = uuid();
     response.status(200).json({ message: "Received.", subscriptionID: subId });
