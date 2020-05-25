@@ -1,6 +1,6 @@
 # A Twitch WebSub Client That Subscribes to Twitch Events
 
-This application uses the Twtich WebSub (webhook) protocol to subscribe to events on Twitch.
+This application uses the Twitch WebSub (webhook) protocol to subscribe to events on Twitch.
 
 ## What it does (and why I did it)
 
