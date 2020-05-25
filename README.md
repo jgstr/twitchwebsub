@@ -11,7 +11,7 @@ I received this project as an instructive assignment. The intentions were:
 3. To rely on an external API
 4. To make it as scalable and resilient as possible (thus the somewhat overly engineered design)
 
-Let's say you have a Twitch account and like certain streams and stream. You can use this Desktop/Curl app to receive certain follow and stream updates from users and store that information in a database.
+Let's say you have a Twitch account and like certain streams and users. You can use this Desktop/Curl app to receive certain follow and stream updates from users and store that information in a database.
 
 So if user CapnHowdy (with ID 90210) has a new follower, you will receive an update from Twitch with the information.
 
@@ -21,11 +21,12 @@ I am forever grateful for my coach and mentor who guided me through this project
 
 ## What you'll need to run this locally
 
-1. A Twitch Developer account, specifically a **Client ID** and **Client Secret**.
-2. An OAuth Token (see [these instrunctions](https://dev.twitch.tv/docs/authentication/getting-tokens-oauth#oauth-client-credentials-flow))
+1. A [Twitch Developer account](https://dev.twitch.tv/), specifically a **Client ID** and **Client Secret**.
+2. An OAuth Token (see [these instructions](https://dev.twitch.tv/docs/authentication/getting-tokens-oauth#oauth-client-credentials-flow))
 3. [Ngrok](https://ngrok.com/) installed
 4. [node](https://nodejs.org/en/) and npm
 5. [Docker](https://www.docker.com/) and [Compose](https://docs.docker.com/compose/)
+6. [curl](https://curl.haxx.se/download.html)
 
 ## How to run
 
