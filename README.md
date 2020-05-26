@@ -60,3 +60,5 @@ Check out the `end-to-end/subscriber-driver.js` file. It acts as a "user" of app
 1. Validate your OAuth Token: `curl -H "Authorization: OAuth YOUR_OAUTH_TOKEN" "https://id.twitch.tv/oauth2/validate"`
 2. Receive your OAuth Token: `curl -X POST "https://id.twitch.tv/oauth2/token?client_id=YOUR_CLIENT_ID&client_secret=YOUR_CLIENT_SECRET&grant_type=client_credentials"` (Client Credentials is the only authentication type necessary for this app). You should expect a response from Twitch similar to: `{"access_token":"YOUR_NEW_ACCESS_TOKEN","expires_in":1234567,"token_type":"bearer"}`
 3. Get currently streaming Twitch users and IDs: `npm run get-twitch-user-id`.
+
+## MORE COMING SOON...
