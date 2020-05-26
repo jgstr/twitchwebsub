@@ -1,21 +1,21 @@
 # A Twitch WebSub Client That Subscribes to Twitch Events
 
-This application uses the Twitch WebSub (webhook) protocol to subscribe to events on Twitch.
+This application uses the Twitch WebSub (webhook) protocol to subscribe to events on Twitch. I'm still adding features, so expect this guide to change.
 
 ## What it does (and why I did it)
 
 I received this project as an instructive assignment. The intentions were:
 
 1. To use test-driven development (as described in GOOS)
-2. To use practice patterns like Ports & Adapters and Clean Code
-3. To rely on an external API
-4. To make it as scalable and resilient as possible (thus the somewhat overly engineered design)
+2. To identify and use patterns like Ports & Adapters and Clean Code
+3. To handle an uncontrolled external API
+4. To make it as scalable and resilient as possible (thus the somewhat overly-engineered design)
 
 Let's say you have a Twitch account and like certain streams and users. You can use this Desktop/Curl app to receive certain follow and stream updates from users and store that information in a database.
 
 So if user CapnHowdy (with ID 90210) has a new follower, you will receive an update from Twitch with the information.
 
-This is an on-going project that I will use to demonstrate the web programming ideas I learn. I consider this project about 75% complete as of this writing. It's missing a few key features and requires some refactoring.
+This is an on-going project demonstrating the web programming ideas I learn. I consider this project about 75% complete as of this writing. It's missing a few key features and requires some refactoring.
 
 I am forever grateful for my coach and mentor who guided me through this project even when I thought I couldn't do it.
 
@@ -41,7 +41,7 @@ I am forever grateful for my coach and mentor who guided me through this project
 
 ### Run Against The Real Twitch (aka, Live or Production mode)
 
-1. To run the app _without the tests_, first run `npm run write-env-local`, then `docker-compose up`, both from the root folder. You will then have to run the `fake-twitch` server in another terminal window on port `3001`. But this is the least reliable environment for the app. The most useful modes are in test mode or live/production mode.
+1. To run the app _without the tests_, first run `npm run write-env-local`, then `docker-compose up`, both from the root folder. You will then have to run the `fake-twitch` server in another terminal window on port `3001`. But this is the _least reliable environment_ for the app. The most useful modes are in test mode or live/production mode.
 2. To run in _live/production_ mode: First, use `npm run start-ngrok`. You will have to change the `start-ngrok` script to run ngrok wherever you installed it. I have ngrok in my user directory. Second, use `npm run start-locally`.
 3. You can now use curl and/or the browser to send information to the app. See the _Currently Working App API Endpoints_ section.
 
