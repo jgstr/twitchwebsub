@@ -1,7 +1,5 @@
 const axios = require("axios");
 
-// TODO: refactoring using URL parameters instead of hyphens.
-
 const getSubscription = (subscriptionID) => {
   return axios.get(`http://localhost:3000/get-subscription/${subscriptionID}`);
 };
