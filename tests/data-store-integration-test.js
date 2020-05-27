@@ -77,9 +77,18 @@ describe("Data Store", function () {
       });
   });
 
-  // it("should return a list of current events.", function(){
-
-  // });
+  /* TODO:
+  it("should return a list of current events.", function () {
+    let dataStore;
+    const expectedEvents = createEvents(6);
+    const subscriptionID = expectedEvents[0].subscription_id;
+    saveAllEvents(dataStore)
+      .then(() => dataStore.getCurrentEvents(subscriptionID))
+      .then((events) => {
+        // Expect events to include only the latest 5 events.
+      });
+  });
+  */
 
   // Note: This does NOT remove all events related to a subscription.
   it("should remove a subscription.", function (done) {

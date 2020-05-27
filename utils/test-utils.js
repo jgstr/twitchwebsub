@@ -1,3 +1,5 @@
+// TODO: test-utils needs to be divided further:
+// Example: all docker stuff under one object, all expections under one object, etc.
 const path = require("path");
 const compose = require("docker-compose");
 import mysql from "mysql";
