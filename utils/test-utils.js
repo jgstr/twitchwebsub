@@ -2,6 +2,7 @@ const path = require("path");
 const compose = require("docker-compose");
 import mysql from "mysql";
 import { expect } from "chai";
+import { uuid } from "uuidv4";
 
 const dockerComposeUp = () => {
   compose.upAll({ cwd: path.join(__dirname, ".."), log: true }).then(
@@ -104,6 +105,7 @@ const expectIDsToMatch = (results, subscriptionID) =>
 const expectZeroEvents = (results) =>
   expect(results.data.events.length).to.equal(0);
 
+// TODO: this and eventsInclude can probably become one, similar helper
 const expectEventsToMatch = (results, eventData, callback) => {
   for (const event of results.data.events) {
     if (event.data === JSON.stringify(eventData)) {
@@ -111,6 +113,27 @@ const expectEventsToMatch = (results, eventData, callback) => {
       callback();
     }
   }
+};
+
+const eventsInclude = (events, eventID, callback) => {
+  for (const event of events) {
+    if (event.id === eventID) {
+      expect(event.id).to.equal(eventID);
+      callback();
+    }
+  }
+};
+
+const createEvents = (numberOfEvents) => {
+  const events = [];
+  for (let i = 0; i < numberOfEvents; i++) {
+    events.push({
+      id: uuid(),
+      subscription_id: uuid(),
+      data: JSON.stringify({ id: `123_${i}`, user_id: `4321_${i}` }),
+    });
+  }
+  return events;
 };
 
 const subscriptionRequestByUserStub = {
@@ -176,6 +199,8 @@ module.exports = {
   expectIDsToMatch,
   expectZeroEvents,
   expectEventsToMatch,
+  eventsInclude,
+  createEvents,
   subscriptionRequestByUserStub,
   eventDataStub,
   eventsDataStubs,

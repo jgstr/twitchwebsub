@@ -1,6 +1,12 @@
 import { expect } from "chai";
 import { createDataStore } from "../subscriber/adapters/data-store";
-const testUtils = require("../utils/test-utils");
+import {
+  dockerComposeUpDatabase,
+  checkDatabaseIsRunning,
+  dockerComposeDown,
+  createEvents,
+  eventsInclude,
+} from "../utils/test-utils";
 import { notificationsDatabaseLocalConfig } from "../subscriber/authentications";
 import { uuid } from "uuidv4";
 
@@ -8,8 +14,8 @@ describe("Data Store", function () {
   this.timeout(13000);
 
   before(function (done) {
-    testUtils.dockerComposeUpDatabase();
-    testUtils.checkDatabaseIsRunning().then(() => done());
+    dockerComposeUpDatabase();
+    checkDatabaseIsRunning().then(() => done());
   });
 
   it("should return a list of subscriptions.", function (done) {
@@ -57,25 +63,23 @@ describe("Data Store", function () {
 
   it("should return a list of events.", function (done) {
     let dataStore;
-    const eventUuid = uuid();
-    const eventSubscriptionId = uuid();
-    const eventData = { id: 1234, user_id: 4321 };
-
-    const expectedEvent = {
-      id: eventUuid,
-      subscription_id: eventSubscriptionId,
-      data: JSON.stringify(eventData),
-    };
-
+    const expectedEvent = createEvents(1)[0];
     dataStore = createDataStore(notificationsDatabaseLocalConfig);
     dataStore
-      .saveEvent(eventSubscriptionId, eventUuid, eventData)
-      .then(() => dataStore.getAllEvents(eventSubscriptionId))
+      .saveEvent(
+        expectedEvent.subscription_id,
+        expectedEvent.id,
+        expectedEvent.data
+      )
+      .then(() => dataStore.getAllEvents(expectedEvent.subscription_id))
       .then((events) => {
-        expect(events).to.include.deep.members([expectedEvent]);
-        done();
+        eventsInclude(events, expectedEvent.id, done);
       });
   });
+
+  // it("should return a list of current events.", function(){
+
+  // });
 
   // Note: This does NOT remove all events related to a subscription.
   it("should remove a subscription.", function (done) {
@@ -101,6 +105,6 @@ describe("Data Store", function () {
   });
 
   after(function (done) {
-    testUtils.dockerComposeDown(done);
+    dockerComposeDown(done);
   });
 });
