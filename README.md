@@ -30,6 +30,8 @@ I am forever grateful for my coach and mentor who guided me through this project
 
 ## How to run
 
+For the best introduction, check out _[this video](https://vimeo.com/422954757/95166b91f5)_ I made for it. It's up to date as of May 26, 2020. I'll try to update it as I progress.
+
 ### Run for testing and development
 
 1. Install everything listed above and get your Twitch developer credentials.

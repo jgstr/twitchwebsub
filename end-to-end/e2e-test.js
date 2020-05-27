@@ -83,7 +83,6 @@ describe("Twitch Websub appUser", function () {
   });
 
   // TODO:
-  /* Commented out for demoing
   it("should return a list of the incoming events.", function (done) {
     let subscriptionID;
     let expectedEvents = [eventsDataStubs[0], eventsDataStubs[1]];
@@ -100,7 +99,6 @@ describe("Twitch Websub appUser", function () {
       .then(() => appUser.getLatestEvents(subscriptionID))
       .then((results) => expectEventsToMatch(results, expectedEvents, done));
   });
-*/
 
   // TODO: The system should handle duplicate events gracefully.
 

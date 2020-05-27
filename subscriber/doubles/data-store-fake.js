@@ -1,4 +1,8 @@
-import { eventRecordStub, subscriptionRecordStub } from "./subscriptions";
+import {
+  eventRecordStub,
+  eventRecordListStub,
+  subscriptionRecordStub,
+} from "./subscriptions";
 
 let subscriptionDatabase = new Map();
 let eventDatabase = [];
@@ -22,7 +26,9 @@ const saveEvent = (subID, eventID, eventData) => {
   eventDatabase.push(event);
 };
 
-const getAllEvents = () => [eventRecordStub];
+const getAllEvents = (subscriptionID) => [eventRecordStub];
+
+const getLatestEvents = (subscriptionID) => eventRecordListStub;
 
 module.exports = {
   eventDatabase,
@@ -33,4 +39,5 @@ module.exports = {
   removeSubscription,
   saveEvent,
   getAllEvents,
+  getLatestEvents,
 };

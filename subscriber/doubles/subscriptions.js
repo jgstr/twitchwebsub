@@ -45,8 +45,27 @@ const eventRecordStub = {
   data: {},
 };
 
+const eventRecordListStub = [
+  {
+    id: "0dc956cb-4664-5695-b52f-ac7808e7aa3a",
+    subscription_id: "ac7856cb-5695-4664-b52f-0dc908e3aa7a",
+    data: {},
+  },
+  {
+    id: "984956cb-4664-5695-b52f-ac7808e7abc2",
+    subscription_id: "ac7856cb-5695-4664-b52f-0dc908e3aa7a",
+    data: {},
+  },
+  {
+    id: "ae09956cb-4664-5695-b52f-ac7808e7af5d",
+    subscription_id: "ac7856cb-5695-4664-b52f-0dc908e3aa7a",
+    data: {},
+  },
+];
+
 module.exports = {
   eventRecordStub,
+  eventRecordListStub,
   subscriptionDummy,
   subscriptionFromUserInputStub,
   subscriptionRecordStub,

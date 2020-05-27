@@ -24,6 +24,10 @@ const getAllEvents = (dataStore, subscriptionID) => {
   return dataStore.getAllEvents(subscriptionID);
 };
 
+const getLatestEvents = (dataStore, subscriptionID) => {
+  return dataStore.getLatestEvents(subscriptionID);
+};
+
 const removeSubscription = (dataStore, subscriptionID) => {
   return dataStore.removeSubscription(subscriptionID);
 };
@@ -36,5 +40,6 @@ export default {
   saveSubscription,
   saveEvent,
   getAllEvents,
+  getLatestEvents,
   removeSubscription,
 };

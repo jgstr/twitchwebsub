@@ -4,6 +4,7 @@ const dataStoreFake = require("../subscriber/doubles/data-store-fake");
 const twitchStub = require("../subscriber/doubles/twitch-stub");
 import {
   eventRecordStub,
+  eventRecordListStub,
   subscriptionDummy,
   subscriptionRecordStub,
 } from "../subscriber/doubles/subscriptions";
@@ -56,5 +57,13 @@ describe("Subscriber Server", function () {
     expect(subscriber.removeSubscription(dataStoreFake, "12345")).to.equal(
       "Removed."
     );
+  });
+
+  it("should return a list of latest events.", function () {
+    const events = subscriber.getLatestEvents(
+      dataStoreFake,
+      subscriptionRecordStub.id
+    );
+    expect(events).to.include.deep.members(eventRecordListStub);
   });
 });
