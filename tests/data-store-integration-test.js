@@ -6,6 +6,7 @@ import {
   dockerComposeDown,
   createEvents,
   eventsInclude,
+  saveAllEvents,
 } from "../utils/test-utils";
 import { notificationsDatabaseLocalConfig } from "../subscriber/authentications";
 import { uuid } from "uuidv4";
@@ -77,18 +78,18 @@ describe("Data Store", function () {
       });
   });
 
-  /* TODO:
+  // DOING
   it("should return a list of current events.", function () {
     let dataStore;
     const expectedEvents = createEvents(6);
     const subscriptionID = expectedEvents[0].subscription_id;
-    saveAllEvents(dataStore)
+    saveAllEvents(dataStore, expectedEvents)
       .then(() => dataStore.getCurrentEvents(subscriptionID))
       .then((events) => {
-        // Expect events to include only the latest 5 events.
+        // Note: this is a temporary/naive test. A better test is one that confirms last-in-first-out.
+        expect(events.length).to.equal(5);
       });
   });
-  */
 
   // Note: This does NOT remove all events related to a subscription.
   it("should remove a subscription.", function (done) {
