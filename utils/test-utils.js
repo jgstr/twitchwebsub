@@ -138,14 +138,18 @@ const createEvents = (numberOfEvents) => {
   return events;
 };
 
-const saveAllEvents = (dataStore, events) => {
-  for (const event of events) {
-    // TODO: Look into async interables, since I want to save the next event only after the previous
-    // event is saved/resolved. See using something like: if events.next() along with recursive call
-    // with in .then() of the .saveEvent promise.
-    // dataStore.saveEvent(event.subscription_id, event.id, event.data);
+function saveAllEvents(dataStore, events) {
+  async function saveAndWait() {
+    for (const event of events) {
+      await dataStore.saveEvent(event.subscription_id, event.id, event.data);
+    }
   }
-};
+
+  return new Promise((resolve) => {
+    saveAndWait();
+    resolve();
+  });
+}
 
 const subscriptionRequestByUserStub = {
   clientID: "zqyp13ibm7tejwe0r61ckvz95asblpw",
