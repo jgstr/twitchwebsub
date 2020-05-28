@@ -139,14 +139,13 @@ const createEvents = (numberOfEvents) => {
 };
 
 function saveAllEvents(dataStore, events) {
-  async function saveAndWait() {
+  (async () => {
     for (const event of events) {
       await dataStore.saveEvent(event.subscription_id, event.id, event.data);
     }
-  }
+  })();
 
   return new Promise((resolve) => {
-    saveAndWait();
     resolve();
   });
 }

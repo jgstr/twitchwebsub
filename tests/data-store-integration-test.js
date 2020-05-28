@@ -79,8 +79,11 @@ describe("Data Store", function () {
   });
 
   // DOING
-  it("should return a list of current events.", function () {
-    let dataStore;
+  it("should return a list of current events.", function (done) {
+    // Note: might need to empty the database to accurately test this.
+    // Also: Events are being saved in the database but not in order.
+    // Time stamp will be required.
+    let dataStore = createDataStore(notificationsDatabaseLocalConfig);
     const expectedEvents = createEvents(6);
     const subscriptionID = expectedEvents[0].subscription_id;
     saveAllEvents(dataStore, expectedEvents)
@@ -88,6 +91,7 @@ describe("Data Store", function () {
       .then((events) => {
         // Note: this is a temporary/naive test. A better test is one that confirms last-in-first-out.
         expect(events.length).to.equal(5);
+        done();
       });
   });
 
