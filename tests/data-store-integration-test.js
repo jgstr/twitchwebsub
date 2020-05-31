@@ -64,7 +64,8 @@ describe("Data Store", function () {
 
   it("should return a list of events.", function (done) {
     let dataStore;
-    const expectedEvent = createEvents(1)[0];
+    const subID = uuid();
+    const expectedEvent = createEvents(1, subID)[0];
     dataStore = createDataStore(notificationsDatabaseLocalConfig);
     dataStore
       .saveEvent(
@@ -78,15 +79,15 @@ describe("Data Store", function () {
       });
   });
 
-  // DOING. Currently adding TIMESTAMP field to events database table.
   it("should return a list of current events.", function (done) {
     let dataStore = createDataStore(notificationsDatabaseLocalConfig);
-    const expectedEvents = createEvents(6);
-    const subscriptionID = expectedEvents[0].subscription_id;
+    const subscriptionID = uuid();
+    const expectedEvents = createEvents(6, subscriptionID);
     saveAllEvents(dataStore, expectedEvents)
       .then(() => dataStore.getLatestEvents(subscriptionID))
       .then((events) => {
-        // Note: this is a temporary/naive test. A better test is one that confirms last-in-first-out.
+        // TODO: this is a temporary/naive test. A better test is one that confirms last-in-first-out.
+        // Perhaps a function to compare the ordered TIMESTAMPS with ordered expectedEvents object.
         expect(events.length).to.equal(5);
         done();
       });
@@ -115,7 +116,7 @@ describe("Data Store", function () {
       });
   });
 
-  // after(function (done) {
-  //   dockerComposeDown(done);
-  // });
+  after(function (done) {
+    dockerComposeDown(done);
+  });
 });

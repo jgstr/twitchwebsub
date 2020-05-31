@@ -126,12 +126,14 @@ const eventsInclude = (events, eventID, callback) => {
   }
 };
 
-const createEvents = (numberOfEvents) => {
+const createEvents = (numberOfEvents, subscriptionID) => {
+  const subscription_id = subscriptionID;
+  // const subscription_id = subscriptionID ? subscriptionID : uuid();
   const events = [];
   for (let i = 0; i < numberOfEvents; i++) {
     events.push({
       id: uuid(),
-      subscription_id: uuid(),
+      subscription_id,
       data: JSON.stringify({ id: `123_${i}`, user_id: `4321_${i}` }),
     });
   }
@@ -139,14 +141,20 @@ const createEvents = (numberOfEvents) => {
 };
 
 function saveAllEvents(dataStore, events) {
-  (async () => {
-    for (const event of events) {
-      await dataStore.saveEvent(event.subscription_id, event.id, event.data);
-    }
-  })();
-
   return new Promise((resolve) => {
-    resolve();
+    (async () => {
+      for (let i = 0; i <= events.length; i++) {
+        if (i === events.length) {
+          resolve();
+          break;
+        }
+        await dataStore.saveEvent(
+          events[i].subscription_id,
+          events[i].id,
+          events[i].data
+        );
+      }
+    })();
   });
 }
 

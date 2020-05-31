@@ -93,11 +93,18 @@ export const createDataStore = (config) => {
     },
 
     getLatestEvents: (subscriptionID) => {
+      const query =
+        "SELECT * FROM events WHERE subscription_id=? ORDER BY created_at DESC LIMIT 5";
+
       return new Promise((resolve) => {
-        resolve(["event", "event", "event", "event", "event"]);
+        pool.query(query, [subscriptionID], (error, results) => {
+          if (error) throw error;
+          resolve(results);
+        });
       });
     },
 
+    // Note: Server should create TIMESTAMP instead of MySQL, but parsing a TIMESTAMP between Node to MySQL is tricky.
     saveEvent: (subscriptionID, eventID, eventData) => {
       return new Promise((resolve) => {
         pool.query(
