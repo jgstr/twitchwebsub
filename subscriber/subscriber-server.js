@@ -100,7 +100,7 @@ const start = (
 
   app.get("/events/:subID", (request, response) => {
     subscriber
-      .getCurrentEventsFor(request.params.subID)
+      .getLatestEvents(dataStore, request.params.subID)
       .then((results) => {
         return response.status(200).json(results);
       })

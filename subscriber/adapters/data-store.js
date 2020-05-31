@@ -79,16 +79,22 @@ export const createDataStore = (config) => {
       });
     },
 
-    getAllEvents: (subscriptionId) => {
+    getAllEvents: (subscriptionID) => {
       return new Promise((resolve) => {
         pool.query(
           "SELECT * FROM events WHERE subscription_id=?",
-          [subscriptionId],
+          [subscriptionID],
           (error, results) => {
             if (error) throw error;
             resolve(results);
           }
         );
+      });
+    },
+
+    getLatestEvents: (subscriptionID) => {
+      return new Promise((resolve) => {
+        resolve(["event", "event", "event", "event", "event"]);
       });
     },
 
