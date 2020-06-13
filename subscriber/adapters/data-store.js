@@ -44,49 +44,63 @@ export const createDataStore = (config) => {
     saveSubscription: (subscription) => {
       const formattedSubscription = formatSubscription(subscription);
 
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
         pool.query(
           "INSERT INTO subscriptions SET ?",
           formattedSubscription,
           (error) => {
-            if (error) throw error;
-            resolve();
+            if (error) {
+              reject(error);
+            } else {
+              resolve();
+            }
           }
         );
       });
     },
 
     getSubscription: (subscriptionID) => {
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
         pool.query(
           "SELECT * FROM subscriptions WHERE id=?",
           subscriptionID,
           (error, results) => {
-            if (error) throw error;
-            if (results.length === 0) resolve(results);
-            else resolve(formatDatabaseResult(results[0]));
+            if (error) {
+              reject(error);
+            }
+            if (results.length === 0) {
+              resolve(results);
+            } else {
+              resolve(formatDatabaseResult(results[0]));
+            }
           }
         );
       });
     },
 
     getAllSubscriptions: () => {
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
         pool.query("SELECT * FROM subscriptions", (error, results) => {
-          if (error) throw error;
-          resolve(results);
+          if (error) {
+            reject(error);
+          } else {
+            resolve(results);
+          }
         });
       });
     },
 
     getAllEvents: (subscriptionID) => {
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
         pool.query(
           "SELECT * FROM events WHERE subscription_id=?",
           [subscriptionID],
           (error, results) => {
-            if (error) throw error;
-            resolve(results);
+            if (error) {
+              reject(error);
+            } else {
+              resolve(results);
+            }
           }
         );
       });
@@ -96,17 +110,20 @@ export const createDataStore = (config) => {
       const query =
         "SELECT * FROM events WHERE subscription_id=? ORDER BY created_at DESC LIMIT 5";
 
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
         pool.query(query, [subscriptionID], (error, results) => {
-          if (error) throw error;
-          resolve(results);
+          if (error) {
+            reject(error);
+          } else {
+            resolve(results);
+          }
         });
       });
     },
 
     // Note: Server should create TIMESTAMP instead of MySQL, but parsing a TIMESTAMP between Node to MySQL is tricky.
     saveEvent: (subscriptionID, eventID, eventData) => {
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
         pool.query(
           "INSERT INTO events SET ?",
           {
@@ -115,21 +132,27 @@ export const createDataStore = (config) => {
             data: JSON.stringify(eventData),
           },
           (error) => {
-            if (error) throw error;
-            resolve();
+            if (error) {
+              reject(error);
+            } else {
+              resolve();
+            }
           }
         );
       });
     },
 
     removeSubscription: (subscriptionID) => {
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
         pool.query(
           "DELETE FROM subscriptions WHERE id=?",
           subscriptionID,
           (error) => {
-            if (error) throw error;
-            resolve("Removed.");
+            if (error) {
+              reject(error);
+            } else {
+              resolve("Removed.");
+            }
           }
         );
       });
