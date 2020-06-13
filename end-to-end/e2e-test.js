@@ -82,7 +82,7 @@ describe("Twitch Websub appUser", function () {
       });
   });
 
-  // TODO:
+  // DOING:
   it("should return a list of the incoming events.", function (done) {
     let subscriptionID;
     let expectedEvents = [eventsDataStubs[0], eventsDataStubs[1]];

@@ -93,7 +93,7 @@ const sendApprovalRequest = (hubCallback) => {
 
 const sendEvent = (event) => {
   const eventDataStub = { data: event };
-
+  console.log("* sendEvent hubcallback: ", hubCallbackFromRequest); // Debugging
   return new Promise((resolve, reject) => {
     axios({
       method: "POST",

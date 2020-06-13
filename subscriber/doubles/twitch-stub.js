@@ -1,5 +1,5 @@
 const requestSubscription = (subscription) => {
-  return new Promise((resolve) => resolve("Received"));
+  return Promise.resolve("Received");
 };
 
 module.exports = { requestSubscription };
