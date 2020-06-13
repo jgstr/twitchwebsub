@@ -19,49 +19,35 @@ const stop = (twitchApp) => {
   twitchApp.close();
 };
 
+const sendErrorResponseMessage = (error) => {
+  return response.status(400).json({
+    status: "error",
+    error,
+  });
+};
+
 app.post("/hub", (request, response) => {
   // Note: request.headers[...] is case sensitive.
   if (!request.headers["client-id"]) {
-    return response.status(400).json({
-      status: "error",
-      error: "Missing Client-ID",
-    });
+    return sendErrorResponseMessage("Missing Client-ID");
   }
   if (request.headers["content-type"] !== "application/json") {
-    return response.status(400).json({
-      status: "error",
-      error: "Incorrect Content-Type",
-    });
+    return sendErrorResponseMessage("Incorrect Content-Type");
   }
   if (!request.headers["authorization"]) {
-    return response.status(400).json({
-      status: "Unauthorized",
-      error: "Missing OAuth Token",
-    });
+    return sendErrorResponseMessage("Missing OAuth Token");
   }
   if (!request.body["hub.callback"]) {
-    return response.status(400).json({
-      status: "error",
-      error: "Missing hub.callback",
-    });
+    return sendErrorResponseMessage("Missing hub.callback");
   }
   if (request.body["hub.mode"] !== "subscribe") {
-    return response.status(400).json({
-      status: "error",
-      error: "Incorrect hub.mode",
-    });
+    return sendErrorResponseMessage("Incorrect hub.mode");
   }
   if (!request.body["hub.topic"]) {
-    return response.status(400).json({
-      status: "error",
-      error: "Missing hub.topic",
-    });
+    return sendErrorResponseMessage("Missing hub.topic");
   }
   if (!request.body["hub.lease_seconds"]) {
-    return response.status(400).json({
-      status: "error",
-      error: "Missing hub.lease_seconds",
-    });
+    return sendErrorResponseMessage("Missing hub.lease_seconds");
   }
 
   hubCallbackFromRequest = request.body["hub.callback"];
