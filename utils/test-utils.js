@@ -109,7 +109,7 @@ const expectZeroEvents = (results) =>
 
 // TODO: this and eventsInclude can probably become one, similar helper
 const expectEventsToMatch = (results, eventData, callback) => {
-  for (const event of results.data.events) {
+  for (const event of results["data"].events) {
     if (event.data === JSON.stringify(eventData)) {
       expect(event.data).to.equal(JSON.stringify(eventData));
       callback();
