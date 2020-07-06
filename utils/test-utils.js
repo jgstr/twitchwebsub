@@ -107,12 +107,23 @@ const expectIDsToMatch = (results, subscriptionID) =>
 const expectZeroEvents = (results) =>
   expect(results.data.events.length).to.equal(0);
 
-// TODO: this and eventsInclude can probably become one, similar helper
+// TODO: this, expectEventToMatchAtLeastOne and eventsInclude can probably become one helper
 const expectEventsToMatch = (results, eventData, callback) => {
   for (const event of results["data"].events) {
     if (event.data === JSON.stringify(eventData)) {
       expect(event.data).to.equal(JSON.stringify(eventData));
       callback();
+    }
+  }
+};
+
+const expectEventToMatchAtLeastOne = (results, eventData, callback) => {
+  for (const stubEvent of eventData) {
+    for (const event of results["data"].events) {
+      if (event.data === JSON.stringify(stubEvent)) {
+        expect(event.data).to.equal(JSON.stringify(stubEvent));
+        callback();
+      }
     }
   }
 };
@@ -128,7 +139,6 @@ const eventsInclude = (events, eventID, callback) => {
 
 const createEvents = (numberOfEvents, subscriptionID) => {
   const subscription_id = subscriptionID;
-  // const subscription_id = subscriptionID ? subscriptionID : uuid();
   const events = [];
   for (let i = 0; i < numberOfEvents; i++) {
     events.push({
@@ -221,6 +231,7 @@ module.exports = {
   expectIDsToMatch,
   expectZeroEvents,
   expectEventsToMatch,
+  expectEventToMatchAtLeastOne,
   eventsInclude,
   createEvents,
   saveAllEvents,

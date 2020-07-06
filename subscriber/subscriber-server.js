@@ -102,8 +102,7 @@ const start = (
     subscriber
       .getLatestEvents(dataStore, request.params.subID)
       .then((results) => {
-        // return response.status(200).json(results); // previous
-        return response.status(200).json({ events: results }); // new
+        return response.status(200).json({ events: results });
       })
       .catch(() => {
         return response
