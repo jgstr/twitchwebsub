@@ -13,5 +13,5 @@ CREATE TABLE IF NOT EXISTS events (
     subscription_id VARCHAR(128) NOT NULL,
     data VARCHAR(1000) NOT NULL,
     created_at TIMESTAMP(6),
-    PRIMARY KEY (id)
+    PRIMARY KEY (subscription_id, id)
     );

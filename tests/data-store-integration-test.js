@@ -12,7 +12,7 @@ import { notificationsDatabaseLocalConfig } from "../subscriber/authentications"
 import { uuid } from "uuidv4";
 
 describe("Data Store", function () {
-  this.timeout(13000);
+  this.timeout(30000);
 
   before(function (done) {
     dockerComposeUpDatabase();
