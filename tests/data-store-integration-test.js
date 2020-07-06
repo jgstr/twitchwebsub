@@ -6,6 +6,7 @@ import {
   dockerComposeDown,
   createEvents,
   eventsInclude,
+  expectOrderOfSavedEventsToMatchRetrievedEvents,
   saveAllEvents,
 } from "../utils/test-utils";
 import { notificationsDatabaseLocalConfig } from "../subscriber/authentications";
@@ -86,10 +87,11 @@ describe("Data Store", function () {
     saveAllEvents(dataStore, expectedEvents)
       .then(() => dataStore.getLatestEvents(subscriptionID))
       .then((events) => {
-        // TODO: this is a temporary/naive test. A better test is one that confirms last-in-first-out.
-        // Perhaps a function to compare the ordered TIMESTAMPS with ordered expectedEvents object.
-        expect(events.length).to.equal(5);
-        done();
+        expectOrderOfSavedEventsToMatchRetrievedEvents(
+          events,
+          expectedEvents,
+          done
+        );
       });
   });
 
@@ -116,7 +118,7 @@ describe("Data Store", function () {
       });
   });
 
-  after(function (done) {
-    dockerComposeDown(done);
-  });
+  // after(function (done) {
+  //   dockerComposeDown(done);
+  // });
 });

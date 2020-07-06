@@ -28,7 +28,7 @@ describe("Twitch Websub appUser", function () {
     appUser.checkServerIsRunning().then(done);
   });
 
-  // Walking skeleton
+  // This is also the Walking Skeleton test for the entire application.
   it("should return one subscription.", function (done) {
     let subscriptionID;
 

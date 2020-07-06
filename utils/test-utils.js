@@ -137,10 +137,26 @@ const eventsInclude = (events, eventID, callback) => {
   }
 };
 
+const expectOrderOfSavedEventsToMatchRetrievedEvents = (
+  events,
+  expectedEvents,
+  done
+) => {
+  let match = true;
+  for (let i = 0; i < events.length; ++i) {
+    console.log("DB Events: ", events[i]["id"]);
+    console.log("Expected Events: ", expectedEvents[events.length - i]["id"]);
+    if (events[i]["id"] !== expectedEvents[events.length - i]["id"]) {
+      match = false;
+    }
+  }
+  if (match) done();
+};
+
 const createEvents = (numberOfEvents, subscriptionID) => {
   const subscription_id = subscriptionID;
   const events = [];
-  for (let i = 0; i < numberOfEvents; i++) {
+  for (let i = 0; i < numberOfEvents; ++i) {
     events.push({
       id: uuid(),
       subscription_id,
@@ -153,7 +169,7 @@ const createEvents = (numberOfEvents, subscriptionID) => {
 function saveAllEvents(dataStore, events) {
   return new Promise((resolve) => {
     (async () => {
-      for (let i = 0; i <= events.length; i++) {
+      for (let i = 0; i <= events.length; ++i) {
         if (i === events.length) {
           resolve();
           break;
@@ -233,6 +249,7 @@ module.exports = {
   expectEventsToMatch,
   expectEventToMatchAtLeastOne,
   eventsInclude,
+  expectOrderOfSavedEventsToMatchRetrievedEvents,
   createEvents,
   saveAllEvents,
   subscriptionRequestByUserStub,
