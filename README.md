@@ -6,9 +6,9 @@ This application uses the Twitch WebSub (webhook) protocol to subscribe to event
 
 I received this project as an instructive assignment. The intentions were:
 
-1. To use test-driven development (as described in GOOS)
-2. To identify and use patterns like Ports & Adapters and Clean Code
-3. To handle an uncontrolled external API
+1. To use test-driven development (as described in [GOOS](http://www.growing-object-oriented-software.com/))
+2. To identify and use patterns like [Ports & Adapters](http://wiki.c2.com/?PortsAndAdaptersArchitecture) and [Clean Code](https://www.oreilly.com/library/view/clean-code/9780136083238/)
+3. To handle an uncontrolled, external API
 4. To make it as scalable and resilient as possible (thus the somewhat overly-engineered design)
 
 Let's say you have a Twitch account and like certain streams and users. You can use this Desktop/Curl app to receive certain follow and stream updates from users and store that information in a database.
