@@ -76,7 +76,8 @@ describe("Data Store", function () {
       )
       .then(() => dataStore.getAllEvents(expectedEvent.subscription_id))
       .then((events) => {
-        eventsInclude(events, expectedEvent.id, done);
+        eventsInclude(events, expectedEvent.id, done); // replace with chai.expect.include
+        expect(events);
       });
   });
 

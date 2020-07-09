@@ -1,45 +1,49 @@
-const status = (dataStore) => dataStore.checkStatus();
+export const createSubscriberManager = (dataStore, twitch) => {
+  return {
+    status: () => dataStore.checkStatus(),
 
-const getAllSubscriptions = (dataStore) => {
-  return dataStore.getAllSubscriptions();
-};
+    getAllSubscriptions: () => {
+      return dataStore.getAllSubscriptions();
+    },
 
-const getSubscription = (dataStore, subscriptionID) => {
-  return dataStore.getSubscription(subscriptionID);
-};
+    getSubscription: (subscriptionID) => {
+      return dataStore.getSubscription(subscriptionID);
+    },
 
-const requestSubscription = (twitch, subscription) => {
-  return twitch.requestSubscription(subscription);
-};
+    requestSubscription: (subscription) => {
+      return twitch.requestSubscription(subscription);
+    },
 
-const saveSubscription = (dataStore, subscription) => {
-  return dataStore.saveSubscription(subscription);
-};
+    saveSubscription: (subscription) => {
+      return dataStore.saveSubscription(subscription);
+    },
 
-const saveEvent = (dataStore, subID, eventID, eventData) => {
-  return dataStore.saveEvent(subID, eventID, eventData);
-};
+    saveEvent: (subID, eventID, eventData) => {
+      return dataStore.saveEvent(subID, eventID, eventData);
+    },
 
-const getAllEvents = (dataStore, subscriptionID) => {
-  return dataStore.getAllEvents(subscriptionID);
-};
+    getAllEvents: (subscriptionID) => {
+      return dataStore.getAllEvents(subscriptionID);
+    },
 
-const getLatestEvents = (dataStore, subscriptionID) => {
-  return dataStore.getLatestEvents(subscriptionID);
-};
+    getLatestEvents: (subscriptionID) => {
+      return dataStore.getLatestEvents(subscriptionID);
+    },
 
-const removeSubscription = (dataStore, subscriptionID) => {
-  return dataStore.removeSubscription(subscriptionID);
-};
+    removeSubscription: (subscriptionID) => {
+      return dataStore.removeSubscription(subscriptionID);
+    },
 
-export default {
-  status,
-  getAllSubscriptions,
-  getSubscription,
-  requestSubscription,
-  saveSubscription,
-  saveEvent,
-  getAllEvents,
-  getLatestEvents,
-  removeSubscription,
+    saveApprovedSubscription: (
+      subscriptionsWaitingForTwitchApproval,
+      approvedSubscriptionID
+    ) => {
+      for (const [id, subscription] of subscriptionsWaitingForTwitchApproval) {
+        if (id === approvedSubscriptionID) {
+          saveSubscription(subscription);
+        }
+        subscriptionsWaitingForTwitchApproval.delete(id);
+      }
+    },
+  };
 };

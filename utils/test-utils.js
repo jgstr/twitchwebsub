@@ -144,8 +144,6 @@ const expectOrderOfSavedEventsToMatchRetrievedEvents = (
 ) => {
   let match = true;
   for (let i = 0; i < events.length; ++i) {
-    console.log("DB Events: ", events[i]["id"]);
-    console.log("Expected Events: ", expectedEvents[events.length - i]["id"]);
     if (events[i]["id"] !== expectedEvents[events.length - i]["id"]) {
       match = false;
     }
