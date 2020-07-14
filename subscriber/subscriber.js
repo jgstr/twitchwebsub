@@ -40,7 +40,7 @@ export const createSubscriberManager = (dataStore, twitch) => {
     ) => {
       for (const [id, subscription] of subscriptionsWaitingForTwitchApproval) {
         if (id === approvedSubscriptionID) {
-          saveSubscription(subscription);
+          dataStore.saveSubscription(subscription);
         }
         subscriptionsWaitingForTwitchApproval.delete(id);
       }
