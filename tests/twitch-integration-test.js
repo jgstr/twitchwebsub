@@ -1,10 +1,17 @@
 import { expect } from "chai";
 const fakeTwitch = require("../fake-twitch-websub/fake-twitch-server");
 const twitch = require("../subscriber/adapters/twitch");
-import subscriber from "../subscriber/subscriber";
+import { createSubscriberManager } from "../subscriber/subscriber";
 import { subscriptionStub } from "../subscriber/doubles/subscriptions";
 
 let twitchApp;
+const dataStoreFake = {};
+const twitchAdapter = twitch.createTwitchAdapter(
+  "http://localhost:3001/hub",
+  "/approval"
+);
+
+const subscriber = createSubscriberManager(dataStoreFake, twitchAdapter);
 
 describe("Twitch", function (done) {
   before(function (done) {
@@ -12,17 +19,12 @@ describe("Twitch", function (done) {
     setTimeout(done, 1000);
   });
 
-  const twitchAdapter = twitch.createTwitchAdapter(
-    "http://localhost:3001/hub",
-    "/approval"
-  );
-
   it("should send a subscription request.", function (done) {
     const subscriptionStubWithLocalhost = subscriptionStub;
     subscriptionStubWithLocalhost.hubUrl = "http://localhost:3001/hub";
 
     subscriber
-      .requestSubscription(twitchAdapter, subscriptionStubWithLocalhost)
+      .requestSubscription(subscriptionStubWithLocalhost)
       .then((response) => {
         expect(response).to.equal("Received.");
         done();

@@ -9,7 +9,7 @@ import {
   subscriptionRecordStub,
 } from "../subscriber/doubles/subscriptions";
 
-// Might need to move this to it's own module eventually.
+// Might need to move this to its own module eventually.
 const twitchDummy = { requestSubscription: () => Promise.resolve("Received") };
 const subscriberManager = createSubscriberManager(dataStoreFake, twitchDummy);
 
