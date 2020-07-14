@@ -20,7 +20,7 @@ const appUser = require("../utils/subscriber-driver");
 let twitchAPI;
 
 describe("Twitch Websub appUser", function () {
-  this.timeout(17000);
+  this.timeout(30000);
 
   before(function (done) {
     twitchAPI = fakeTwitch.start();
