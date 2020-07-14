@@ -51,7 +51,15 @@ For the best introduction, check out _[this video](https://vimeo.com/422954757/9
 
 Check out the `end-to-end/subscriber-driver.js` file. It acts as a "user" of app and is the best referral for working features. For api.twitch.tv/helix endpoints, consult [this documentation](https://dev.twitch.tv/docs/api/webhooks-reference) for more details.
 
-1. Send a subscription request to receive events for new followers of a user: use curl to send a POST request with the following: `curl -H "Content-Type: application/json" -H "client-id: YOUR_CLIENT_ID" -H "Authorization: Bearer YOUR_OAUTH_TOKEN" -X POST -d '{"hub.mode": "subscribe", "hub.topic": "https://api.twitch.tv/helix/users/follows?first=1&to_id=USER_ID", "hub.lease_seconds": 600}' http://localhost:3000/subscribe`
+1. Send a subscription request to receive events for new followers of a user: use curl to send a POST request with the following:
+
+```
+curl -H "Content-Type: application/json" \
+-H "client-id: YOUR_CLIENT_ID" \
+-H "Authorization: Bearer YOUR_OAUTH_TOKEN" \
+-X POST "http://localhost:3000/subscribe?to_id=USER_ID&topic=follows"
+```
+
 2. Get all saved subscriptions: Using a browser (or curl), enter `http://localhost:3000/get-subscriptions`.
 3. Get details of a specific subscription: `http://localhost:3000/get-subscription/SUBSCRIPTION_ID`
 4. Get all events of a subscription: `http://localhost:3000/get-events/SUBSCRIPTION_ID`.
