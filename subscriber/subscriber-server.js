@@ -1,6 +1,6 @@
 "use strict";
 import { createSubscriberManager } from "./subscriber";
-import { createWeb } from "./web";
+import { createWeb } from "./adapters/web";
 import {
   hubCallback,
   notificationsDatabaseDockerConfig,
