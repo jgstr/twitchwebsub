@@ -107,8 +107,12 @@ describe("Twitch Websub appUser", function () {
   // TODO: subscription lease should be set to 600 seconds and be renewed before it expires.
 
   // TODO: basic logging and metrics.
-
-  // TODO: Test all stream and follows possibilities?
+  it("should report a getAllSubscriptions request.", function (done) {
+    appUser.getAllSubscriptions().then(() => {
+      checkThatSubscriberReportedEvent(); // But how? The logging will be in the subscriber container console.
+      done();
+    });
+  });
 
   // after(function (done) {
   //   fakeTwitch.stop(twitchAPI);
