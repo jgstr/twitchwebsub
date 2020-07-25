@@ -10,7 +10,7 @@ describe("Reporter", function () {
 
   it("should report a getAllSubscriptions event.", function (done) {
     const reporter = createReporter({}); // the configuration would replace the empty object.
-    const spy = sinon(reporter, "reportGetAllSubscriptions");
+    const spy = sinon.spy(reporter, "reportGetAllSubscriptions");
     reporter.reportGetAllSubscriptions("User requested all subscriptions.");
     expect(spy.calledOnce).to.be.true;
     done();
