@@ -8,10 +8,10 @@ describe("Reporter", function () {
   //   done();
   // });
 
-  it("should return report a getAllSubscriptions event.", function (done) {
+  it("should report a getAllSubscriptions event.", function (done) {
     const reporter = createReporter({}); // the configuration would replace the empty object.
-    reporter.reportGetAllSubscriptions("User requested all subscriptions.");
     const spy = sinon(reporter, "reportGetAllSubscriptions");
+    reporter.reportGetAllSubscriptions("User requested all subscriptions.");
     expect(spy.calledOnce).to.be.true;
     done();
   });
