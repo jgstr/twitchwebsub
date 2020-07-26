@@ -20,6 +20,20 @@ describe("Data Store", function () {
     checkDatabaseIsRunning().then(() => done());
   });
 
+  //   const datastore1 = createDataStore1()
+  //   const datastore2 = createDataStore2()
+
+  //   function createShouldReturnSubs(datastore) {
+  //     retrun function(done) {
+  //       ///...
+  //     }
+  //   }
+
+  //   it("", createShouldReturnSubs(datastore1))
+  //   it("", createShouldReturnSubs(datastore2))
+
+  // it("", someFuncThatReturnsItCallback(datastore));
+
   it("should return a list of subscriptions.", function (done) {
     let dataStore;
 

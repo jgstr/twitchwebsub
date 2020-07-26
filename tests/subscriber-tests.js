@@ -8,6 +8,7 @@ import {
   subscriptionDummy,
   subscriptionRecordStub,
 } from "../subscriber/doubles/subscriptions";
+import sinon from "sinon";
 
 // Might need to move this to its own module eventually.
 const twitchDummy = { requestSubscription: () => Promise.resolve("Received") };
@@ -50,12 +51,28 @@ describe("Subscriber Server", function () {
     expect(dataStoreFake.eventDatabase.length).to.equal(1);
   });
 
+  it("should save an event. (using mocks)", function () {
+    const subID = "1234";
+    const eventID = "5678";
+    const eventData = { data: "data" };
+
+    const dataStoreApi = {
+      saveEvent: function () {},
+    };
+    const mockDataStore = sinon.mock(dataStoreApi);
+    const expectation = mockDataStore.expects("saveEvent");
+    expectation.once().resolves();
+    const subManager = createSubscriberManager(mockDataStore);
+    subManager.saveEvent(subID, eventID, eventData);
+    expectation.verify();
+  });
+
   it("should return a list of events.", function () {
     const events = subscriberManager.getAllEvents(subscriptionRecordStub.id);
     expect(events).to.include.deep.members([eventRecordStub]);
   });
 
-  it("should removed a subscription.", function () {
+  it("should remove a subscription.", function () {
     expect(subscriberManager.removeSubscription("12345")).to.equal("Removed.");
   });
 
