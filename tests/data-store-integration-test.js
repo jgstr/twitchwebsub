@@ -20,6 +20,9 @@ describe("Data Store", function () {
     checkDatabaseIsRunning().then(() => done());
   });
 
+  // Contract tests:
+  // Only way you use a test is if you confirm fake works likes real thing.
+
   //   const datastore1 = createDataStore1()
   //   const datastore2 = createDataStore2()
 

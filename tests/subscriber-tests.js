@@ -59,12 +59,16 @@ describe("Subscriber Server", function () {
     const dataStoreApi = {
       saveEvent: function () {},
     };
-    const mockDataStore = sinon.mock(dataStoreApi);
-    const expectation = mockDataStore.expects("saveEvent");
-    expectation.once().resolves();
-    const subManager = createSubscriberManager(mockDataStore);
+
+    const mockDataStore = sinon.mock(dataStoreApi); // this changes dataStoreApi
+    mockDataStore
+      .expects("saveEvent")
+      .once()
+      .withArgs(subID, eventID, eventData)
+      .resolves(); // configuration/preparation. once() == spy, resolves() == stub.
+    const subManager = createSubscriberManager(dataStoreApi);
     subManager.saveEvent(subID, eventID, eventData);
-    expectation.verify();
+    mockDataStore.verify(); // actually checks / verification
   });
 
   it("should return a list of events.", function () {
