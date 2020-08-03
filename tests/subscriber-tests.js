@@ -14,8 +14,6 @@ import sinon from "sinon";
 const twitchDummy = { requestSubscription: () => Promise.resolve("Received") };
 const subscriberManager = createSubscriberManager(dataStoreFake, twitchDummy);
 
-console.log("Subscriber Manager: ", subscriberManager);
-
 describe("Subscriber Server", function () {
   it("should return a list of subscriptions.", function () {
     const subscriptions = subscriberManager.getAllSubscriptions();
@@ -35,6 +33,22 @@ describe("Subscriber Server", function () {
     expect(dataStoreFake.subscriptionDatabase.size).to.equal(1);
   });
 
+  it("should save a subscription (using mocks).", function () {
+    const dataStoreApi = {
+      saveSubscription: function () {},
+    };
+
+    const mockDataStore = sinon.mock(dataStoreApi);
+    mockDataStore
+      .expects("saveSubscription")
+      .once()
+      .withArgs(subscriptionRecordStub)
+      .resolves();
+    const subManager = createSubscriberManager(dataStoreApi);
+    subManager.saveSubscription(subscriptionRecordStub);
+    mockDataStore.verify();
+  });
+
   it("should return one subscription.", function () {
     const subscription = subscriberManager.getSubscription(
       subscriptionRecordStub
@@ -51,7 +65,8 @@ describe("Subscriber Server", function () {
     expect(dataStoreFake.eventDatabase.length).to.equal(1);
   });
 
-  it("should save an event. (using mocks)", function () {
+  // Use as mocking template.
+  it("should save an event (using mocks).", function () {
     const subID = "1234";
     const eventID = "5678";
     const eventData = { data: "data" };
