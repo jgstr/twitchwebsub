@@ -7,12 +7,15 @@ import {
 let subscriptionDatabase = new Map();
 let eventDatabase = [];
 
-const getAllSubscriptions = () => [subscriptionRecordStub];
+const getAllSubscriptions = () =>
+  Promise.resolve(subscriptionDatabase.values());
 
 const getSubscription = (subscription) => subscription;
 
-const saveSubscription = (subscription) =>
+const saveSubscription = (subscription) => {
   subscriptionDatabase.set(subscription.id, subscription);
+  return Promise.resolve();
+};
 
 const removeSubscription = (subscriptionID) => {
   return "Removed.";

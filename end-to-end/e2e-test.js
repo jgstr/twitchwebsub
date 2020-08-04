@@ -47,6 +47,7 @@ describe("Twitch Websub appUser", function () {
       });
   });
 
+  // TODO: Write new test to perform this without web? Maybe later as just an exercise.
   it("should receive return at least one event.", function (done) {
     let subscriptionID;
 
@@ -105,6 +106,7 @@ describe("Twitch Websub appUser", function () {
   // TODO: The system should handle duplicate events gracefully.
 
   // TODO: subscription lease should be set to 600 seconds and be renewed before it expires.
+  //       This will be a unit test. You will mock time.
 
   // TODO: basic logging and metrics.
   it("should report a getAllSubscriptions request.", function (done) {

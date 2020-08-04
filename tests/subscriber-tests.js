@@ -14,6 +14,7 @@ import sinon from "sinon";
 const twitchDummy = { requestSubscription: () => Promise.resolve("Received") };
 const subscriberManager = createSubscriberManager(dataStoreFake, twitchDummy);
 
+// TODO: maybe delete middlemen tests? Or just keep some for reference.
 describe("Subscriber Server", function () {
   it("should return a list of subscriptions.", function () {
     const subscriptions = subscriberManager.getAllSubscriptions();

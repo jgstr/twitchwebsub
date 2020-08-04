@@ -11,6 +11,10 @@ import {
 } from "../utils/test-utils";
 import { notificationsDatabaseLocalConfig } from "../subscriber/authentications";
 import { uuid } from "uuidv4";
+import {
+  getAllSubscriptions,
+  saveSubscription,
+} from "../subscriber/doubles/data-store-fake";
 
 describe("Data Store", function () {
   this.timeout(30000);
@@ -37,30 +41,40 @@ describe("Data Store", function () {
 
   // it("", someFuncThatReturnsItCallback(datastore));
 
-  it("should return a list of subscriptions.", function (done) {
-    let dataStore;
+  function shouldReturnAListOfSub(dataStore) {
+    return function (done) {
+      const expectedValue = {
+        id: uuid(),
+        topic: "follows",
+      };
 
-    const expectedValue = {
-      id: uuid(),
-      topic: "follows",
-    };
-
-    dataStore = createDataStore(notificationsDatabaseLocalConfig);
-
-    dataStore
-      .saveSubscription(expectedValue)
-      .then(() => {
-        return dataStore.getAllSubscriptions();
-      })
-      .then((subscriptions) => {
-        for (const sub of subscriptions) {
-          if (sub.id === expectedValue.id) {
-            expect(sub.id).to.equal(expectedValue.id);
-            done();
+      dataStore
+        .saveSubscription(expectedValue)
+        .then(() => {
+          return dataStore.getAllSubscriptions();
+        })
+        .then((subscriptions) => {
+          for (const sub of subscriptions) {
+            if (sub.id === expectedValue.id) {
+              expect(sub.id).to.equal(expectedValue.id);
+              done();
+            }
           }
-        }
-      });
-  });
+        });
+    };
+  }
+  // TODO: put in different describes, one for MySQL one for in-memory/fake.
+  it(
+    "should return a list of subscriptions.",
+    shouldReturnAListOfSub(createDataStore(notificationsDatabaseLocalConfig))
+  );
+
+  // TODO: must refactor data fake to pass dataStoreFake.
+  // Make note in anki. This is test feedback in the wild.
+  it(
+    "should return a list of subscriptions.",
+    shouldReturnAListOfSub({ getAllSubscriptions, saveSubscription })
+  );
 
   it("should return one subscription.", function (done) {
     let dataStore;
@@ -136,7 +150,7 @@ describe("Data Store", function () {
       });
   });
 
-  // after(function (done) {
-  //   dockerComposeDown(done);
-  // });
+  after(function (done) {
+    dockerComposeDown(done);
+  });
 });
