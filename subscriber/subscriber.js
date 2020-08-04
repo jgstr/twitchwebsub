@@ -34,6 +34,9 @@ export const createSubscriberManager = (dataStore, twitch) => {
       return dataStore.removeSubscription(subscriptionID);
     },
 
+    // TODO: 1) if twitch is down, this will overflow and crash
+    //       2) if your server crashes, the in-memory list is gone
+    //          One way, add STATUS column to subs table.
     saveApprovedSubscription: (
       subscriptionsWaitingForTwitchApproval,
       approvedSubscriptionID

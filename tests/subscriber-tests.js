@@ -42,8 +42,7 @@ describe("Subscriber Server", function () {
     mockDataStore
       .expects("saveSubscription")
       .once()
-      .withArgs(subscriptionRecordStub)
-      .resolves();
+      .withArgs(subscriptionRecordStub);
     const subManager = createSubscriberManager(dataStoreApi);
     subManager.saveSubscription(subscriptionRecordStub);
     mockDataStore.verify();
@@ -79,8 +78,7 @@ describe("Subscriber Server", function () {
     mockDataStore
       .expects("saveEvent")
       .once()
-      .withArgs(subID, eventID, eventData)
-      .resolves(); // configuration/preparation. once() == spy, resolves() == stub.
+      .withArgs(subID, eventID, eventData); // configuration/preparation. once() == spy
     const subManager = createSubscriberManager(dataStoreApi);
     subManager.saveEvent(subID, eventID, eventData);
     mockDataStore.verify(); // actually checks / verification
