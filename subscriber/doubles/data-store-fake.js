@@ -1,46 +1,42 @@
-import {
-  eventRecordStub,
-  eventRecordListStub,
-  subscriptionRecordStub,
-} from "./subscriptions";
+import { eventRecordStub, eventRecordListStub } from "./subscriptions";
 
-let subscriptionDatabase = new Map();
-let eventDatabase = [];
+export const createDataStore = (config) => {
+  return {
+    subscriptionDatabase: new Map(),
+    eventDatabase: [],
 
-const getAllSubscriptions = () =>
-  Promise.resolve(subscriptionDatabase.values());
+    getAllSubscriptions: function () {
+      Promise.resolve(this.subscriptionDatabase.values());
+    },
 
-const getSubscription = (subscription) => subscription;
+    getSubscription: function (subscription) {
+      subscription;
+    },
 
-const saveSubscription = (subscription) => {
-  subscriptionDatabase.set(subscription.id, subscription);
-  return Promise.resolve();
-};
+    saveSubscription: function (subscription) {
+      this.subscriptionDatabase.set(subscription.id, subscription);
+      return Promise.resolve();
+    },
 
-const removeSubscription = (subscriptionID) => {
-  return "Removed.";
-};
-const saveEvent = (subID, eventID, eventData) => {
-  const event = {
-    subID,
-    eventID,
-    eventData,
+    removeSubscription: function (subscriptionID) {
+      return "Removed.";
+    },
+
+    saveEvent: function (subID, eventID, eventData) {
+      const event = {
+        subID,
+        eventID,
+        eventData,
+      };
+      this.eventDatabase.push(event);
+    },
+
+    getAllEvents: function (subscriptionID) {
+      [eventRecordStub];
+    },
+
+    getLatestEvents: function (subscriptionID) {
+      eventRecordListStub;
+    },
   };
-  eventDatabase.push(event);
-};
-
-const getAllEvents = (subscriptionID) => [eventRecordStub];
-
-const getLatestEvents = (subscriptionID) => eventRecordListStub;
-
-module.exports = {
-  eventDatabase,
-  subscriptionDatabase,
-  getAllSubscriptions,
-  getSubscription,
-  saveSubscription,
-  removeSubscription,
-  saveEvent,
-  getAllEvents,
-  getLatestEvents,
 };
