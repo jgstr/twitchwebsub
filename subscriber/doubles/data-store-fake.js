@@ -1,12 +1,12 @@
 import { eventRecordStub, eventRecordListStub } from "./subscriptions";
 
-export const createDataStore = (config) => {
+export const createDataStoreFake = (config) => {
   return {
     subscriptionDatabase: new Map(),
     eventDatabase: [],
 
     getAllSubscriptions: function () {
-      Promise.resolve(this.subscriptionDatabase.values());
+      return Promise.resolve(this.subscriptionDatabase.values());
     },
 
     getSubscription: function (subscription) {
