@@ -53,6 +53,34 @@ function shouldReturnOneSub(dataStore) {
   };
 }
 
+function shouldReturnListOfEvents(dataStore) {
+  return function (done) {
+    const subID = uuid();
+    const expectedEvent = createEvents(1, subID)[0];
+
+    dataStore
+      .saveEvent(
+        expectedEvent.subscription_id,
+        expectedEvent.id,
+        expectedEvent.data
+      )
+      .then(() => dataStore.getAllEvents(expectedEvent.subscription_id))
+      .then((events) => {
+        // Note: This loop might be replaceable with .includes somehow.
+        // but I must figure out how to match only a few items of a subset, rather than...
+        // an entire subset.
+        // Ie. expect(event).to.include.anywhere({id: expectedEvent.id})
+        // As of now, includes only searches one level deep.
+        for (let event of events) {
+          if (event.id === expectedEvent.id) {
+            expect(event).to.include({ id: expectedEvent.id });
+            done();
+          }
+        }
+      });
+  };
+}
+
 describe("Data Store MySQL", function () {
   this.timeout(30000);
 
@@ -71,23 +99,10 @@ describe("Data Store MySQL", function () {
     shouldReturnOneSub(createDataStore(notificationsDatabaseLocalConfig))
   );
 
-  it("should return a list of events.", function (done) {
-    let dataStore;
-    const subID = uuid();
-    const expectedEvent = createEvents(1, subID)[0];
-    dataStore = createDataStore(notificationsDatabaseLocalConfig);
-    dataStore
-      .saveEvent(
-        expectedEvent.subscription_id,
-        expectedEvent.id,
-        expectedEvent.data
-      )
-      .then(() => dataStore.getAllEvents(expectedEvent.subscription_id))
-      .then((events) => {
-        eventsInclude(events, expectedEvent.id, done); // replace with chai.expect.include
-        expect(events);
-      });
-  });
+  it(
+    "should return a list of events.",
+    shouldReturnListOfEvents(createDataStore(notificationsDatabaseLocalConfig))
+  );
 
   it("should return a list of current events.", function (done) {
     let dataStore = createDataStore(notificationsDatabaseLocalConfig);
@@ -141,4 +156,9 @@ describe("Data Store Fake", function () {
   );
 
   it("should return one subscription.", shouldReturnOneSub(dataStoreFake));
+
+  it(
+    "should return a list of events.",
+    shouldReturnListOfEvents(dataStoreFake)
+  );
 });

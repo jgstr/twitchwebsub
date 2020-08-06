@@ -4,6 +4,7 @@ export const createDataStoreFake = (config) => {
   return {
     subscriptionDatabase: new Map(),
     eventDatabase: [],
+    eventDatabaseMap: new Map(),
 
     getAllSubscriptions: function () {
       return Promise.resolve(this.subscriptionDatabase.values());
@@ -23,16 +24,21 @@ export const createDataStoreFake = (config) => {
     },
 
     saveEvent: function (subID, eventID, eventData) {
-      const event = {
-        subID,
-        eventID,
-        eventData,
-      };
-      this.eventDatabase.push(event);
+      this.eventDatabaseMap.set(subID, [eventID, eventData]);
+      return Promise.resolve();
     },
 
     getAllEvents: function (subscriptionID) {
-      [eventRecordStub];
+      const events = Array.from(
+        this.eventDatabaseMap,
+        ([subscription_id, data]) => ({
+          id: data[0],
+          subscription_id,
+          data: data[1],
+          created_at: "",
+        })
+      );
+      return Promise.resolve(events);
     },
 
     getLatestEvents: function (subscriptionID) {
@@ -40,3 +46,12 @@ export const createDataStoreFake = (config) => {
     },
   };
 };
+
+// saveEvent: function (subID, eventID, eventData) {
+//   const event = {
+//     subID,
+//     eventID,
+//     eventData,
+//   };
+//   this.eventDatabase.push(event);
+// },
