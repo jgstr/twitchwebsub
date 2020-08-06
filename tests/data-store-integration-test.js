@@ -67,10 +67,7 @@ function shouldReturnListOfEvents(dataStore) {
       .then(() => dataStore.getAllEvents(expectedEvent.subscription_id))
       .then((events) => {
         // Note: This loop might be replaceable with .includes somehow.
-        // but I must figure out how to match only a few items of a subset, rather than...
-        // an entire subset.
-        // Ie. expect(event).to.include.anywhere({id: expectedEvent.id})
-        // As of now, includes only searches one level deep.
+        // Ie. expect(events).to.deep.include({ id: expectedEvent.id }); But this doesn't work.
         for (let event of events) {
           if (event.id === expectedEvent.id) {
             expect(event).to.include({ id: expectedEvent.id });
