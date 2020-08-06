@@ -10,7 +10,7 @@ export const createDataStoreFake = (config) => {
     },
 
     getSubscription: function (subscription) {
-      subscription;
+      return Promise.resolve(this.subscriptionDatabase.get(subscription));
     },
 
     saveSubscription: function (subscription) {

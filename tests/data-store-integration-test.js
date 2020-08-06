@@ -13,7 +13,7 @@ import { notificationsDatabaseLocalConfig } from "../subscriber/authentications"
 import { uuid } from "uuidv4";
 import { createDataStoreFake } from "../subscriber/doubles/data-store-fake";
 
-function shouldReturnAListOfSub(dataStore) {
+function shouldReturnAListOfSubs(dataStore) {
   return function (done) {
     const expectedValue = {
       id: uuid(),
@@ -36,6 +36,23 @@ function shouldReturnAListOfSub(dataStore) {
   };
 }
 
+function shouldReturnOneSub(dataStore) {
+  return function (done) {
+    const expectedValue = {
+      id: uuid(),
+      topic: "follows",
+    };
+
+    dataStore
+      .saveSubscription(expectedValue)
+      .then(() => dataStore.getSubscription(expectedValue.id))
+      .then((subscription) => {
+        expect(subscription.id).to.equal(expectedValue.id);
+        done();
+      });
+  };
+}
+
 describe("Data Store MySQL", function () {
   this.timeout(30000);
 
@@ -46,26 +63,13 @@ describe("Data Store MySQL", function () {
 
   it(
     "should return a list of subscriptions.",
-    shouldReturnAListOfSub(createDataStore(notificationsDatabaseLocalConfig))
+    shouldReturnAListOfSubs(createDataStore(notificationsDatabaseLocalConfig))
   );
 
-  it("should return one subscription.", function (done) {
-    let dataStore;
-
-    const expectedValue = {
-      id: uuid(),
-      topic: "follows",
-    };
-
-    dataStore = createDataStore(notificationsDatabaseLocalConfig);
-    dataStore
-      .saveSubscription(expectedValue)
-      .then(() => dataStore.getSubscription(expectedValue.id))
-      .then((subscription) => {
-        expect(subscription.id).to.equal(expectedValue.id);
-        done();
-      });
-  });
+  it(
+    "should return one subscription.",
+    shouldReturnOneSub(createDataStore(notificationsDatabaseLocalConfig))
+  );
 
   it("should return a list of events.", function (done) {
     let dataStore;
@@ -133,6 +137,8 @@ describe("Data Store Fake", function () {
 
   it(
     "should return a list of subscriptions.",
-    shouldReturnAListOfSub(dataStoreFake)
+    shouldReturnAListOfSubs(dataStoreFake)
   );
+
+  it("should return one subscription.", shouldReturnOneSub(dataStoreFake));
 });
