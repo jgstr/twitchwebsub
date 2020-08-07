@@ -78,6 +78,22 @@ function shouldReturnListOfEvents(dataStore) {
   };
 }
 
+function shouldReturnListOfCurrentEvents(dataStore) {
+  return function (done) {
+    const subscriptionID = uuid();
+    const expectedEvents = createEvents(6, subscriptionID);
+    saveAllEvents(dataStore, expectedEvents)
+      .then(() => dataStore.getLatestEvents(subscriptionID))
+      .then((events) => {
+        expectOrderOfSavedEventsToMatchRetrievedEvents(
+          events,
+          expectedEvents,
+          done
+        );
+      });
+  };
+}
+
 describe("Data Store MySQL", function () {
   this.timeout(30000);
 
@@ -101,20 +117,12 @@ describe("Data Store MySQL", function () {
     shouldReturnListOfEvents(createDataStore(notificationsDatabaseLocalConfig))
   );
 
-  it("should return a list of current events.", function (done) {
-    let dataStore = createDataStore(notificationsDatabaseLocalConfig);
-    const subscriptionID = uuid();
-    const expectedEvents = createEvents(6, subscriptionID);
-    saveAllEvents(dataStore, expectedEvents)
-      .then(() => dataStore.getLatestEvents(subscriptionID))
-      .then((events) => {
-        expectOrderOfSavedEventsToMatchRetrievedEvents(
-          events,
-          expectedEvents,
-          done
-        );
-      });
-  });
+  it(
+    "should return a list of current events.",
+    shouldReturnListOfCurrentEvents(
+      createDataStore(notificationsDatabaseLocalConfig)
+    )
+  );
 
   // Note: This does NOT remove all events related to a subscription.
   it("should remove a subscription.", function (done) {
