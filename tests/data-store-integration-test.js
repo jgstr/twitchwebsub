@@ -5,7 +5,6 @@ import {
   checkDatabaseIsRunning,
   dockerComposeDown,
   createEvents,
-  eventsInclude,
   expectOrderOfSavedEventsToMatchRetrievedEvents,
   saveAllEvents,
 } from "../utils/test-utils";
@@ -81,7 +80,7 @@ function shouldReturnListOfEvents(dataStore) {
 function shouldReturnListOfCurrentEvents(dataStore) {
   return function (done) {
     const subscriptionID = uuid();
-    const expectedEvents = createEvents(6, subscriptionID);
+    const expectedEvents = createEvents(5, subscriptionID);
     saveAllEvents(dataStore, expectedEvents)
       .then(() => dataStore.getLatestEvents(subscriptionID))
       .then((events) => {
@@ -165,5 +164,10 @@ describe("Data Store Fake", function () {
   it(
     "should return a list of events.",
     shouldReturnListOfEvents(dataStoreFake)
+  );
+
+  it(
+    "should return a list of current events.",
+    shouldReturnListOfCurrentEvents(dataStoreFake)
   );
 });

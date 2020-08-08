@@ -1,5 +1,4 @@
-// TODO: test-utils needs to be divided further:
-// Example: all docker stuff under one object, all expections under one object, etc.
+// TODO: Ask N about test-utils organization.
 const path = require("path");
 const compose = require("docker-compose");
 import mysql from "mysql";
@@ -107,7 +106,6 @@ const expectIDsToMatch = (results, subscriptionID) =>
 const expectZeroEvents = (results) =>
   expect(results.data.events.length).to.equal(0);
 
-// TODO: this, expectEventToMatchAtLeastOne and eventsInclude can probably become one helper
 const expectEventsToMatch = (results, eventData, callback) => {
   for (const event of results["data"].events) {
     if (event.data === JSON.stringify(eventData)) {
@@ -143,9 +141,13 @@ const expectOrderOfSavedEventsToMatchRetrievedEvents = (
   done
 ) => {
   let match = true;
-  for (let i = 0; i < events.length; ++i) {
-    if (events[i]["id"] !== expectedEvents[events.length - i]["id"]) {
+
+  for (let i = 0; i < expectedEvents.length; ++i) {
+    if (
+      events[i]["id"] !== expectedEvents[expectedEvents.length - 1 - i]["id"]
+    ) {
       match = false;
+      break;
     }
   }
   if (match) done();
@@ -164,6 +166,7 @@ const createEvents = (numberOfEvents, subscriptionID) => {
   return events;
 };
 
+// TODO: see github issues. Ask N how to best approach using/not using async vs promise.
 function saveAllEvents(dataStore, events) {
   return new Promise((resolve) => {
     (async () => {

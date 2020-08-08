@@ -1,10 +1,9 @@
-import { eventRecordStub, eventRecordListStub } from "./subscriptions";
+import { eventRecordListStub } from "./subscriptions";
 
 export const createDataStoreFake = (config) => {
   return {
     subscriptionDatabase: new Map(),
-    eventDatabase: [],
-    eventDatabaseMap: new Map(),
+    eventDatabase: new Map(),
 
     getAllSubscriptions: function () {
       return Promise.resolve(this.subscriptionDatabase.values());
@@ -24,17 +23,27 @@ export const createDataStoreFake = (config) => {
     },
 
     saveEvent: function (subID, eventID, eventData) {
-      this.eventDatabaseMap.set(subID, [eventID, eventData]);
+      if (this.eventDatabase.has(subID)) {
+        this.eventDatabase.set(
+          subID,
+          [{ eventID, eventData }].concat(this.eventDatabase.get(subID))
+        );
+      } else {
+        this.eventDatabase.set(
+          subID,
+          new Array().concat([{ eventID, eventData }])
+        );
+      }
       return Promise.resolve();
     },
 
     getAllEvents: function (subscriptionID) {
       const events = Array.from(
-        this.eventDatabaseMap,
-        ([subscription_id, data]) => ({
-          id: data[0],
-          subscription_id,
-          data: data[1],
+        this.eventDatabase.get(subscriptionID),
+        (event) => ({
+          id: event.eventID,
+          subscription_id: subscriptionID,
+          data: event.eventData,
           created_at: "",
         })
       );
@@ -42,16 +51,16 @@ export const createDataStoreFake = (config) => {
     },
 
     getLatestEvents: function (subscriptionID) {
-      eventRecordListStub;
+      const events = Array.from(
+        this.eventDatabase.get(subscriptionID),
+        (event) => ({
+          id: event.eventID,
+          subscription_id: subscriptionID,
+          data: event.eventData,
+          created_at: "",
+        })
+      );
+      return Promise.resolve(events);
     },
   };
 };
-
-// saveEvent: function (subID, eventID, eventData) {
-//   const event = {
-//     subID,
-//     eventID,
-//     eventData,
-//   };
-//   this.eventDatabase.push(event);
-// },
