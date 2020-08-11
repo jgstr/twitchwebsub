@@ -152,29 +152,6 @@ describe("Data Store MySQL", function () {
     )
   );
 
-  // Original:
-  // it("should remove a subscription.", function (done) {
-  //   let dataStore;
-
-  //   const expectedValue = {
-  //     id: uuid(),
-  //     topic: "follows",
-  //   };
-
-  //   dataStore = createDataStore(notificationsDatabaseLocalConfig);
-  //   dataStore
-  //     .saveSubscription(expectedValue)
-  //     .then(() => dataStore.getSubscription(expectedValue.id))
-  //     .then((subscription) =>
-  //       expect(subscription.id).to.equal(expectedValue.id)
-  //     )
-  //     .then(() => dataStore.removeSubscription(expectedValue.id))
-  //     .then((results) => {
-  //       expect(results).to.equal("Removed.");
-  //       done();
-  //     });
-  // });
-
   after(function (done) {
     dockerComposeDown(done);
   });
@@ -198,5 +175,10 @@ describe("Data Store Fake", function () {
   it(
     "should return a list of current events.",
     shouldReturnListOfCurrentEvents(dataStoreFake)
+  );
+
+  it(
+    "should remove a subscription.",
+    shouldRemoveOneSubscription(dataStoreFake)
   );
 });
