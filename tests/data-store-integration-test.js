@@ -93,6 +93,27 @@ function shouldReturnListOfCurrentEvents(dataStore) {
   };
 }
 
+function shouldRemoveOneSubscription(dataStore) {
+  return function (done) {
+    const expectedValue = {
+      id: uuid(),
+      topic: "follows",
+    };
+
+    dataStore
+      .saveSubscription(expectedValue)
+      .then(() => dataStore.getSubscription(expectedValue.id))
+      .then((subscription) =>
+        expect(subscription.id).to.equal(expectedValue.id)
+      )
+      .then(() => dataStore.removeSubscription(expectedValue.id))
+      .then((results) => {
+        expect(results).to.equal("Removed.");
+        done();
+      });
+  };
+}
+
 describe("Data Store MySQL", function () {
   this.timeout(30000);
 
@@ -124,27 +145,35 @@ describe("Data Store MySQL", function () {
   );
 
   // Note: This does NOT remove all events related to a subscription.
-  it("should remove a subscription.", function (done) {
-    let dataStore;
+  it(
+    "should remove a subscription.",
+    shouldRemoveOneSubscription(
+      createDataStore(notificationsDatabaseLocalConfig)
+    )
+  );
 
-    const expectedValue = {
-      id: uuid(),
-      topic: "follows",
-    };
+  // Original:
+  // it("should remove a subscription.", function (done) {
+  //   let dataStore;
 
-    dataStore = createDataStore(notificationsDatabaseLocalConfig);
-    dataStore
-      .saveSubscription(expectedValue)
-      .then(() => dataStore.getSubscription(expectedValue.id))
-      .then((subscription) =>
-        expect(subscription.id).to.equal(expectedValue.id)
-      )
-      .then(() => dataStore.removeSubscription(expectedValue.id))
-      .then((results) => {
-        expect(results).to.equal("Removed.");
-        done();
-      });
-  });
+  //   const expectedValue = {
+  //     id: uuid(),
+  //     topic: "follows",
+  //   };
+
+  //   dataStore = createDataStore(notificationsDatabaseLocalConfig);
+  //   dataStore
+  //     .saveSubscription(expectedValue)
+  //     .then(() => dataStore.getSubscription(expectedValue.id))
+  //     .then((subscription) =>
+  //       expect(subscription.id).to.equal(expectedValue.id)
+  //     )
+  //     .then(() => dataStore.removeSubscription(expectedValue.id))
+  //     .then((results) => {
+  //       expect(results).to.equal("Removed.");
+  //       done();
+  //     });
+  // });
 
   after(function (done) {
     dockerComposeDown(done);
