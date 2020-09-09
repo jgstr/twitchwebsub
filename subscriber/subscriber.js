@@ -18,8 +18,14 @@ export const createSubscriberManager = (dataStore, twitch) => {
       return dataStore.saveSubscription(subscription);
     },
 
+    // Original
+    // saveEvent: (subID, eventID, eventData) => {
+    //   return dataStore.saveEvent(subID, eventID, eventData);
+    // },
+
     saveEvent: (subID, eventID, eventData) => {
-      return dataStore.saveEvent(subID, eventID, eventData);
+      eventData.forEach((event) => dataStore.saveEvent(subID, eventID, event));
+      return Promise.resolve();
     },
 
     getAllEvents: (subscriptionID) => {
