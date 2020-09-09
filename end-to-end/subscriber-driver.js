@@ -1,14 +1,14 @@
 const axios = require("axios");
 
-const getSubscription = (subscriptionID) => {
+export const getSubscription = (subscriptionID) => {
   return axios.get(`http://localhost:3000/get-subscription/${subscriptionID}`);
 };
 
-const getAllSubscriptions = () => {
+export const getAllSubscriptions = () => {
   return axios.get("http://localhost:3000/get-subscriptions");
 };
 
-const requestSubscription = (subscription) => {
+export const requestSubscription = (subscription) => {
   return axios({
     method: "POST",
     url: "http://localhost:3000/subscribe",
@@ -25,19 +25,19 @@ const requestSubscription = (subscription) => {
   });
 };
 
-const getAllEvents = (subscriptionID) => {
+export const getAllEvents = (subscriptionID) => {
   return axios.get(`http://localhost:3000/get-events/${subscriptionID}`);
 };
 
-const getLatestEvents = (subscriptionID) => {
+export const getLatestEvents = (subscriptionID) => {
   return axios.get(`http://localhost:3000/events/${subscriptionID}`);
 };
 
-const removeSubscription = (subscriptionID) => {
+export const removeSubscription = (subscriptionID) => {
   return axios.get(`http://localhost:3000/unsubscribe/${subscriptionID}`);
 };
 
-const checkServerIsRunning = () => {
+export const checkServerIsRunning = () => {
   return new Promise((resolve) => {
     function pollStatus() {
       axios
@@ -58,14 +58,4 @@ const checkServerIsRunning = () => {
     console.log("* Checking database... ");
     pollStatus();
   });
-};
-
-module.exports = {
-  getSubscription,
-  getAllSubscriptions,
-  requestSubscription,
-  getAllEvents,
-  getLatestEvents,
-  removeSubscription,
-  checkServerIsRunning,
 };

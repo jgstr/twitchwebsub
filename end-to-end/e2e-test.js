@@ -1,5 +1,5 @@
 "use strict";
-const {
+import {
   dockerComposeUp,
   dockerComposeDown,
   pollForSubscription,
@@ -14,7 +14,7 @@ const {
   subscriptionRequestByUserStub,
   eventDataStub,
   eventsDataStubs,
-} = require("../utils/test-utils");
+} from "../utils/test-utils";
 const fakeTwitch = require("../fake-twitch-websub/fake-twitch-server");
 const appUser = require("./subscriber-driver");
 let twitchAPI;
@@ -47,7 +47,7 @@ describe("Twitch Websub appUser", function () {
       });
   });
 
-  // TODO: Write new test to perform this without web? Maybe later as just an exercise.
+  // TODO: Move to subscriber-tests.
   it("should receive return at least one event.", function (done) {
     let subscriptionID;
 

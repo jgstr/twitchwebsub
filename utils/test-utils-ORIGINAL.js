@@ -4,7 +4,7 @@ import mysql from "mysql";
 import { expect } from "chai";
 import { uuid } from "uuidv4";
 
-export const dockerComposeUp = () => {
+const dockerComposeUp = () => {
   compose.upAll({ cwd: path.join(__dirname, ".."), log: true }).then(
     () => {
       console.log("Docker-compose up ran.");
@@ -15,7 +15,7 @@ export const dockerComposeUp = () => {
   );
 };
 
-export const dockerComposeDown = (done) => {
+const dockerComposeDown = (done) => {
   compose.down(["--rmi all"]).then(
     () => {
       console.log("Docker-compose down ran.");
@@ -31,7 +31,7 @@ export const dockerComposeDown = (done) => {
   );
 };
 
-export const dockerComposeUpDatabase = () => {
+const dockerComposeUpDatabase = () => {
   compose
     .upOne("database", { cwd: path.join(__dirname, ".."), log: true })
     .then(
@@ -44,7 +44,7 @@ export const dockerComposeUpDatabase = () => {
     );
 };
 
-export const pollForSubscription = (getSubscription, subscriptionID) => {
+const pollForSubscription = (getSubscription, subscriptionID) => {
   return new Promise((resolve) => {
     function poll() {
       getSubscription(subscriptionID).then((results) => {
@@ -59,7 +59,7 @@ export const pollForSubscription = (getSubscription, subscriptionID) => {
   });
 };
 
-export const checkDatabaseIsRunning = () => {
+const checkDatabaseIsRunning = () => {
   return new Promise((resolve) => {
     console.log("* Checking database...");
 
@@ -88,24 +88,24 @@ export const checkDatabaseIsRunning = () => {
   });
 };
 
-export const expectZeroSubscriptions = (results) =>
+const expectZeroSubscriptions = (results) =>
   expect(results.data.list.length).to.equal(0);
 
-export const expectMessageToMatch = (results, message) =>
+const expectMessageToMatch = (results, message) =>
   expect(results.data.message).to.equal(message);
 
-export const expectNo = (results) =>
+const expectNo = (results) =>
   expect(results.data.subscription.length).to.equal(0);
 
-export const getSubscriptionID = (results) => results.data.subscriptionID;
+const getSubscriptionID = (results) => results.data.subscriptionID;
 
-export const expectIDsToMatch = (results, subscriptionID) =>
+const expectIDsToMatch = (results, subscriptionID) =>
   expect(results.id).to.equal(subscriptionID);
 
-export const expectZeroEvents = (results) =>
+const expectZeroEvents = (results) =>
   expect(results.data.events.length).to.equal(0);
 
-export const expectEventsToMatch = (results, eventData, callback) => {
+const expectEventsToMatch = (results, eventData, callback) => {
   for (const event of results["data"].events) {
     if (event.data === JSON.stringify(eventData)) {
       expect(event.data).to.equal(JSON.stringify(eventData));
@@ -114,7 +114,7 @@ export const expectEventsToMatch = (results, eventData, callback) => {
   }
 };
 
-export const expectEventToMatchAtLeastOne = (results, eventData, callback) => {
+const expectEventToMatchAtLeastOne = (results, eventData, callback) => {
   for (const stubEvent of eventData) {
     for (const event of results["data"].events) {
       if (event.data === JSON.stringify(stubEvent)) {
@@ -125,7 +125,7 @@ export const expectEventToMatchAtLeastOne = (results, eventData, callback) => {
   }
 };
 
-export const eventsInclude = (events, eventID, callback) => {
+const eventsInclude = (events, eventID, callback) => {
   for (const event of events) {
     if (event.id === eventID) {
       expect(event.id).to.equal(eventID);
@@ -134,7 +134,7 @@ export const eventsInclude = (events, eventID, callback) => {
   }
 };
 
-export const expectOrderOfSavedEventsToMatchRetrievedEvents = (
+const expectOrderOfSavedEventsToMatchRetrievedEvents = (
   events,
   expectedEvents,
   done
@@ -152,7 +152,7 @@ export const expectOrderOfSavedEventsToMatchRetrievedEvents = (
   if (match) done();
 };
 
-export const createEvents = (numberOfEvents, subscriptionID) => {
+const createEvents = (numberOfEvents, subscriptionID) => {
   const subscription_id = subscriptionID;
   const events = [];
   for (let i = 0; i < numberOfEvents; ++i) {
@@ -184,7 +184,7 @@ function saveAllEvents(dataStore, events) {
   });
 }
 
-export const subscriptionRequestByUserStub = {
+const subscriptionRequestByUserStub = {
   clientID: "zqyp13ibm7tejwe0r61ckvz95asblpw",
   hubUrl: "http://host.docker.internal:3001/hub",
   hubCallback: "http://localhost:3000/approval",
@@ -194,7 +194,7 @@ export const subscriptionRequestByUserStub = {
   Authorization: "12334567",
 };
 
-export const eventDataStub = [
+const eventDataStub = [
   {
     from_id: "1336",
     from_name: "userNameFrom",
@@ -204,7 +204,7 @@ export const eventDataStub = [
   },
 ];
 
-export const eventsDataStubs = [
+const eventsDataStubs = [
   [
     {
       from_id: "1247",
@@ -233,3 +233,26 @@ export const eventsDataStubs = [
     },
   ],
 ];
+
+module.exports = {
+  checkDatabaseIsRunning,
+  dockerComposeUp,
+  dockerComposeDown,
+  dockerComposeUpDatabase,
+  pollForSubscription,
+  expectZeroSubscriptions,
+  expectMessageToMatch,
+  expectNo,
+  getSubscriptionID,
+  expectIDsToMatch,
+  expectZeroEvents,
+  expectEventsToMatch,
+  expectEventToMatchAtLeastOne,
+  eventsInclude,
+  expectOrderOfSavedEventsToMatchRetrievedEvents,
+  createEvents,
+  saveAllEvents,
+  subscriptionRequestByUserStub,
+  eventDataStub,
+  eventsDataStubs,
+};
