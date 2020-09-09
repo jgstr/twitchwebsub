@@ -16,7 +16,7 @@ import {
   eventsDataStubs,
 } from "../utils/test-utils";
 const fakeTwitch = require("../fake-twitch-websub/fake-twitch-server");
-const appUser = require("./subscriber-driver");
+import { subscriberDriver as appUser } from "./subscriber-driver";
 let twitchAPI;
 
 describe("Twitch Websub appUser", function () {
