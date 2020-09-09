@@ -10,10 +10,7 @@ describe("Subscriber Server", function () {
     const eventID = "5678";
     const eventData = { data: "data" };
 
-    const dataStoreApi = {
-      saveEvent: function () {},
-    };
-
+    const dataStoreApi = { saveEvent: function () {} };
     const mockDataStore = sinon.mock(dataStoreApi); // this mutates dataStoreApi
     mockDataStore
       .expects("saveEvent")
@@ -24,5 +21,21 @@ describe("Subscriber Server", function () {
     mockDataStore.verify(); // actually checks / verification
   });
 
-  // TODO: Create unit test for subscriberManager.saveApprovedSubscription
+  it("should save two events.", function () {
+    const subID = "1234";
+    const eventID = "5678";
+    const eventData = [{}, {}];
+
+    const dataStoreApi = { saveEvent: function () {} };
+    const mockDataStore = sinon.mock(dataStoreApi);
+    mockDataStore
+      .expects("saveEvent")
+      .twice()
+      .withArgs(subID, eventID, eventData);
+
+    const subManager = createSubscriberManager(dataStoreApi);
+    subManager.saveEvent(subID, eventID, eventData);
+
+    mockDataStore.verify();
+  });
 });
