@@ -16,8 +16,11 @@ import {
   eventsDataStubs,
 } from "../utils/test-utils";
 const fakeTwitch = require("../fake-twitch-websub/fake-twitch-server");
-import { subscriberDriver as appUser } from "./subscriber-driver";
+import { createSubscriberDriver } from "./subscriber-driver";
+
 let twitchAPI;
+const hostUrl = "http://localhost:3000";
+const appUser = createSubscriberDriver(hostUrl);
 
 describe("Twitch Websub appUser", function () {
   this.timeout(30000);
