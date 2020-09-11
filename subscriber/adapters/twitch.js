@@ -20,7 +20,12 @@ const createHubTopicURL = (topicType, toID, fromID, userID) => {
   // TODO: needs error handling.
 };
 
-export const createTwitchAdapter = (twitchHub, hubCallback) => {
+export const createTwitchAdapter = (
+  twitchHub,
+  hubCallback,
+  clientID,
+  oAuthBearerToken
+) => {
   return {
     requestSubscription: (subscription) => {
       const hubTopicURL = createHubTopicURL(
@@ -36,8 +41,8 @@ export const createTwitchAdapter = (twitchHub, hubCallback) => {
           url: twitchHub,
           headers: {
             "content-type": "application/json",
-            "client-id": subscription.clientID,
-            authorization: subscription.authorization,
+            "client-id": clientID,
+            authorization: oAuthBearerToken,
           },
           data: {
             "hub.callback": hubCallback + `/${subscription.id}`,

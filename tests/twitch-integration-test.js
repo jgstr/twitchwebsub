@@ -3,12 +3,15 @@ const fakeTwitch = require("../fake-twitch-websub/fake-twitch-server");
 const twitch = require("../subscriber/adapters/twitch");
 import { createSubscriberManager } from "../subscriber/subscriber";
 import { subscriptionStub } from "../subscriber/doubles/subscriptions";
+import { clientID, oAuthBearerToken } from "../subscriber/authentications";
 
 let twitchApp;
 const dataStoreFake = {};
 const twitchAdapter = twitch.createTwitchAdapter(
   "http://localhost:3001/hub",
-  "/approval"
+  "/approval",
+  clientID,
+  oAuthBearerToken
 );
 
 const subscriber = createSubscriberManager(dataStoreFake, twitchAdapter);

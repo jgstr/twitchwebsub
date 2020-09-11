@@ -1,4 +1,5 @@
 const axios = require("axios");
+import { clientID, oAuthBearerToken } from "../subscriber/authentications";
 
 export const createSubscriberDriver = (hostUrl) => {
   return {
@@ -21,8 +22,8 @@ export const createSubscriberDriver = (hostUrl) => {
         },
         headers: {
           "Content-Type": "application/json",
-          "Client-ID": subscription.clientID,
-          Authorization: `Bearer ${subscription.Authorization}`,
+          "Client-ID": clientID,
+          Authorization: `Bearer ${oAuthBearerToken}`,
         },
       });
     },

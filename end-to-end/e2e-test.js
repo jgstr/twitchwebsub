@@ -20,6 +20,7 @@ import { createSubscriberDriver } from "./subscriber-driver";
 
 let twitchAPI;
 const hostUrl = "http://localhost:3000";
+
 const appUser = createSubscriberDriver(hostUrl);
 
 describe("Twitch Websub appUser", function () {

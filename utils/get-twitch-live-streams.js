@@ -1,8 +1,6 @@
 const axios = require("axios");
-import { appAccessToken, clientID } from "../references/authentications";
+import { clientID, oAuthBearerToken } from "../subscriber/authentications";
 
-// TODO: Eventually, all this might needs its own tests
-// and API.
 const daysTillTokenExpiry = (milliSeconds) => {
   const secondsInDay = 60 * 60 * 24;
   return Math.floor(milliSeconds / secondsInDay);
@@ -13,7 +11,7 @@ const validateAccessToken = () => {
     method: "GET",
     url: "https://id.twitch.tv/oauth2/validate",
     headers: {
-      Authorization: `OAuth ${appAccessToken}`,
+      Authorization: `OAuth ${oAuthBearerToken}`,
     },
   })
     .then((response) =>
@@ -32,7 +30,7 @@ const getTwitchLiveStreams = () => {
     url: "https://api.twitch.tv/helix/streams",
     headers: {
       "Client-ID": clientID,
-      Authorization: `Bearer ${appAccessToken}`,
+      Authorization: `Bearer ${oAuthBearerToken}`,
     },
   })
     .then((streams) => {
