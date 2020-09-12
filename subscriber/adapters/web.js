@@ -133,14 +133,11 @@ export const createWeb = (
     response.set("Content-Type", "text/html");
     response.status(200).send("Ok");
 
-    // This should go in the subscriber manager.
     const subID = request.params.subID;
     // TODO: MUST VALIDATE THIS --> try joi library.
-    // const eventID = uuid();
     const eventData = request.body.data; // Note, this is important. Twitch uses this shape.
 
     subscriberManager.saveEvent(subID, eventData);
-    // subscriberManager.saveEvent(subID, eventID, eventData);
   });
 
   const server = app.listen(port, () => {
