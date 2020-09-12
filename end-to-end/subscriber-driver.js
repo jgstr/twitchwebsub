@@ -41,8 +41,18 @@ export const createSubscriberDriver = (hostUrl) => {
     },
 
     checkServerIsRunning: () => {
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
+        let connectionAttempts = 0;
         function pollStatus() {
+          if (connectionAttempts === 8) {
+            console.error(
+              `Could not connect to the database after ${connectionAttempts} attempts.`
+            );
+            reject();
+          }
+
+          connectionAttempts++;
+
           axios
             .get(`${hostUrl}/status`)
             .then((response) => {

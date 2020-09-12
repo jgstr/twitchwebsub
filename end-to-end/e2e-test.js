@@ -113,12 +113,6 @@ describe("Twitch Websub appUser", function () {
   //       This will be a unit test. You will mock time.
 
   // TODO: basic logging and metrics.
-  it("should report a getAllSubscriptions request.", function (done) {
-    appUser.getAllSubscriptions().then(() => {
-      checkThatSubscriberReportedEvent(); // But how? The logging will be in the subscriber container console.
-      done();
-    });
-  });
 
   // after(function (done) {
   //   fakeTwitch.stop(twitchAPI);
