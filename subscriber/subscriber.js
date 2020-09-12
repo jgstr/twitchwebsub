@@ -21,7 +21,7 @@ export const createSubscriberManager = (dataStore, twitch) => {
     },
 
     saveEvent: (subID, eventData) => {
-      eventData.forEach(event => dataStore.saveEvent(subID, uuid(), event));
+      eventData.forEach(event => dataStore.saveEvent(subID, eventData, uuid()));
       return Promise.resolve();
     },
 

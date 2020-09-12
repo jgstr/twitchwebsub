@@ -20,7 +20,7 @@ export const createDataStoreFake = (config) => {
       return "Removed.";
     },
 
-    saveEvent: function (subID, eventID, eventData) {
+    saveEvent: function (subID, eventData, eventID) {
       if (this.eventDatabase.has(subID)) {
         this.eventDatabase.set(
           subID,
