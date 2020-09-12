@@ -1,5 +1,3 @@
-import { eventRecordListStub } from "./subscriptions";
-
 export const createDataStoreFake = (config) => {
   return {
     subscriptionDatabase: new Map(),

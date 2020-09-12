@@ -75,8 +75,6 @@ export const createWeb = (
     };
   };
 
-  // TODO: Overall, abstract this logic into another, separate method/module.
-  // This code needs unit tests.
   app.post("/subscribe", (request, response) => {
     const subId = uuid();
     response.status(200).json({ message: "Received.", subscriptionID: subId });
@@ -135,11 +133,14 @@ export const createWeb = (
     response.set("Content-Type", "text/html");
     response.status(200).send("Ok");
 
+    // This should go in the subscriber manager.
     const subID = request.params.subID;
-    const eventID = uuid();
+    // TODO: MUST VALIDATE THIS --> try joi library.
+    // const eventID = uuid();
     const eventData = request.body.data; // Note, this is important. Twitch uses this shape.
 
-    subscriberManager.saveEvent(subID, eventID, eventData);
+    subscriberManager.saveEvent(subID, eventData);
+    // subscriberManager.saveEvent(subID, eventID, eventData);
   });
 
   const server = app.listen(port, () => {

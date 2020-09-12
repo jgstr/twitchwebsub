@@ -1,3 +1,5 @@
+import { uuid } from "uuidv4";
+
 export const createSubscriberManager = (dataStore, twitch) => {
   return {
     status: () => dataStore.checkStatus(),
@@ -18,13 +20,8 @@ export const createSubscriberManager = (dataStore, twitch) => {
       return dataStore.saveSubscription(subscription);
     },
 
-    // Original
-    // saveEvent: (subID, eventID, eventData) => {
-    //   return dataStore.saveEvent(subID, eventID, eventData);
-    // },
-
-    saveEvent: (subID, eventID, eventData) => {
-      eventData.forEach((event) => dataStore.saveEvent(subID, eventID, event));
+    saveEvent: (subID, eventData) => {
+      eventData.forEach(event => dataStore.saveEvent(subID, uuid(), event));
       return Promise.resolve();
     },
 
@@ -43,16 +40,14 @@ export const createSubscriberManager = (dataStore, twitch) => {
     // TODO: 1) if twitch is down, this will overflow and crash
     //       2) if your server crashes, the in-memory list is gone
     //          One way, add STATUS column to subs table.
-    saveApprovedSubscription: (
-      subscriptionsWaitingForTwitchApproval,
-      approvedSubscriptionID
-    ) => {
-      for (const [id, subscription] of subscriptionsWaitingForTwitchApproval) {
-        if (id === approvedSubscriptionID) {
-          dataStore.saveSubscription(subscription);
+    saveApprovedSubscription:
+      (subscriptionsWaitingForTwitchApproval, approvedSubscriptionID) => {
+        for (const [id, subscription] of subscriptionsWaitingForTwitchApproval) {
+          if (id === approvedSubscriptionID) {
+            dataStore.saveSubscription(subscription);
+          }
+          subscriptionsWaitingForTwitchApproval.delete(id);
         }
-        subscriptionsWaitingForTwitchApproval.delete(id);
-      }
-    },
+      },
   };
 };

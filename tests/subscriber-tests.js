@@ -7,28 +7,26 @@ describe("Subscriber Server", function () {
   // Use as mocking template.
   it("should save an event (using mocks).", function () {
     const subID = "1234";
-    const eventID = "5678";
     const eventData = [{}];
 
-    const dataStoreApi = { saveEvent: function () {} };
+    const dataStoreApi = { saveEvent: function () { } };
     const mockDataStore = sinon.mock(dataStoreApi); // this mutates dataStoreApi
-    mockDataStore.expects("saveEvent").once().withArgs(subID, eventID, {}); // configuration/preparation. once() == spy
+    mockDataStore.expects("saveEvent").once().withArgs(subID, eventData); // configuration/preparation. once() == spy
     const subManager = createSubscriberManager(dataStoreApi);
-    subManager.saveEvent(subID, eventID, eventData);
+    subManager.saveEvent(subID, eventData);
     mockDataStore.verify(); // actually checks / verification
   });
 
   it("should save two events.", function () {
     const subID = "1234";
-    const eventID = "5678";
     const eventData = [{}, {}];
 
-    const dataStoreApi = { saveEvent: function () {} };
+    const dataStoreApi = { saveEvent: function () { } };
     const mockDataStore = sinon.mock(dataStoreApi);
-    mockDataStore.expects("saveEvent").twice().withArgs(subID, eventID, {});
+    mockDataStore.expects("saveEvent").twice().withArgs(subID, eventData);
 
     const subManager = createSubscriberManager(dataStoreApi);
-    subManager.saveEvent(subID, eventID, eventData);
+    subManager.saveEvent(subID, eventData);
 
     mockDataStore.verify();
   });
