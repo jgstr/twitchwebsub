@@ -1,12 +1,9 @@
-import { expect } from "chai";
+import { assert, expect } from "chai";
 import { createDataStore } from "../subscriber/adapters/data-store";
 import {
   dockerComposeUpDatabase,
   checkDatabaseIsRunning,
   dockerComposeDown,
-  createEvents,
-  expectOrderOfSavedEventsToMatchRetrievedEvents,
-  saveAllEvents,
 } from "../utils/test-utils";
 import { notificationsDatabaseLocalConfig } from "../subscriber/authentications";
 import { uuid } from "uuidv4";
@@ -54,42 +51,33 @@ function shouldReturnOneSub(dataStore) {
 
 function shouldReturnListOfEvents(dataStore) {
   return function (done) {
-    const subID = uuid();
-    const expectedEvent = createEvents(1, subID)[0];
 
-    dataStore
-      .saveEvent(
-        expectedEvent.subscription_id,
-        expectedEvent.id,
-        expectedEvent.data
-      )
-      .then(() => dataStore.getAllEvents(expectedEvent.subscription_id))
-      .then((events) => {
-        // Note: This loop might be replaceable with .includes somehow.
-        // Ie. expect(events).to.deep.include({ id: expectedEvent.id }); But this doesn't work.
-        for (let event of events) {
-          if (event.id === expectedEvent.id) {
-            expect(event).to.include({ id: expectedEvent.id });
-            done();
-          }
-        }
+    const subscriptionID = uuid();
+    const expectedEvent = [{}];
+
+    dataStore.saveEvent(
+      subscriptionID,
+      expectedEvent
+    )
+      .then(() => dataStore.getAllEvents(subscriptionID))
+      .then(events => {
+        expect(events.length).to.equal(1);
+        done();
       });
   };
 }
 
 function shouldReturnListOfCurrentEvents(dataStore) {
-  return function (done) {
+  return function () {
+
+    assert.fail();
+
     const subscriptionID = uuid();
-    const expectedEvents = createEvents(5, subscriptionID);
-    saveAllEvents(dataStore, expectedEvents)
+    const expectedEvents = [{}, {}, {}, {}, {}];
+
+    dataStore.saveEvent(subscriptionID, expectedEvents)
       .then(() => dataStore.getLatestEvents(subscriptionID))
-      .then((events) => {
-        expectOrderOfSavedEventsToMatchRetrievedEvents(
-          events,
-          expectedEvents,
-          done
-        );
-      });
+      .then(events => { });
   };
 }
 
@@ -137,19 +125,16 @@ describe("Data Store MySQL", function () {
     shouldReturnListOfEvents(createDataStore(notificationsDatabaseLocalConfig))
   );
 
+  // Note: I force this test to fail. Events get saved too quickly. MySQL does not offer a TIMESTAMP accurate enough for ordering on millisceond.
+  // So I might have to create the TIMESTAMP myself if I want to use this feature.
   it(
     "should return a list of current events.",
-    shouldReturnListOfCurrentEvents(
-      createDataStore(notificationsDatabaseLocalConfig)
-    )
+    shouldReturnListOfCurrentEvents(createDataStore(notificationsDatabaseLocalConfig))
   );
 
   // Note: This does NOT remove all events related to a subscription.
-  it(
-    "should remove a subscription.",
-    shouldRemoveOneSubscription(
-      createDataStore(notificationsDatabaseLocalConfig)
-    )
+  it("should remove a subscription.",
+    shouldRemoveOneSubscription(createDataStore(notificationsDatabaseLocalConfig))
   );
 
   after(function (done) {
@@ -160,25 +145,13 @@ describe("Data Store MySQL", function () {
 describe("Data Store Fake", function () {
   const dataStoreFake = createDataStoreFake("config");
 
-  it(
-    "should return a list of subscriptions.",
-    shouldReturnAListOfSubs(dataStoreFake)
-  );
+  it("should return a list of subscriptions.", shouldReturnAListOfSubs(dataStoreFake));
 
   it("should return one subscription.", shouldReturnOneSub(dataStoreFake));
 
-  it(
-    "should return a list of events.",
-    shouldReturnListOfEvents(dataStoreFake)
-  );
+  it("should return a list of events.", shouldReturnListOfEvents(dataStoreFake));
 
-  it(
-    "should return a list of current events.",
-    shouldReturnListOfCurrentEvents(dataStoreFake)
-  );
+  it("should return a list of current events.", shouldReturnListOfCurrentEvents(dataStoreFake));
 
-  it(
-    "should remove a subscription.",
-    shouldRemoveOneSubscription(dataStoreFake)
-  );
+  it("should remove a subscription.", shouldRemoveOneSubscription(dataStoreFake));
 });

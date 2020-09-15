@@ -21,10 +21,7 @@ export const createSubscriberManager = (dataStore, twitch) => {
     },
 
     saveEvent: (subID, eventData) => {
-      // TODO: Instead of loop, try this recommendation:
-      // https://stackoverflow.com/questions/8899802/how-do-i-do-a-bulk-insert-in-mysql-using-node-js
-      eventData.forEach(event => dataStore.saveEvent(subID, eventData, uuid()));
-      return Promise.resolve();
+      return dataStore.saveEvent(subID, eventData);
     },
 
     getAllEvents: (subscriptionID) => {

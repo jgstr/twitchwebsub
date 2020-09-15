@@ -20,21 +20,32 @@ export const createDataStoreFake = (config) => {
       return "Removed.";
     },
 
-    saveEvent: function (subID, eventData, eventID) {
+
+    // TODO: this does a lot. Maybe break into smaller functions.
+    saveEvent: function (subID, eventMessage, eventID) {
+      // TODO: implement this after N responds to question on dicord 9/14/20.
+      // Format message to exactly what I need. Also, add "id" with eventID to properties.
+      // const eventMessageFormatted = JSON.stringify(eventMessage);
+
+      // Place holder for above.
+      const eventMessageFormatted = eventMessage;
+
       if (this.eventDatabase.has(subID)) {
         this.eventDatabase.set(
           subID,
-          [{ eventID, eventData }].concat(this.eventDatabase.get(subID))
+          [{ eventID, eventMessageFormatted }].concat(this.eventDatabase.get(subID))
         );
-      } else {
+      }
+      else {
         this.eventDatabase.set(
           subID,
-          new Array().concat([{ eventID, eventData }])
+          new Array().concat([{ eventID, eventMessageFormatted }])
         );
       }
       return Promise.resolve();
     },
 
+    // This should just return even event and format to JSON.
     getAllEvents: function (subscriptionID) {
       const events = Array.from(
         this.eventDatabase.get(subscriptionID),

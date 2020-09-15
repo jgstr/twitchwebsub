@@ -1,4 +1,5 @@
 import mysql from "mysql";
+import { uuid } from "../../node_modules/uuidv4/build/lib/uuidv4";
 const timestampFormatter = require("moment");
 
 const formatSubscription = (subscription) => {
@@ -107,11 +108,11 @@ export const createDataStore = (config) => {
     },
 
     getLatestEvents: (subscriptionID) => {
-      const query =
+      const selectEventsQuery =
         "SELECT * FROM events WHERE subscription_id=? ORDER BY created_at DESC LIMIT 5";
 
       return new Promise((resolve, reject) => {
-        pool.query(query, [subscriptionID], (error, results) => {
+        pool.query(selectEventsQuery, [subscriptionID], (error, results) => {
           if (error) {
             reject(error);
           } else {
@@ -122,16 +123,15 @@ export const createDataStore = (config) => {
     },
 
     // Note: Server should create TIMESTAMP instead of MySQL, but parsing a TIMESTAMP between Node to MySQL is tricky.
-    saveEvent: (subscriptionID, eventID, eventData) => {
-      return new Promise((resolve, reject) => {
-        pool.query(
-          "INSERT INTO events SET ?",
-          {
-            id: eventID,
-            subscription_id: subscriptionID,
-            data: JSON.stringify(eventData),
-          },
-          (error) => {
+    saveEvent: (subscriptionID, eventData) => {
+
+      const formatEvents = event => {
+        return [uuid(), subscriptionID, event];
+      }
+
+      const insertIntoEvents = (eventsInsertQuery, eventsFormatted, resolve, reject) => {
+        pool.query(eventsInsertQuery, [eventsFormatted],
+          error => {
             if (error) {
               reject(error);
             } else {
@@ -139,6 +139,14 @@ export const createDataStore = (config) => {
             }
           }
         );
+      }
+
+      return new Promise((resolve, reject) => {
+
+        const eventsInsertQuery = "INSERT INTO events (id, subscription_id, data) VALUES ?";
+        const eventsFormatted = eventData.map(formatEvents);
+        insertIntoEvents(eventsInsertQuery, eventsFormatted, resolve, reject);
+
       });
     },
 
