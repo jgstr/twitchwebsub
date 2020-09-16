@@ -53,7 +53,12 @@ function shouldReturnListOfEvents(dataStore) {
   return function (done) {
 
     const subscriptionID = uuid();
-    const expectedEvent = [{}];
+    const expectedEvent = [
+      {
+        "from_name": "ebi",
+        "to_name": "oliver",
+      }
+    ];
 
     dataStore.saveEvent(
       subscriptionID,
@@ -61,7 +66,8 @@ function shouldReturnListOfEvents(dataStore) {
     )
       .then(() => dataStore.getAllEvents(subscriptionID))
       .then(events => {
-        expect(events.length).to.equal(1);
+        console.log("\n\n\n\n********** Events: ", events);
+        expect(events[0].data).to.deep.equal(expectedEvent[0]);
         done();
       });
   };

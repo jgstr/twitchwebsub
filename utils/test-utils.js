@@ -2,7 +2,6 @@ const path = require("path");
 const compose = require("docker-compose");
 import mysql from "mysql";
 import { expect } from "chai";
-import { uuid } from "uuidv4";
 
 export const dockerComposeUp = () => {
   compose.upAll({ cwd: path.join(__dirname, ".."), log: true }).then(
@@ -124,65 +123,6 @@ export const expectEventToMatchAtLeastOne = (results, eventData, callback) => {
     }
   }
 };
-
-export const eventsInclude = (events, eventID, callback) => {
-  for (const event of events) {
-    if (event.id === eventID) {
-      expect(event.id).to.equal(eventID);
-      callback();
-    }
-  }
-};
-
-export const expectOrderOfSavedEventsToMatchRetrievedEvents = (
-  events,
-  expectedEvents,
-  done
-) => {
-  let match = true;
-
-  for (let i = 0; i < expectedEvents.length; ++i) {
-    if (
-      events[i]["id"] !== expectedEvents[expectedEvents.length - 1 - i]["id"]
-    ) {
-      match = false;
-      break;
-    }
-  }
-  if (match) done();
-};
-
-export const createEvents = (numberOfEvents, subscriptionID) => {
-  const subscription_id = subscriptionID;
-  const events = [];
-  for (let i = 0; i < numberOfEvents; ++i) {
-    events.push({
-      id: uuid(),
-      subscription_id,
-      data: JSON.stringify({ id: `123_${i}`, user_id: `4321_${i}` }),
-    });
-  }
-  return events;
-};
-
-// TODO: see github issues. Ask N how to best approach using/not using async vs promise.
-function saveAllEvents(dataStore, events) {
-  return new Promise((resolve) => {
-    (async () => {
-      for (let i = 0; i <= events.length; ++i) {
-        if (i === events.length) {
-          resolve();
-          break;
-        }
-        await dataStore.saveEvent(
-          events[i].subscription_id,
-          events[i].id,
-          events[i].data
-        );
-      }
-    })();
-  });
-}
 
 export const subscriptionRequestByUserStub = {
   hubUrl: "http://host.docker.internal:3001/hub",
