@@ -53,7 +53,7 @@ function shouldReturnListOfEvents(dataStore) {
   return function (done) {
 
     const subscriptionID = uuid();
-    const expectedEvent = [
+    const eventsFromTwitch = [
       {
         "from_name": "ebi",
         "to_name": "oliver",
@@ -62,12 +62,11 @@ function shouldReturnListOfEvents(dataStore) {
 
     dataStore.saveEvent(
       subscriptionID,
-      expectedEvent
+      eventsFromTwitch
     )
       .then(() => dataStore.getAllEvents(subscriptionID))
-      .then(events => {
-        console.log("\n\n\n\n********** Events: ", events);
-        expect(events[0].data).to.deep.equal(expectedEvent[0]);
+      .then(eventsFromDataBase => {
+        expect(eventsFromDataBase[0].data).to.deep.equal(eventsFromTwitch[0]);
         done();
       });
   };

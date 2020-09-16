@@ -27,7 +27,14 @@ export const createDataStoreFake = (config) => {
     },
 
     getAllEvents: function (subscriptionID) {
-      return Promise.resolve([{}]);
+      return Promise.resolve([
+        {
+          data: {
+            "from_name": "ebi",
+            "to_name": "oliver",
+          }
+        }
+      ]);
     },
 
     getLatestEvents: function (subscriptionID) {
