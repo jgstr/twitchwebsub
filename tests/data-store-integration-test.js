@@ -1,4 +1,7 @@
 import { assert, expect } from "chai";
+const chai = require("chai");
+const deepEqualInAnyOrder = require('deep-equal-in-any-order');
+chai.use(deepEqualInAnyOrder);
 import { createDataStore } from "../subscriber/adapters/data-store";
 import {
   dockerComposeUpDatabase,
@@ -8,6 +11,7 @@ import {
 import { notificationsDatabaseLocalConfig } from "../subscriber/authentications";
 import { uuid } from "uuidv4";
 import { createDataStoreFake } from "../subscriber/doubles/data-store-fake";
+import e from "express";
 
 function shouldReturnAListOfSubs(dataStore) {
   return function (done) {
@@ -58,6 +62,10 @@ function shouldSaveAListOfEvents(dataStore) {
       {
         "from_name": "ebi",
         "to_name": "oliver",
+      },
+      {
+        "from_name": "johnjacob",
+        "to_name": "jingleheimerschmidt",
       }
     ];
 
@@ -67,9 +75,30 @@ function shouldSaveAListOfEvents(dataStore) {
     )
       .then(() => dataStore.getAllEvents(subscriptionID))
       .then(eventsFromDataBase => {
-        expect(eventsFromDataBase[0].data).to.deep.equal(eventsFromTwitch[0]);
+        expect(eventsFromDataBase).to.satisfy(function () {
+          return eventsFromDataBase[0].data === eventsFromTwitch[0];
+        });
         done();
       });
+
+    // Original
+    // const subscriptionID = uuid();
+    // const eventsFromTwitch = [
+    //   {
+    //     "from_name": "ebi",
+    //     "to_name": "oliver",
+    //   }
+    // ];
+
+    // dataStore.saveEvents(
+    //   subscriptionID,
+    //   eventsFromTwitch
+    // )
+    //   .then(() => dataStore.getAllEvents(subscriptionID))
+    //   .then(eventsFromDataBase => {
+    //     expect(eventsFromDataBase[0].data).to.deep.equal(eventsFromTwitch[0]);
+    //     done();
+    //   });
   };
 }
 

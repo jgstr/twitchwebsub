@@ -44,6 +44,7 @@
     "@babel/register": "^7.8.3",
     "@babel/runtime": "^7.10.1",
     "chai": "^4.2.0",
+    "deep-equal-in-any-order": "^1.0.28",
     "docker-compose": "^0.23.2",
     "mocha": "^7.0.0",
     "nock": "^12.0.3",
