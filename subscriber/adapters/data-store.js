@@ -20,6 +20,23 @@ const formatDatabaseResult = (result) => {
   };
 };
 
+const stringifyEvents = (subscriptionID) => event => {
+  return [uuid(), subscriptionID, JSON.stringify(event)];
+}
+
+
+const providePoolContext = (pool) => (eventsInsertQuery, eventsFormatted, resolve, reject) => {
+  pool.query(eventsInsertQuery, [eventsFormatted],
+    error => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve();
+      }
+    }
+  );
+}
+
 export const createDataStore = (config) => {
   let pool = mysql.createPool({
     host: config.host,
@@ -130,28 +147,13 @@ export const createDataStore = (config) => {
     },
 
     // Note: Server should create TIMESTAMP instead of MySQL, but parsing a TIMESTAMP between Node to MySQL is tricky.
-    saveEvent: (subscriptionID, eventData) => {
-
-      const stringifyEvents = event => {
-        return [uuid(), subscriptionID, JSON.stringify(event)];
-      }
-
-      const insertIntoEvents = (eventsInsertQuery, eventsFormatted, resolve, reject) => {
-        pool.query(eventsInsertQuery, [eventsFormatted],
-          error => {
-            if (error) {
-              reject(error);
-            } else {
-              resolve();
-            }
-          }
-        );
-      }
+    saveEvents: (subscriptionID, eventMessagesList) => {
 
       return new Promise((resolve, reject) => {
 
         const eventsInsertQuery = "INSERT INTO events (id, subscription_id, data) VALUES ?";
-        const eventsFormatted = eventData.map(stringifyEvents);
+        const eventsFormatted = eventMessagesList.map(stringifyEvents(subscriptionID));
+        let insertIntoEvents = providePoolContext(pool);
         insertIntoEvents(eventsInsertQuery, eventsFormatted, resolve, reject);
 
       });

@@ -9,12 +9,12 @@ describe("Subscriber Server", function () {
     const subID = "1234";
     const eventMessage = [{}];
 
-    const dataStoreApi = { saveEvent: function () { } };
+    const dataStoreApi = { saveEvents: function () { } };
     const mockDataStore = sinon.mock(dataStoreApi); // this mutates dataStoreApi
-    mockDataStore.expects("saveEvent").once().withArgs(subID, eventMessage); // configuration/preparation. once() == spy
+    mockDataStore.expects("saveEvents").once().withArgs(subID, eventMessage); // configuration/preparation. once() == spy
 
     const subManager = createSubscriberManager(dataStoreApi);
-    subManager.saveEvent(subID, eventMessage);
+    subManager.saveEvents(subID, eventMessage);
 
     mockDataStore.verify(); // actually checks / verification
   });
@@ -24,12 +24,12 @@ describe("Subscriber Server", function () {
   //   const subID = "1234";
   //   const eventMessage = [{}, {}];
 
-  //   const dataStoreApi = { saveEvent: function () { } };
+  //   const dataStoreApi = { saveEvents: function () { } };
   //   const mockDataStore = sinon.mock(dataStoreApi);
-  //   mockDataStore.expects("saveEvent").twice().withArgs(subID, eventMessage);
+  //   mockDataStore.expects("saveEvents").twice().withArgs(subID, eventMessage);
 
   //   const subManager = createSubscriberManager(dataStoreApi);
-  //   subManager.saveEvent(subID, eventMessage);
+  //   subManager.saveEvents(subID, eventMessage);
 
   //   mockDataStore.verify();
   // });
@@ -39,12 +39,12 @@ describe("Subscriber Server", function () {
     const subID = "1234";
     const eventMessage = [{}, {}];
 
-    const dataStoreApi = { saveEvent: function () { } };
+    const dataStoreApi = { saveEvents: function () { } };
     const mockDataStore = sinon.mock(dataStoreApi);
-    mockDataStore.expects("saveEvent").once().withArgs(subID, eventMessage);
+    mockDataStore.expects("saveEvents").once().withArgs(subID, eventMessage);
 
     const subManager = createSubscriberManager(dataStoreApi);
-    subManager.saveEvent(subID, eventMessage);
+    subManager.saveEvents(subID, eventMessage);
 
     mockDataStore.verify();
   });

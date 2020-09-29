@@ -137,7 +137,7 @@ export const createWeb = (
     // TODO: MUST VALIDATE THIS --> try joi library.
     const eventData = request.body.data; // Note, this is important. Twitch uses this shape.
 
-    subscriberManager.saveEvent(subID, eventData);
+    subscriberManager.saveEvents(subID, eventData);
   });
 
   const server = app.listen(port, () => {

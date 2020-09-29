@@ -22,7 +22,7 @@ export const createDataStoreFake = (config) => {
 
 
     // TODO: Next: This needs to match data-store "real".
-    saveEvent: function (subID, eventMessage) {
+    saveEvents: function (subID, eventMessage) {
       return Promise.resolve();
     },
 

@@ -49,7 +49,8 @@ function shouldReturnOneSub(dataStore) {
   };
 }
 
-function shouldReturnListOfEvents(dataStore) {
+// TODO: See notes on 9/26/20
+function shouldSaveAListOfEvents(dataStore) {
   return function (done) {
 
     const subscriptionID = uuid();
@@ -60,7 +61,7 @@ function shouldReturnListOfEvents(dataStore) {
       }
     ];
 
-    dataStore.saveEvent(
+    dataStore.saveEvents(
       subscriptionID,
       eventsFromTwitch
     )
@@ -80,7 +81,7 @@ function shouldReturnListOfCurrentEvents(dataStore) {
     const subscriptionID = uuid();
     const expectedEvents = [{}, {}, {}, {}, {}];
 
-    dataStore.saveEvent(subscriptionID, expectedEvents)
+    dataStore.saveEvents(subscriptionID, expectedEvents)
       .then(() => dataStore.getLatestEvents(subscriptionID))
       .then(events => { });
   };
@@ -127,7 +128,7 @@ describe("Data Store MySQL", function () {
 
   it(
     "should return a list of events.",
-    shouldReturnListOfEvents(createDataStore(notificationsDatabaseLocalConfig))
+    shouldSaveAListOfEvents(createDataStore(notificationsDatabaseLocalConfig))
   );
 
   // Note: I force this test to fail. Events get saved too quickly. MySQL does not offer a TIMESTAMP accurate enough for ordering on millisceond.
@@ -154,7 +155,7 @@ describe("Data Store Fake", function () {
 
   it("should return one subscription.", shouldReturnOneSub(dataStoreFake));
 
-  it("should return a list of events.", shouldReturnListOfEvents(dataStoreFake));
+  it("should return a list of events.", shouldSaveAListOfEvents(dataStoreFake));
 
   it("should return a list of current events.", shouldReturnListOfCurrentEvents(dataStoreFake));
 

@@ -20,8 +20,8 @@ export const createSubscriberManager = (dataStore, twitch) => {
       return dataStore.saveSubscription(subscription);
     },
 
-    saveEvent: (subID, eventData) => {
-      return dataStore.saveEvent(subID, eventData);
+    saveEvents: (subID, eventData) => {
+      return dataStore.saveEvents(subID, eventData);
     },
 
     getAllEvents: (subscriptionID) => {
