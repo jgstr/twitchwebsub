@@ -25,7 +25,7 @@ const stringifyEvents = (subscriptionID) => event => {
 }
 
 
-const providePoolContext = (pool) => (eventsInsertQuery, eventsFormatted, resolve, reject) => {
+const insertIntoEvents = (pool, eventsInsertQuery, eventsFormatted, resolve, reject) => {
   pool.query(eventsInsertQuery, [eventsFormatted],
     error => {
       if (error) {
@@ -153,8 +153,7 @@ export const createDataStore = (config) => {
 
         const eventsInsertQuery = "INSERT INTO events (id, subscription_id, data) VALUES ?";
         const eventsFormatted = eventMessagesList.map(stringifyEvents(subscriptionID));
-        let insertIntoEvents = providePoolContext(pool);
-        insertIntoEvents(eventsInsertQuery, eventsFormatted, resolve, reject);
+        insertIntoEvents(pool, eventsInsertQuery, eventsFormatted, resolve, reject);
 
       });
     },
