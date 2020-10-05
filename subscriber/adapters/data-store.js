@@ -153,7 +153,7 @@ export const createDataStore = (config) => {
 
         const eventsInsertQuery = "INSERT INTO events (id, subscription_id, data) VALUES ?";
         const eventsFormatted = eventMessagesList.map(stringifyEvents(subscriptionID));
-        insertIntoEvents(pool, eventsInsertQuery, eventsFormatted, resolve, reject);
+        insertIntoEvents(eventsInsertQuery, eventsFormatted, resolve, reject);
 
       });
     },

@@ -21,20 +21,14 @@ export const createDataStoreFake = (config) => {
     },
 
 
-    // TODO: Next: This needs to match data-store "real".
-    saveEvents: function (subID, eventMessage) {
+    saveEvents: function (subscriptionID, eventMessagesList) {
+      const eventsFormattedForDatabase = eventMessagesList.map(event => ({ data: event }));
+      this.eventDatabase.set(subscriptionID, eventsFormattedForDatabase);
       return Promise.resolve();
     },
 
     getAllEvents: function (subscriptionID) {
-      return Promise.resolve([
-        {
-          data: {
-            "from_name": "ebi",
-            "to_name": "oliver",
-          }
-        }
-      ]);
+      return Promise.resolve(this.eventDatabase.get(subscriptionID));
     },
 
     getLatestEvents: function (subscriptionID) {
