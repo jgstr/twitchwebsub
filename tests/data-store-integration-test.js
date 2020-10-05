@@ -53,7 +53,6 @@ function shouldReturnOneSub(dataStore) {
   };
 }
 
-// TODO: See notes on 9/26/20
 function shouldSaveAListOfEvents(dataStore) {
   return function (done) {
 
@@ -74,10 +73,8 @@ function shouldSaveAListOfEvents(dataStore) {
       eventsFromTwitch
     )
       .then(() => dataStore.getAllEvents(subscriptionID))
-      .then(eventsFromDataBase => {
-        expect(eventsFromDataBase).to.satisfy(function () {
-          return eventsFromDataBase[0].data === eventsFromTwitch[0];
-        });
+      .then(eventsFromDatabase => {
+        expect(eventsFromDatabase.map(event => event.data)).to.have.deep.members(eventsFromTwitch);
         done();
       });
 
@@ -184,7 +181,7 @@ describe("Data Store Fake", function () {
 
   it("should return one subscription.", shouldReturnOneSub(dataStoreFake));
 
-  it("should return a list of events.", shouldSaveAListOfEvents(dataStoreFake));
+  it("should save a list of events.", shouldSaveAListOfEvents(dataStoreFake));
 
   it("should return a list of current events.", shouldReturnListOfCurrentEvents(dataStoreFake));
 

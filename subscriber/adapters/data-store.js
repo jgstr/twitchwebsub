@@ -24,19 +24,6 @@ const stringifyEvents = (subscriptionID) => event => {
   return [uuid(), subscriptionID, JSON.stringify(event)];
 }
 
-
-const insertIntoEvents = (pool, eventsInsertQuery, eventsFormatted, resolve, reject) => {
-  pool.query(eventsInsertQuery, [eventsFormatted],
-    error => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve();
-      }
-    }
-  );
-}
-
 export const createDataStore = (config) => {
   let pool = mysql.createPool({
     host: config.host,
@@ -45,6 +32,19 @@ export const createDataStore = (config) => {
     password: config.password,
     database: config.database,
   });
+
+  const insertIntoEvents = (eventsInsertQuery, eventsFormatted, resolve, reject) => {
+    pool.query(eventsInsertQuery, [eventsFormatted],
+      error => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve();
+        }
+      }
+    );
+  }
+
 
   return {
     checkStatus: () => {
