@@ -48,5 +48,9 @@ export const createSubscriberManager = (dataStore, twitch) => {
           subscriptionsWaitingForTwitchApproval.delete(id);
         }
       },
+
+      renewSubscription: (subscriptionID) => {
+        return "You did not provide a subscriber ID.";
+      }
   };
 };
