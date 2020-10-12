@@ -51,4 +51,13 @@ describe("Subscriber Server", function () {
     const result = subManager.renewSubscription();
     expect(result).to.equal("You did not provide a subscriber ID.");
   });
+
+  // TODO: 10/11/2020 Next, figure out how to follow TPP and still let it use the neighbor objects it requires (data-store).  
+  it("should update a subscriptions end-lease timestamp.", function(){
+    const dataStoreApi = {};
+    const subManager = createSubscriberManager(dataStoreApi);
+    const subscriptionID = 123;
+    const result = subManager.renewSubscription(subscriptionID);
+    expect(result).to.equal("Your subscription was renewed.");
+  });
 });
