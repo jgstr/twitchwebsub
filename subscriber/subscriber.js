@@ -50,7 +50,9 @@ export const createSubscriberManager = (dataStore, twitch) => {
       },
 
       renewSubscription: (subscriptionID) => {
-        return "You did not provide a subscriber ID.";
+        if(!subscriptionID)
+          return "You did not provide a subscriber ID.";
+        return "Your subscription was renewed.";
       }
   };
 };
