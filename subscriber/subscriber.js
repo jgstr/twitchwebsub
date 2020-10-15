@@ -1,5 +1,3 @@
-import { uuid } from "uuidv4";
-
 export const createSubscriberManager = (dataStore, twitch) => {
   return {
     status: () => dataStore.checkStatus(),
@@ -50,9 +48,7 @@ export const createSubscriberManager = (dataStore, twitch) => {
       },
 
       renewSubscription: (subscriptionID) => {
-        if(!subscriptionID)
-          return "You did not provide a subscriber ID.";
-        return "The subscription was renewed.";
+        return dataStore.renewSubscription(subscriptionID);
       }
   };
 };

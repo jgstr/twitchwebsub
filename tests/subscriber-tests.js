@@ -34,18 +34,22 @@ describe("Subscriber Server", function () {
     mockDataStore.verify();
   });
 
-  it("should return an error message if given no subscriptoin ID.", function () {
-    const dataStoreApi = {};
+  it("should update a subscription lease.", function(){
+
+    const subID = 123;
+
+    const dataStoreApi = { renewSubscription: function(subscriptionID) { 
+      if(!subscriptionID)
+          return "You did not provide a subscriber ID.";
+      return "The subscription was renewed.";
+    }};
+    const mockDataStore = sinon.mock(dataStoreApi);
+    mockDataStore.expects("renewSubscription").once().withArgs(subID);
+
     const subManager = createSubscriberManager(dataStoreApi);
-    const result = subManager.renewSubscription();
-    expect(result).to.equal("You did not provide a subscriber ID.");
+    subManager.renewSubscription(subID);
+
+    mockDataStore.verify();
   });
 
-  it("should update a subscriptions end-lease timestamp.", function(){
-    const dataStoreApi = {};
-    const subManager = createSubscriberManager(dataStoreApi);
-    const subscriptionID = 123;
-    const result = subManager.renewSubscription(subscriptionID);
-    expect(result).to.equal("The subscription was renewed.");
-  });
 });
