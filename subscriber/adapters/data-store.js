@@ -5,10 +5,7 @@ const timestampFormatter = require("moment");
 const formatSubscription = (subscription) => {
   return {
     id: subscription.id,
-    hub_topic: subscription.topic,
-    lease_start: timestampFormatter
-      .utc(new Date())
-      .format("YYYY-MM-DD HH:mm:ss"),
+    hub_topic: subscription.topic
   };
 };
 

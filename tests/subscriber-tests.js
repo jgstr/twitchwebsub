@@ -35,7 +35,6 @@ describe("Subscriber Server", function () {
   });
 
   it("should return an error message if given no subscriptoin ID.", function () {
-
     const dataStoreApi = {};
     const subManager = createSubscriberManager(dataStoreApi);
     const result = subManager.renewSubscription();
@@ -47,6 +46,6 @@ describe("Subscriber Server", function () {
     const subManager = createSubscriberManager(dataStoreApi);
     const subscriptionID = 123;
     const result = subManager.renewSubscription(subscriptionID);
-    expect(result).to.equal("Your subscription was renewed.");
+    expect(result).to.equal("The subscription was renewed.");
   });
 });
