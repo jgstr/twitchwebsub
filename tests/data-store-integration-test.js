@@ -112,12 +112,6 @@ function shouldRemoveOneSubscription(dataStore) {
   };
 }
 
-function shouldRenewOneSubscriptions(dataStore){
-  return function(done) {
-    assert.fail();
-  }
-}
-
 describe("Data Store MySQL", function () {
   this.timeout(30000);
 
@@ -146,9 +140,7 @@ describe("Data Store MySQL", function () {
   it("should remove a subscription.",
   shouldRemoveOneSubscription(createDataStore(notificationsDatabaseLocalConfig))
   );
-  
-  it("should renew a subscription.", shouldRenewOneSubscriptions(createDataStore(notificationsDatabaseLocalConfig)));
-  
+    
   // Note: I ignore test to fail. Events get saved too quickly. MySQL does not offer a TIMESTAMP accurate enough for ordering on millisceond.
   // So I might have to create the TIMESTAMP myself if I want to use this feature.
   it.skip(
