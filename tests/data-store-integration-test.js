@@ -35,6 +35,8 @@ function shouldReturnAListOfSubs(dataStore) {
   };
 }
 
+// TODO: For testing a REPLACE change to data-store function.
+// copy this, add a start_lease, save once, change the lease, save again, then expect the "changed" subscription.
 function shouldReturnOneSub(dataStore) {
   return function (done) {
     const expectedValue = {

@@ -1,5 +1,6 @@
 import { createSubscriberManager } from "../subscriber/subscriber";
 import sinon from "sinon";
+import { DateTime, Duration } from "luxon";
 import { assert, expect } from "chai";
 
 describe("Subscriber Server", function () {
@@ -36,18 +37,24 @@ describe("Subscriber Server", function () {
 
   it("should update a subscription lease.", function(){
 
-    const subID = 123;
+    const subscription = {
+      id: 1234,
+      hub_topic: "follows",
+      lease_start: DateTime.local().minus(Duration.fromObject({seconds: 580}))
+    };
 
-    const dataStoreApi = { renewSubscription: function(subscriptionID) { 
-      if(!subscriptionID)
-          return "You did not provide a subscriber ID.";
-      return "The subscription was renewed.";
-    }};
+    const dataStoreApi = { getAllSubscriptions: () => Promise.resolve(subscription) }
     const mockDataStore = sinon.mock(dataStoreApi);
-    mockDataStore.expects("renewSubscription").once().withArgs(subID);
+    mockDataStore.expects("getAllSubscriptions").once().resolves(subscription);
 
-    const subManager = createSubscriberManager(dataStoreApi);
-    subManager.renewSubscription(subID);
+    const twitchApi = {requestSubscription: () => {}};
+    const mockTwitch = sinon.mock(twitchApi);
+    mockTwitch.expects("requestSubscription").once().resolves();
+
+    const subManager = createSubscriberManager(dataStoreApi, twitchApi);
+    subManager.renewExpiringSubscriptions();
+
+    expect(subManager.pendingSubscriptions()).to.include(subscription); // needs subscription object.
 
     mockDataStore.verify();
   });

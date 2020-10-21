@@ -1,3 +1,6 @@
+import { DateTime, Duration } from "luxon";
+
+
 export const createSubscriberManager = (dataStore, twitch) => {
   return {
     status: () => dataStore.checkStatus(),
@@ -45,10 +48,22 @@ export const createSubscriberManager = (dataStore, twitch) => {
           }
           subscriptionsWaitingForTwitchApproval.delete(id);
         }
-      },
+    },
 
-      renewSubscription: (subscriptionID) => {
-        return dataStore.renewSubscription(subscriptionID);
-      }
+    renewExpiringSubscriptions: () => {
+
+    },
+
+    pendingSubscriptions: () => {
+
+      // Stuck here. Adding DateTime here won't make a stub. DateTime always changing.
+      const subscription = {
+        id: 1234,
+        hub_topic: "follows",
+        lease_start: DateTime.local().minus(Duration.fromObject({seconds: 580})) 
+      };
+
+      return [subscription];
+    }
   };
 };
