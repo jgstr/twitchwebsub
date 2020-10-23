@@ -1,10 +1,7 @@
 import express from "express";
 import { uuid } from "uuidv4";
 
-export const createWeb = (
-  subscriptionsWaitingForTwitchApproval,
-  subscriberManager
-) => {
+export const createWeb = (subscriberManager) => {
   const app = express();
   app.use(express.json());
   const port = 3000;
@@ -81,8 +78,7 @@ export const createWeb = (
     // TODO: Instead, extract required info from request object. Pass that info instead.
     const subscription = createSubscriptionFromRequest(subId, request);
 
-    // Change to subscriberManager.addToSubscriptionsAwaitingApproval(subID, subscription)
-    subscriptionsWaitingForTwitchApproval.set(subId, subscription);
+    subscriberManager.addToSubscriptionsAwaitingApproval(subId, subscription);
     subscriberManager.requestSubscription(subscription);
   });
 

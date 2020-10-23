@@ -20,9 +20,5 @@ export const start = () => {
     oAuthBearerToken
   );
   const subscriberManager = createSubscriberManager(dataStore, twitchAdapter);
-  const subscriptionsWaitingForTwitchApproval = new Map(); // TODO: Remove after moving to subscriber
-  const webServer = createWeb(
-    subscriptionsWaitingForTwitchApproval,
-    subscriberManager
-  );
+  const webServer = createWeb(subscriberManager);
 };
