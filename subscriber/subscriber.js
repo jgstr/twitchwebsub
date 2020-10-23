@@ -2,7 +2,11 @@ import { DateTime, Duration } from "luxon";
 
 
 export const createSubscriberManager = (dataStore, twitch) => {
+
+  const subscriptionsWaitingForTwitchApproval = new Map();
+
   return {
+
     status: () => dataStore.checkStatus(),
 
     getAllSubscriptions: () => {
@@ -37,11 +41,16 @@ export const createSubscriberManager = (dataStore, twitch) => {
       return dataStore.removeSubscription(subscriptionID);
     },
 
+    addToSubscriptionsAwaitingApproval: (subId, subscription) => {
+      subscriptionsWaitingForTwitchApproval.set(subId, subscription);
+    },
+
+
     // TODO: 1) if twitch is down, this will overflow and crash
     //       2) if your server crashes, the in-memory list is gone
     //          One way, add STATUS column to subs table.
     saveApprovedSubscription:
-      (subscriptionsWaitingForTwitchApproval, approvedSubscriptionID) => {
+      (approvedSubscriptionID) => {
         for (const [id, subscription] of subscriptionsWaitingForTwitchApproval) {
           if (id === approvedSubscriptionID) {
             dataStore.saveSubscription(subscription);
@@ -50,20 +59,10 @@ export const createSubscriberManager = (dataStore, twitch) => {
         }
     },
 
+    getSubscriptionsAwaitingTwitchApproval: () =>  subscriptionsWaitingForTwitchApproval,
+
     renewExpiringSubscriptions: () => {
-
-    },
-
-    pendingSubscriptions: () => {
-
-      // Stuck here. Adding DateTime here won't make a stub. DateTime always changing.
-      const subscription = {
-        id: 1234,
-        hub_topic: "follows",
-        lease_start: DateTime.local().minus(Duration.fromObject({seconds: 580})) 
-      };
-
-      return [subscription];
+      dataStore.getAllSubscriptions();
     }
   };
 };

@@ -52,9 +52,10 @@ describe("Subscriber Server", function () {
     mockTwitch.expects("requestSubscription").once().resolves();
 
     const subManager = createSubscriberManager(dataStoreApi, twitchApi);
+    subManager.addToSubscriptionsAwaitingApproval("1234", subscription);
     subManager.renewExpiringSubscriptions();
 
-    expect(subManager.pendingSubscriptions()).to.include(subscription); // needs subscription object.
+    expect(subManager.getSubscriptionsAwaitingTwitchApproval()).to.include(subscription); 
 
     mockDataStore.verify();
   });

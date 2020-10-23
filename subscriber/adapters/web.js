@@ -80,6 +80,8 @@ export const createWeb = (
     response.status(200).json({ message: "Received.", subscriptionID: subId });
     // TODO: Instead, extract required info from request object. Pass that info instead.
     const subscription = createSubscriptionFromRequest(subId, request);
+
+    // Change to subscriberManager.addToSubscriptionsAwaitingApproval(subID, subscription)
     subscriptionsWaitingForTwitchApproval.set(subId, subscription);
     subscriberManager.requestSubscription(subscription);
   });
@@ -121,10 +123,7 @@ export const createWeb = (
       response.status(200).send(request.query["hub.challenge"]);
     }
 
-    subscriberManager.saveApprovedSubscription(
-      subscriptionsWaitingForTwitchApproval,
-      approvedSubscriptionID
-    );
+    subscriberManager.saveApprovedSubscription(approvedSubscriptionID);
   });
 
   // TODO: Possibly find better name than "approval".
